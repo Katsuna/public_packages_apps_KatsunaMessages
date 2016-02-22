@@ -31,23 +31,23 @@ public class SmsDao {
         final String[] projection = new String[]{ConversationColumns.ID, ConversationColumns.CT_T,
                 ConversationColumns.THREAD_ID};
 
-        Cursor cursor = cr.query(Uris.CONVERSATIONS, projection, null, null, null);
+        Cursor cursor = cr.query(Uris.CONVERSATIONS_SIMPLE, ConversationColumns.PROJECTION_SIMPLE, null, null, null);
         if (cursor.moveToFirst()) {
             do {
                 String id = cursor.getString(cursor.getColumnIndex(ConversationColumns.ID));
-                String ct_t = cursor.getString(cursor.getColumnIndex(ConversationColumns.CT_T));
-                String threadId = cursor.getString(cursor.getColumnIndex(ConversationColumns.THREAD_ID));
+                long recipientIds = cursor.getLong(cursor.getColumnIndex(ConversationColumns.RECIPIENT_IDS));
+                //String threadId = cursor.getString(cursor.getColumnIndex(ConversationColumns.THREAD_ID));
 
-                if ("application/vnd.wap.multipart.related".equals(ct_t)) {
+/*                if ("application/vnd.wap.multipart.related".equals(ct_t)) {
                     // it's MMS
                 } else {
                     // it's SMS
-                }
+                }*/
 
                 Conversation conversation = new Conversation();
-                conversation.setId(id);
-                conversation.setCt_t(ct_t);
-                conversation.setThreadId(threadId);
+                conversation.setThreadId(id);
+                conversation.setRecipientIds(recipientIds);
+                //conversation.setThreadId(threadId);
                 conversations.add(conversation);
 
             } while (cursor.moveToNext());

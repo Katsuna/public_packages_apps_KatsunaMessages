@@ -4,11 +4,12 @@ public class Conversation {
 
     private String id;
     private String ct_t;
+    private long recipientIds;
     private String threadId;
 
     @Override
     public String toString() {
-        return "Conversation: id=" + id + " ct_t=" + ct_t + " threadId=" + threadId;
+        return "Conversation: id=" + id + " ct_t=" + ct_t + " threadId=" + threadId + " recipientIds=" + recipientIds;
     }
 
     public String getId() {
@@ -33,5 +34,13 @@ public class Conversation {
 
     public void setThreadId(String threadId) {
         this.threadId = threadId;
+    }
+
+    public long getRecipientIds() {
+        return recipientIds;
+    }
+
+    public void setRecipientIds(long recipientIds) {
+        this.recipientIds = recipientIds;
     }
 }
