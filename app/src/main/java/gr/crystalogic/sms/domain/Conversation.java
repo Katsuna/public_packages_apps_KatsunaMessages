@@ -14,6 +14,8 @@ public class Conversation {
 
     private String ct_t;
 
+    private Contact contact;
+
     @Override
     public String toString() {
         return "Conversation: id=" + id + " date=" + getDateFormatted("HH:mm dd/MM/yyyy") + " messageCount=" + messageCount + " "
@@ -79,5 +81,13 @@ public class Conversation {
 
     public void setSnippetCs(long snippetCs) {
         this.snippetCs = snippetCs;
+    }
+
+    public Contact getContact() {
+        return contact;
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
     }
 }

@@ -12,6 +12,7 @@ import java.util.List;
 
 import gr.crystalogic.sms.R;
 import gr.crystalogic.sms.dao.SmsDao;
+import gr.crystalogic.sms.domain.Contact;
 import gr.crystalogic.sms.domain.Conversation;
 
 public class ConversationActivity extends AppCompatActivity {
@@ -35,13 +36,23 @@ public class ConversationActivity extends AppCompatActivity {
 
 
         SmsDao dao = new SmsDao(this);
+        //dao.showRows(Uris.PHONES);
 
         List<Conversation> conversations = dao.getConversations();
 
         for(Conversation conversation: conversations) {
             Log.e("3ee", conversation.toString());
-            Log.e("3ee", "Show messages for threadId: " + conversation.getId());
-            dao.getConversationMessages(conversation.getId());
+
+            String address = dao.getAddress(conversation.getRecipientIds());
+            Log.e("xxx", " address for rid: " + conversation.getRecipientIds() + " = "  + address);
+            Contact contact = dao.getContactByAddress(address);
+            if (contact == null) {
+                Log.e("xxx", " contact not found for address " + address);
+            } else {
+                Log.e("xxx", " contact found: " + contact.toString());
+            }
+
+            //dao.getConversationMessages(conversation.getId());
         }
 
     }

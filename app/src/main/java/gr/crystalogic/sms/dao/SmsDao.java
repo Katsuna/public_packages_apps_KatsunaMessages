@@ -4,12 +4,15 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.ContactsContract;
+import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import gr.crystalogic.sms.dao.metadata.ConversationColumns;
+import gr.crystalogic.sms.domain.Contact;
 import gr.crystalogic.sms.domain.Conversation;
 import gr.crystalogic.sms.domain.Message;
 
@@ -85,6 +88,41 @@ public class SmsDao {
 
         return messages;
     }
+
+    public String getAddress(long recipientId) {
+        String address = null;
+
+        Uri uri = Uri.withAppendedPath(Uris.CANONICAL_ADDRESS, String.valueOf(recipientId));
+
+        String[] projection = new String[]{"address"};
+
+        Cursor cursor = cr.query(uri, projection, null, null, null);
+        if (cursor.moveToFirst()) {
+            address = cursor.getString(cursor.getColumnIndex("address"));
+        }
+        return address;
+    }
+
+    public Contact getContactByAddress(String address) {
+        Contact contact = null;
+
+        String[] projection = {
+                ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
+                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+                ContactsContract.CommonDataKinds.Phone.NUMBER,
+        };
+        String selection = ContactsContract.CommonDataKinds.Phone.NUMBER + "=" + PhoneNumberUtils.stripSeparators(address);
+
+        Cursor cursor = cr.query(Uris.PHONES, projection, selection, null, null);
+        if (cursor.moveToFirst()) {
+            contact = new Contact();
+            contact.setId(cursor.getLong(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID)));
+            contact.setName(cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)));
+            contact.setNumber(cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
+        }
+        return contact;
+    }
+
 
     public void showRows(Uri u) {
         Log.e(TAG, "-----GET HEADERS-----");

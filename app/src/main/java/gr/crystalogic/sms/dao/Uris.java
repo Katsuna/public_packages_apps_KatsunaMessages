@@ -1,6 +1,7 @@
 package gr.crystalogic.sms.dao;
 
 import android.net.Uri;
+import android.provider.ContactsContract;
 
 public class Uris {
 
@@ -9,5 +10,7 @@ public class Uris {
             .buildUpon().appendQueryParameter("simple", "true").build();
 
     public static final Uri CANONICAL_ADDRESS = Uri.parse("content://mms-sms/canonical-address");
+
+    public static final Uri PHONES =  ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
 
 }
