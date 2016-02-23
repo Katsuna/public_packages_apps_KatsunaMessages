@@ -1,6 +1,5 @@
 package gr.crystalogic.sms.ui.activities;
 
-import android.content.ContentUris;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,7 +12,6 @@ import java.util.List;
 
 import gr.crystalogic.sms.R;
 import gr.crystalogic.sms.dao.SmsDao;
-import gr.crystalogic.sms.dao.Uris;
 import gr.crystalogic.sms.domain.Conversation;
 
 public class ConversationActivity extends AppCompatActivity {
@@ -40,16 +38,10 @@ public class ConversationActivity extends AppCompatActivity {
 
         List<Conversation> conversations = dao.getConversations();
 
-        if (conversations.size() == 0) {
-            Log.e("ee", "zero");
-        }
-
         for(Conversation conversation: conversations) {
             Log.e("3ee", conversation.toString());
-            dao.showRows(ContentUris.withAppendedId(Uris.CANONICAL_ADDRESS, conversation.getRecipientIds()));
-
-            Log.e("3ee", "Show messages for threadId: " + conversation.getThreadId());
-            dao.getConversationMessages(conversation.getThreadId());
+            Log.e("3ee", "Show messages for threadId: " + conversation.getId());
+            dao.getConversationMessages(conversation.getId());
         }
 
     }

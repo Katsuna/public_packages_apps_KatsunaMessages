@@ -1,22 +1,31 @@
 package gr.crystalogic.sms.domain;
 
+import org.joda.time.DateTime;
+
 public class Conversation {
 
-    private String id;
-    private String ct_t;
+    private long id;
+    private long date;
+    private long messageCount;
+    //TODO check if multiple Ids (comma separated) arrive here....
     private long recipientIds;
-    private String threadId;
+    private String snippet;
+    private long snippetCs;
+
+    private String ct_t;
 
     @Override
     public String toString() {
-        return "Conversation: id=" + id + " ct_t=" + ct_t + " threadId=" + threadId + " recipientIds=" + recipientIds;
+        return "Conversation: id=" + id + " date=" + getDateFormatted("HH:mm dd/MM/yyyy") + " messageCount=" + messageCount + " "
+                + " recipientIds=" + recipientIds + " snippet=" + snippet
+                + " snippetCs= " + snippetCs + " ct_t=" + ct_t;
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -28,19 +37,47 @@ public class Conversation {
         this.ct_t = ct_t;
     }
 
-    public String getThreadId() {
-        return threadId;
-    }
-
-    public void setThreadId(String threadId) {
-        this.threadId = threadId;
-    }
-
     public long getRecipientIds() {
         return recipientIds;
     }
 
     public void setRecipientIds(long recipientIds) {
         this.recipientIds = recipientIds;
+    }
+
+    public long getDate() {
+        return date;
+    }
+
+    public String getDateFormatted(String pattern) {
+        return new DateTime(date).toString(pattern);
+    }
+
+    public void setDate(long date) {
+        this.date = date;
+    }
+
+    public long getMessageCount() {
+        return messageCount;
+    }
+
+    public void setMessageCount(long messageCount) {
+        this.messageCount = messageCount;
+    }
+
+    public String getSnippet() {
+        return snippet;
+    }
+
+    public void setSnippet(String snippet) {
+        this.snippet = snippet;
+    }
+
+    public long getSnippetCs() {
+        return snippetCs;
+    }
+
+    public void setSnippetCs(long snippetCs) {
+        this.snippetCs = snippetCs;
     }
 }

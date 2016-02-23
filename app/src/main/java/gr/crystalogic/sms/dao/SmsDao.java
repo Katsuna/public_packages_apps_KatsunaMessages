@@ -28,38 +28,29 @@ public class SmsDao {
     public List<Conversation> getConversations() {
         List<Conversation> conversations = new ArrayList<>();
 
-        final String[] projection = new String[]{ConversationColumns.ID, ConversationColumns.CT_T,
-                ConversationColumns.THREAD_ID};
-
         Cursor cursor = cr.query(Uris.CONVERSATIONS_SIMPLE, ConversationColumns.PROJECTION_SIMPLE, null, null, null);
         if (cursor.moveToFirst()) {
             do {
-                String id = cursor.getString(cursor.getColumnIndex(ConversationColumns.ID));
-                long recipientIds = cursor.getLong(cursor.getColumnIndex(ConversationColumns.RECIPIENT_IDS));
-                //String threadId = cursor.getString(cursor.getColumnIndex(ConversationColumns.THREAD_ID));
-
-/*                if ("application/vnd.wap.multipart.related".equals(ct_t)) {
-                    // it's MMS
-                } else {
-                    // it's SMS
-                }*/
-
+/*                0:_id type:1 | 1:date type:1 | 2:message_count type:1 | 3:recipient_ids type:3 | 4:snippet type:3 | 5:snippet_cs type:1 | 6:read type:
+                1 | 7:type type:1 | 8:error type:1 | 9:has_attachment type:1 |*/
                 Conversation conversation = new Conversation();
-                conversation.setThreadId(id);
-                conversation.setRecipientIds(recipientIds);
-                //conversation.setThreadId(threadId);
+                conversation.setId(cursor.getLong(cursor.getColumnIndex(ConversationColumns.ID)));
+                conversation.setDate(cursor.getLong(cursor.getColumnIndex(ConversationColumns.DATE)));
+                conversation.setMessageCount(cursor.getLong(cursor.getColumnIndex(ConversationColumns.MESSAGE_COUNT)));
+                conversation.setRecipientIds(cursor.getLong(cursor.getColumnIndex(ConversationColumns.RECIPIENT_IDS)));
+                conversation.setSnippet(cursor.getString(cursor.getColumnIndex(ConversationColumns.SNIPPET)));
+                conversation.setSnippetCs(cursor.getLong(cursor.getColumnIndex(ConversationColumns.SNIPPET_CS)));
                 conversations.add(conversation);
-
             } while (cursor.moveToNext());
         }
 
         return conversations;
     }
 
-    public List<Message> getConversationMessages(String threadId) {
+    public List<Message> getConversationMessages(long threadId) {
         List<Message> messages = new ArrayList<>();
 
-        Uri uri = Uri.withAppendedPath(Uris.CONVERSATIONS, threadId);
+        Uri uri = Uri.withAppendedPath(Uris.CONVERSATIONS, String.valueOf(threadId));
 
         String selection = null; /* = ContactsContract.CommonDataKinds.StructuredPostal.CONTACT_ID + "=" + contactId; */
         String orderBy = null; /* = ContactsContract.CommonDataKinds.StructuredPostal.IS_PRIMARY + " DESC"; */
@@ -68,6 +59,13 @@ public class SmsDao {
         if (cursor.moveToFirst()) {
             do {
                 Message address = new Message();
+
+                /* if ("application/vnd.wap.multipart.related".equals(ct_t)) {
+                    // it's MMS
+                } else {
+                    // it's SMS
+                }*/
+
 
                 int l = cursor.getColumnCount();
                 StringBuilder buf = new StringBuilder();
@@ -95,9 +93,12 @@ public class SmsDao {
         if (c != null) {
             int l = c.getColumnCount();
             StringBuilder buf = new StringBuilder();
+            c.moveToFirst();
             for (int i = 0; i < l; i++) {
                 buf.append(i).append(":");
                 buf.append(c.getColumnName(i));
+                buf.append(" type:");
+                buf.append(c.getType(i));
                 buf.append(" | ");
             }
             Log.e(TAG, buf.toString());
