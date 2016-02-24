@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
-import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -107,22 +106,22 @@ public class SmsDao {
         Contact contact = null;
 
         String[] projection = {
-                ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
-                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-                ContactsContract.CommonDataKinds.Phone.NUMBER,
+                ContactsContract.PhoneLookup._ID,
+                ContactsContract.PhoneLookup.DISPLAY_NAME,
+                ContactsContract.PhoneLookup.NUMBER
         };
-        String selection = ContactsContract.CommonDataKinds.Phone.NUMBER + "=" + PhoneNumberUtils.stripSeparators(address);
 
-        Cursor cursor = cr.query(Uris.PHONES, projection, selection, null, null);
+        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(address));
+
+        Cursor cursor = cr.query(uri, projection, null, null, null);
         if (cursor.moveToFirst()) {
             contact = new Contact();
-            contact.setId(cursor.getLong(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID)));
-            contact.setName(cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)));
-            contact.setNumber(cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
+            contact.setId(cursor.getLong(cursor.getColumnIndex(ContactsContract.PhoneLookup._ID)));
+            contact.setName(cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME)));
+            contact.setNumber(cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.NUMBER)));
         }
         return contact;
     }
-
 
     public void showRows(Uri u) {
         Log.e(TAG, "-----GET HEADERS-----");

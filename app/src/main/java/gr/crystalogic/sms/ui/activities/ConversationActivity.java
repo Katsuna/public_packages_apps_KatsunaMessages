@@ -52,7 +52,9 @@ public class ConversationActivity extends AppCompatActivity {
                 Log.e("xxx", " contact found: " + contact.toString());
             }
 
-            //dao.getConversationMessages(conversation.getId());
+            dao.getConversationMessages(conversation.getId());
+            Log.e("xxx", " ================================================================== ");
+
         }
 
     }
