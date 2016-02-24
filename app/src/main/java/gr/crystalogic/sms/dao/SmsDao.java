@@ -42,6 +42,13 @@ public class SmsDao {
                 conversation.setRecipientIds(cursor.getLong(cursor.getColumnIndex(ConversationColumns.RECIPIENT_IDS)));
                 conversation.setSnippet(cursor.getString(cursor.getColumnIndex(ConversationColumns.SNIPPET)));
                 conversation.setSnippetCs(cursor.getLong(cursor.getColumnIndex(ConversationColumns.SNIPPET_CS)));
+
+                //find address
+                String address = getAddress(conversation.getRecipientIds());
+                //find contact
+                Contact contact = getContactByAddress(address);
+                conversation.setContact(contact);
+
                 conversations.add(conversation);
             } while (cursor.moveToNext());
         }
