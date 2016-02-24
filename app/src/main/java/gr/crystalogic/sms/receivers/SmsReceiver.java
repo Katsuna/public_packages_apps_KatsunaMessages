@@ -12,7 +12,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import gr.crystalogic.sms.MainActivity;
+import gr.crystalogic.sms.ui.activities.MainActivity;
 
 public class SmsReceiver extends BroadcastReceiver {
 

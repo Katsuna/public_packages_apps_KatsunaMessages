@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -35,11 +35,11 @@
         <activity
             android:name=".ui.activities.ConversationActivity"
             android:label="@string/title_activity_conversation"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".ui.activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="gr.crystalogic.sms.MainActivity" />
+                android:value=".ui.activities.MainActivity" />
         </activity>
     </application>
 

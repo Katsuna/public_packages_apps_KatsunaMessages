@@ -1,4 +1,4 @@
-package gr.crystalogic.sms;
+package gr.crystalogic.sms.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,15 +8,23 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import gr.crystalogic.sms.ui.activities.ConversationActivity;
+import java.util.List;
+
+import gr.crystalogic.sms.R;
+import gr.crystalogic.sms.dao.SmsDao;
+import gr.crystalogic.sms.domain.Conversation;
+import gr.crystalogic.sms.ui.adapters.ConversationsAdapter;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +53,20 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        initControls();
+        loadConversations();
+    }
+
+    private void initControls() {
+        mRecyclerView = (RecyclerView) findViewById(R.id.conversations_list);
+    }
+
+    private void loadConversations() {
+        SmsDao dao = new SmsDao(this);
+        List<Conversation> conversations = dao.getConversations();
+        ConversationsAdapter mAdapter = new ConversationsAdapter(conversations);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
