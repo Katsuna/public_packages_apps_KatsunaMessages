@@ -9,14 +9,31 @@ import gr.crystalogic.sms.domain.Conversation;
 
 public class ConversationViewHolder extends RecyclerView.ViewHolder {
 
-    private final TextView mDescription;
+    private final TextView mDisplayName;
+    private final TextView mDateTime;
+    private final TextView mMessageCount;
+    private final TextView mSnippet;
 
     public ConversationViewHolder(View itemView) {
         super(itemView);
-        mDescription = (TextView) itemView.findViewById(R.id.description);
+        mDisplayName = (TextView) itemView.findViewById(R.id.displayName);
+        mDateTime = (TextView) itemView.findViewById(R.id.dateTime);
+        mMessageCount = (TextView) itemView.findViewById(R.id.messageCount);
+        mSnippet = (TextView) itemView.findViewById(R.id.snippet);
     }
 
     public void bind(Conversation model) {
-        mDescription.setText(model.toString());
+        String name = "";
+        if (model.getContact() != null) {
+            name = model.getContact().getName();
+        } else
+        {
+
+        }
+        mDisplayName.setText(name);
+
+        mDateTime.setText(model.getDateFormatted("HH:mm dd/MM/yyyy"));
+        mMessageCount.setText(" (" + model.getMessageCount() + ") ");
+        mSnippet.setText(model.getSnippet());
     }
 }
