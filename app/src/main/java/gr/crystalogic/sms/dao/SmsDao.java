@@ -20,11 +20,9 @@ public class SmsDao {
     private static final String TAG = "ContactDao";
 
     private final ContentResolver cr;
-    private final Context mContext;
 
     public SmsDao(Context context) {
         cr = context.getContentResolver();
-        mContext = context;
     }
 
     public List<Conversation> getConversations() {
@@ -45,12 +43,16 @@ public class SmsDao {
 
                 //find address
                 String address = getAddress(conversation.getRecipientIds());
+                conversation.setAddress(address);
+
                 //find contact
                 Contact contact = getContactByAddress(address);
                 conversation.setContact(contact);
 
                 conversations.add(conversation);
             } while (cursor.moveToNext());
+
+            cursor.close();
         }
 
         return conversations;
@@ -105,6 +107,7 @@ public class SmsDao {
         Cursor cursor = cr.query(uri, projection, null, null, null);
         if (cursor.moveToFirst()) {
             address = cursor.getString(cursor.getColumnIndex("address"));
+            cursor.close();
         }
         return address;
     }
@@ -115,7 +118,8 @@ public class SmsDao {
         String[] projection = {
                 ContactsContract.PhoneLookup._ID,
                 ContactsContract.PhoneLookup.DISPLAY_NAME,
-                ContactsContract.PhoneLookup.NUMBER
+                ContactsContract.PhoneLookup.NUMBER,
+                ContactsContract.PhoneLookup.PHOTO_THUMBNAIL_URI
         };
 
         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(address));
@@ -126,6 +130,9 @@ public class SmsDao {
             contact.setId(cursor.getLong(cursor.getColumnIndex(ContactsContract.PhoneLookup._ID)));
             contact.setName(cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME)));
             contact.setNumber(cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.NUMBER)));
+            contact.setPhotoUri(cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.PHOTO_THUMBNAIL_URI)));
+
+            cursor.close();
         }
         return contact;
     }
@@ -145,6 +152,7 @@ public class SmsDao {
                 buf.append(c.getType(i));
                 buf.append(" | ");
             }
+            c.close();
             Log.e(TAG, buf.toString());
         }
     }

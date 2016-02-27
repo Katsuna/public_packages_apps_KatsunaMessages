@@ -5,6 +5,7 @@ public class Contact {
     private long id;
     private String name;
     private String number;
+    private String photoUri;
 
     @Override
     public String toString() {
@@ -33,5 +34,13 @@ public class Contact {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public String getPhotoUri() {
+        return photoUri;
+    }
+
+    public void setPhotoUri(String photoUri) {
+        this.photoUri = photoUri;
     }
 }

@@ -11,6 +11,7 @@ public class Conversation {
     private long recipientIds;
     private String snippet;
     private long snippetCs;
+    private String address;
 
     private String ct_t;
 
@@ -51,12 +52,26 @@ public class Conversation {
         return date;
     }
 
+    public void setDate(long date) {
+        this.date = date;
+    }
+
     public String getDateFormatted(String pattern) {
         return new DateTime(date).toString(pattern);
     }
 
-    public void setDate(long date) {
-        this.date = date;
+    public String getDateFormatted() {
+        DateTime dateTime = new DateTime(date);
+        DateTime startOfToday = DateTime.now().toLocalDate().toDateTimeAtStartOfDay();
+
+        String output;
+        if (dateTime.isBefore(startOfToday)) {
+            output = dateTime.toString("dd/MM/yyyy");
+        } else {
+            output = dateTime.toString("HH:mm");
+        }
+
+        return output;
     }
 
     public long getMessageCount() {
@@ -89,5 +104,13 @@ public class Conversation {
 
     public void setContact(Contact contact) {
         this.contact = contact;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }
