@@ -28,7 +28,9 @@ public class SmsDao {
     public List<Conversation> getConversations() {
         List<Conversation> conversations = new ArrayList<>();
 
-        Cursor cursor = cr.query(Uris.CONVERSATIONS_SIMPLE, ConversationColumns.PROJECTION_SIMPLE, null, null, null);
+        String orderBy =  ConversationColumns.DATE + " DESC";
+
+        Cursor cursor = cr.query(Uris.CONVERSATIONS_SIMPLE, ConversationColumns.PROJECTION_SIMPLE, null, null, orderBy);
         if (cursor.moveToFirst()) {
             do {
 /*                0:_id type:1 | 1:date type:1 | 2:message_count type:1 | 3:recipient_ids type:3 | 4:snippet type:3 | 5:snippet_cs type:1 | 6:read type:
