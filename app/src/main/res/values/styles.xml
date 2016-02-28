@@ -8,4 +8,8 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="drawer">
+        <item name="android:textSize">20sp</item>
+    </style>
+
 </resources>
