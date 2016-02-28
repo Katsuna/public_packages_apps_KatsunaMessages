@@ -63,7 +63,7 @@ public class SmsDao {
 
         Uri uri = Uri.withAppendedPath(Uris.CONVERSATIONS, String.valueOf(threadId));
 
-        Cursor cursor = cr.query(uri, ConversationColumns.PROJECTION_MESSAGES, null, null, null);
+        Cursor cursor = cr.query(uri, ConversationColumns.PROJECTION_ULTRA, null, null, null);
         if (cursor.moveToFirst()) {
             do {
                 Message message = new Message();
@@ -72,16 +72,17 @@ public class SmsDao {
                 message.setBody(cursor.getString(cursor.getColumnIndex(ConversationColumns.BODY)));
                 message.setDate(cursor.getLong(cursor.getColumnIndex(ConversationColumns.DATE)));
                 message.setRead(cursor.getInt(cursor.getColumnIndex(ConversationColumns.READ)));
+                message.setType(cursor.getInt(cursor.getColumnIndex(ConversationColumns.TYPE)));
 
                 //find contact
                 Contact contact = getContactByAddress(message.getAddress());
                 message.setContact(contact);
 
-                /* if ("application/vnd.wap.multipart.related".equals(ct_t)) {
+/*                 if ("application/vnd.wap.multipart.related".equals(ct_t)) {
                     // it's MMS
                 } else {
                     // it's SMS
-                }
+                }*/
                 int l = cursor.getColumnCount();
                 StringBuilder buf = new StringBuilder();
                 for (int i = 0; i < l; i++) {
@@ -92,7 +93,6 @@ public class SmsDao {
                     buf.append(" | ");
                 }
                 Log.e(TAG, buf.toString());
-                */
 
                 messages.add(message);
             } while (cursor.moveToNext());

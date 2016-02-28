@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import gr.crystalogic.sms.R;
+import gr.crystalogic.sms.dao.metadata.MessageType;
 import gr.crystalogic.sms.domain.Message;
 
 public class MessageViewHolder extends RecyclerView.ViewHolder {
@@ -29,8 +30,10 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
     public void bind(Message message) {
         mDisplayName.setText(message.getAddress());
 
-        String name;
-        if (message.getContact() != null) {
+        String name = "";
+        if (message.getType() == MessageType.OUTGOING) {
+            mPhoto.setImageDrawable(null);
+        } else if (message.getContact() != null) {
             name = message.getContact().getName();
 
             //load photo

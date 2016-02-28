@@ -34,12 +34,18 @@ public class ConversationColumns extends BaseColumns {
     public static final String ERROR = "error";
     public static final String HAS_ATTACHMENT = "has_attachment";
 
-    public static final String[] PROJECTION_FULL = new String[] { THREAD_ID, ID, BODY, ADDRESS, PERSON, SUB, SUBJECT, RETR_ST,
-            TYPE, DATE, CR_CLS, SUB_CS, READ, CT_T };
+    public static final String[] PROJECTION_ULTRA = new String[]{
+            "body", "person", "sub", "subject", "retr_st", "type", "date", "ct_cls", "sub_cs", "_id", "read",
+            "ct_l", "tr_id", "st", "msg_box", "thread_id", "reply_path_present", "m_cls", "read_status",
+            "ct_t", "status", "retr_txt_cs", "d_rpt", "error_code", "m_id", "date_sent", "m_type", "v",
+            "exp", "pri", "service_center", "address", "rr", "rpt_a", "resp_txt", "locked", "resp_st", "m_size"};
 
-    public static final String[] PROJECTION_SIMPLE = new String[] { ID, DATE, MESSAGE_COUNT, RECIPIENT_IDS, SNIPPET, SNIPPET_CS,
-            READ, TYPE, ERROR, HAS_ATTACHMENT };
+    public static final String[] PROJECTION_FULL = new String[]{THREAD_ID, ID, BODY, ADDRESS, PERSON, SUB, SUBJECT, RETR_ST,
+            TYPE, DATE, CR_CLS, SUB_CS, READ, CT_T};
 
-    public static final String[] PROJECTION_MESSAGES = new String[] { ID, ADDRESS, BODY, DATE, READ };
+    public static final String[] PROJECTION_SIMPLE = new String[]{ID, DATE, MESSAGE_COUNT, RECIPIENT_IDS, SNIPPET, SNIPPET_CS,
+            READ, TYPE, ERROR, HAS_ATTACHMENT};
+
+    public static final String[] PROJECTION_MESSAGES = new String[]{ID, ADDRESS, BODY, DATE, READ};
 
 }
