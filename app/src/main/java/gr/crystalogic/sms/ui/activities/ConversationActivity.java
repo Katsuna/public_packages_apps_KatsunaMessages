@@ -16,7 +16,7 @@ import gr.crystalogic.sms.dao.SmsDao;
 import gr.crystalogic.sms.domain.Message;
 import gr.crystalogic.sms.ui.adapters.MessagesAdapter;
 
-public class ConversationActivity extends AppCompatActivity {
+public class ConversationActivity extends BaseActivity {
 
     private RecyclerView mRecyclerView;
 
@@ -24,8 +24,8 @@ public class ConversationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversation);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
+        initToolbar();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
