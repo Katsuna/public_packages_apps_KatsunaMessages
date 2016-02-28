@@ -63,21 +63,25 @@ public class SmsDao {
 
         Uri uri = Uri.withAppendedPath(Uris.CONVERSATIONS, String.valueOf(threadId));
 
-        String selection = null; /* = ContactsContract.CommonDataKinds.StructuredPostal.CONTACT_ID + "=" + contactId; */
-        String orderBy = null; /* = ContactsContract.CommonDataKinds.StructuredPostal.IS_PRIMARY + " DESC"; */
-
-        Cursor cursor = cr.query(uri, ConversationColumns.PROJECTION_FULL, selection, null, orderBy);
+        Cursor cursor = cr.query(uri, ConversationColumns.PROJECTION_MESSAGES, null, null, null);
         if (cursor.moveToFirst()) {
             do {
-                Message address = new Message();
+                Message message = new Message();
+                message.setId(cursor.getLong(cursor.getColumnIndex(ConversationColumns.ID)));
+                message.setAddress(cursor.getString(cursor.getColumnIndex(ConversationColumns.ADDRESS)));
+                message.setBody(cursor.getString(cursor.getColumnIndex(ConversationColumns.BODY)));
+                message.setDate(cursor.getLong(cursor.getColumnIndex(ConversationColumns.DATE)));
+                message.setRead(cursor.getInt(cursor.getColumnIndex(ConversationColumns.READ)));
+
+                //find contact
+                Contact contact = getContactByAddress(message.getAddress());
+                message.setContact(contact);
 
                 /* if ("application/vnd.wap.multipart.related".equals(ct_t)) {
                     // it's MMS
                 } else {
                     // it's SMS
-                }*/
-
-
+                }
                 int l = cursor.getColumnCount();
                 StringBuilder buf = new StringBuilder();
                 for (int i = 0; i < l; i++) {
@@ -88,8 +92,9 @@ public class SmsDao {
                     buf.append(" | ");
                 }
                 Log.e(TAG, buf.toString());
+                */
 
-                messages.add(address);
+                messages.add(message);
             } while (cursor.moveToNext());
             cursor.close();
         }

@@ -23,7 +23,7 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
         mDisplayName = (TextView) itemView.findViewById(R.id.displayName);
         mDateTime = (TextView) itemView.findViewById(R.id.dateTime);
         mMessageCount = (TextView) itemView.findViewById(R.id.messageCount);
-        mSnippet = (TextView) itemView.findViewById(R.id.snippet);
+        mSnippet = (TextView) itemView.findViewById(R.id.body);
         mPhoto = (ImageView) itemView.findViewById(R.id.photo);
     }
 

@@ -40,4 +40,6 @@ public class ConversationColumns extends BaseColumns {
     public static final String[] PROJECTION_SIMPLE = new String[] { ID, DATE, MESSAGE_COUNT, RECIPIENT_IDS, SNIPPET, SNIPPET_CS,
             READ, TYPE, ERROR, HAS_ATTACHMENT };
 
+    public static final String[] PROJECTION_MESSAGES = new String[] { ID, ADDRESS, BODY, DATE, READ };
+
 }

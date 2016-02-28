@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private RecyclerView mRecyclerView;
+    private ConversationsAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +66,28 @@ public class MainActivity extends AppCompatActivity
     private void loadConversations() {
         SmsDao dao = new SmsDao(this);
         List<Conversation> conversations = dao.getConversations();
-        ConversationsAdapter mAdapter = new ConversationsAdapter(conversations);
+        mAdapter = new ConversationsAdapter(conversations,
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int position = mRecyclerView.getChildAdapterPosition(v);
+                        Conversation conversation = mAdapter.getItemAtPosition(position);
+                        showConversation(conversation.getId());
+                    }
+                },
+                new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        return false;
+                    }
+                });
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    private void showConversation(long conversationId) {
+        Intent intent = new Intent(getApplicationContext(), ConversationActivity.class);
+        intent.putExtra("conversationId", conversationId);
+        startActivity(intent);
     }
 
     @Override
