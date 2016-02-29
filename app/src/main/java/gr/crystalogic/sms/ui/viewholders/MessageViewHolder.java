@@ -28,24 +28,27 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(Message message) {
-        mDisplayName.setText(message.getAddress());
 
-        String name = "";
-        if (message.getType() == MessageType.OUTGOING) {
-            mPhoto.setImageDrawable(null);
-        } else if (message.getContact() != null) {
-            name = message.getContact().getName();
+        if (mDisplayName != null) {
+            mDisplayName.setText(message.getAddress());
 
-            //load photo
-            Picasso.with(itemView.getContext())
-                    .load(message.getContact().getPhotoUri())
-                    .fit()
-                    .into(mPhoto);
+            String name = "";
+            if (message.getType() == MessageType.OUTGOING) {
+                mPhoto.setImageBitmap(null);
+            } else if (message.getContact() != null) {
+                name = message.getContact().getName();
 
-        } else {
-            name = message.getAddress();
+                //load photo
+                Picasso.with(itemView.getContext())
+                        .load(message.getContact().getPhotoUri())
+                        .fit()
+                        .into(mPhoto);
+
+            } else {
+                name = message.getAddress();
+            }
+            mDisplayName.setText(name);
         }
-        mDisplayName.setText(name);
 
         mDateTime.setText(message.getDateFormatted());
         mBody.setText(message.getBody());
