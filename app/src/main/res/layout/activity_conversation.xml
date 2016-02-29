@@ -26,10 +26,11 @@
     </android.support.design.widget.CoordinatorLayout>
 
     <EditText
+        android:id="@+id/new_message"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:background="@color/pink"
-        android:text="123" />
-
+        android:imeOptions="actionDone"
+        android:singleLine="true" />
 
 </LinearLayout>

@@ -5,18 +5,24 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.List;
 
 import gr.crystalogic.sms.R;
 import gr.crystalogic.sms.dao.SmsDao;
+import gr.crystalogic.sms.dao.SmsSender;
 import gr.crystalogic.sms.domain.Message;
 import gr.crystalogic.sms.ui.adapters.MessagesAdapter;
 
 public class ConversationActivity extends BaseActivity {
 
     private RecyclerView mRecyclerView;
+    private EditText mNewMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +56,17 @@ public class ConversationActivity extends BaseActivity {
 
     private void initControls() {
         mRecyclerView = (RecyclerView) findViewById(R.id.messagesRecyclerView);
+        mNewMessage = (EditText) findViewById(R.id.new_message);
+
+        mNewMessage.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    SmsSender.send(ConversationActivity.this, "6939212234", mNewMessage.getText().toString());
+                }
+                return false;
+            }
+        });
     }
 
     private long getConversationIdFromIntent() {
