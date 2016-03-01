@@ -50,6 +50,11 @@ public class MainActivity extends BaseActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         initControls();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         loadConversations();
     }
 

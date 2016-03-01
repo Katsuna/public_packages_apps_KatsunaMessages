@@ -1,6 +1,7 @@
 package gr.crystalogic.sms.dao;
 
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gr.crystalogic.sms.dao.metadata.ConversationColumns;
+import gr.crystalogic.sms.dao.metadata.MessageType;
 import gr.crystalogic.sms.domain.Contact;
 import gr.crystalogic.sms.domain.Conversation;
 import gr.crystalogic.sms.domain.Message;
@@ -28,7 +30,7 @@ public class SmsDao {
     public List<Conversation> getConversations() {
         List<Conversation> conversations = new ArrayList<>();
 
-        String orderBy =  ConversationColumns.DATE + " DESC";
+        String orderBy = ConversationColumns.DATE + " DESC";
 
         Cursor cursor = cr.query(Uris.CONVERSATIONS_SIMPLE, ConversationColumns.PROJECTION_SIMPLE, null, null, orderBy);
         if (cursor.moveToFirst()) {
@@ -142,6 +144,20 @@ public class SmsDao {
             cursor.close();
         }
         return contact;
+    }
+
+    public void sendMessage(String address, String message) {
+        ContentValues values = new ContentValues();
+        values.put(ConversationColumns.TYPE, MessageType.OUTGOING);
+        values.put(ConversationColumns.BODY, message);
+        values.put(ConversationColumns.READ, 1);
+        values.put(ConversationColumns.ADDRESS, address);
+
+        try {
+            cr.insert(Uris.URI_SENT, values);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
     }
 
     public void showRows(Uri u) {
