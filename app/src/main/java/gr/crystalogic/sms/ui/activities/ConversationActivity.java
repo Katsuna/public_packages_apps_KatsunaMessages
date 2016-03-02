@@ -55,6 +55,7 @@ public class ConversationActivity extends BaseActivity {
         List<Message> messages = dao.getConversationMessages(conversationId);
         MessagesAdapter adapter = new MessagesAdapter(messages, null, null);
         mRecyclerView.setAdapter(adapter);
+        mRecyclerView.scrollToPosition(messages.size()-1);
 
         if (messages.size() > 0) {
             address = messages.get(0).getAddress();
