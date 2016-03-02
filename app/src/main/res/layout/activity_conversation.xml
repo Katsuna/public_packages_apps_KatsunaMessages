@@ -14,14 +14,16 @@
         <EditText
             android:id="@+id/new_message"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="80dp"
             android:layout_alignParentBottom="true"
             android:background="@color/pink"
+            android:hint="@string/type_message"
             android:imeOptions="actionDone"
+            android:padding="10dp"
             android:singleLine="true"
             android:textColor="@color/white"
-            android:padding="10dp"
-            android:textSize="20sp" />
+            android:textColorHint="@color/white"
+            android:textSize="25sp" />
 
         <android.support.design.widget.CoordinatorLayout
             android:id="@+id/coordinator"
