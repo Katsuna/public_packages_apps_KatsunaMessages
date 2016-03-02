@@ -1,15 +1,22 @@
 package gr.crystalogic.sms.ui.activities;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.SmsManager;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -24,6 +31,9 @@ import gr.crystalogic.sms.receivers.BaseBroadcastReceiver;
 import gr.crystalogic.sms.ui.adapters.MessagesAdapter;
 
 public class ConversationActivity extends BaseActivity {
+
+    private static final String TAG = "ConversationActivity";
+    private static final int REQUEST_CODE_ASK_CALL_PERMISSION = 2;
 
     private RecyclerView mRecyclerView;
     private EditText mNewMessage;
@@ -48,6 +58,50 @@ public class ConversationActivity extends BaseActivity {
         conversationId = getConversationIdFromIntent();
 
         loadMessages();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.conversation, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_call) {
+            callContact(address);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void callContact(String address) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CODE_ASK_CALL_PERMISSION);
+            return;
+        }
+
+        Intent i = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + address));
+        startActivity(i);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_ASK_CALL_PERMISSION:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission Granted
+                    Log.e(TAG, "call contact permission granted");
+                    callContact(address);
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 
     private void loadMessages() {
