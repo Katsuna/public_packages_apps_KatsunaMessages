@@ -41,6 +41,16 @@ public class Message {
         return address;
     }
 
+    public String getDisplayName() {
+        String displayName;
+        if (contact != null) {
+            displayName = contact.getName();
+        } else {
+            displayName = address;
+        }
+        return displayName;
+    }
+
     public void setAddress(String address) {
         this.address = address;
     }

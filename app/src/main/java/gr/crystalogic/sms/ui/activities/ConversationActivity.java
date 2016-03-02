@@ -20,6 +20,7 @@ import java.util.List;
 import gr.crystalogic.sms.R;
 import gr.crystalogic.sms.dao.SmsDao;
 import gr.crystalogic.sms.domain.Message;
+import gr.crystalogic.sms.receivers.BaseBroadcastReceiver;
 import gr.crystalogic.sms.ui.adapters.MessagesAdapter;
 
 public class ConversationActivity extends BaseActivity {
@@ -27,8 +28,8 @@ public class ConversationActivity extends BaseActivity {
     private RecyclerView mRecyclerView;
     private EditText mNewMessage;
 
-    private BroadcastReceiver sendBroadcastReceiver;
-    private BroadcastReceiver deliveryBroadcastReceiver;
+    private BaseBroadcastReceiver sendBroadcastReceiver;
+    private BaseBroadcastReceiver deliveryBroadcastReceiver;
     private final String SENT = "SMS_SENT";
     private final String DELIVERED = "SMS_DELIVERED";
     private String address;
@@ -55,10 +56,11 @@ public class ConversationActivity extends BaseActivity {
         List<Message> messages = dao.getConversationMessages(conversationId);
         MessagesAdapter adapter = new MessagesAdapter(messages, null, null);
         mRecyclerView.setAdapter(adapter);
-        mRecyclerView.scrollToPosition(messages.size()-1);
+        mRecyclerView.scrollToPosition(messages.size() - 1);
 
         if (messages.size() > 0) {
             address = messages.get(0).getAddress();
+            setTitle(messages.get(0).getDisplayName());
         }
     }
 
@@ -76,7 +78,7 @@ public class ConversationActivity extends BaseActivity {
             }
         });
 
-        sendBroadcastReceiver = new BroadcastReceiver() {
+        sendBroadcastReceiver = new BaseBroadcastReceiver() {
 
             public void onReceive(Context arg0, Intent arg1) {
                 switch (getResultCode()) {
@@ -104,7 +106,7 @@ public class ConversationActivity extends BaseActivity {
             }
         };
 
-        deliveryBroadcastReceiver = new BroadcastReceiver() {
+        deliveryBroadcastReceiver = new BaseBroadcastReceiver() {
             public void onReceive(Context arg0, Intent arg1) {
                 switch (getResultCode()) {
                     case Activity.RESULT_OK:
@@ -116,14 +118,15 @@ public class ConversationActivity extends BaseActivity {
                 }
             }
         };
-        registerReceiver(deliveryBroadcastReceiver, new IntentFilter(DELIVERED));
-        registerReceiver(sendBroadcastReceiver, new IntentFilter(SENT));
+
+        deliveryBroadcastReceiver.register(this, new IntentFilter(DELIVERED));
+        sendBroadcastReceiver.register(this, new IntentFilter(SENT));
     }
 
     @Override
     protected void onStop() {
-        unregisterReceiver(sendBroadcastReceiver);
-        unregisterReceiver(deliveryBroadcastReceiver);
+        sendBroadcastReceiver.unregister(this);
+        deliveryBroadcastReceiver.unregister(this);
         super.onStop();
     }
 

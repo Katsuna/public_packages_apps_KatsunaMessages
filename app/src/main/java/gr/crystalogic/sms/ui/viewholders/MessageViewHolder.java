@@ -35,18 +35,18 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
             String name = "";
             if (message.getType() == MessageType.OUTGOING) {
                 mPhoto.setImageBitmap(null);
-            } else if (message.getContact() != null) {
-                name = message.getContact().getName();
-
-                //load photo
-                Picasso.with(itemView.getContext())
-                        .load(message.getContact().getPhotoUri())
-                        .fit()
-                        .into(mPhoto);
-
             } else {
-                name = message.getAddress();
+                name = message.getDisplayName();
+
+                if (message.getContact() != null) {
+                    //load photo
+                    Picasso.with(itemView.getContext())
+                            .load(message.getContact().getPhotoUri())
+                            .fit()
+                            .into(mPhoto);
+                }
             }
+
             mDisplayName.setText(name);
         }
 
