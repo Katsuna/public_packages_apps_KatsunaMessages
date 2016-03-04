@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.SmsManager;
 import android.util.Log;
@@ -110,7 +111,8 @@ public class ConversationActivity extends BaseActivity {
         List<Message> messages = dao.getConversationMessages(conversationId);
         MessagesAdapter adapter = new MessagesAdapter(messages, null, null);
         mRecyclerView.setAdapter(adapter);
-        mRecyclerView.scrollToPosition(messages.size() - 1);
+        LinearLayoutManager linearLayoutManager = (LinearLayoutManager ) mRecyclerView.getLayoutManager();
+        linearLayoutManager.setReverseLayout(true);
 
         if (messages.size() > 0) {
             address = messages.get(0).getAddress();

@@ -66,8 +66,9 @@ public class SmsDao {
         List<Message> messages = new ArrayList<>();
 
         Uri uri = Uri.withAppendedPath(Uris.CONVERSATIONS, String.valueOf(threadId));
+        String orderBy = ConversationColumns.DATE + " DESC ";
 
-        Cursor cursor = cr.query(uri, ConversationColumns.PROJECTION_ULTRA, null, null, null);
+        Cursor cursor = cr.query(uri, ConversationColumns.PROJECTION_ULTRA, null, null, orderBy);
         if (cursor.moveToFirst()) {
             do {
                 Message message = new Message();
