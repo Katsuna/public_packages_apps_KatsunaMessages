@@ -57,6 +57,10 @@ public class MainActivity extends BaseActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         initControls();
+
+        if (!Device.isDefaultApp(this)) {
+            Device.makeDefaultApp(this);
+        }
     }
 
     @Override
