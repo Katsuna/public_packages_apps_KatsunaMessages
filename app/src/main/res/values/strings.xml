@@ -15,6 +15,4 @@
     <string name="allow_sms_read">Please allow the application to access your sms.</string>
     <string name="permission_denied">Permission denied.</string>
     <string name="empty_message">Please type a message.</string>
-    <string name="default_app">Default App</string>
-    <string name="default_app_message">Make this app the default sms application.</string>
 </resources>

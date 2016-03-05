@@ -1,10 +1,7 @@
 package gr.crystalogic.sms.utils;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -15,8 +12,6 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import gr.crystalogic.sms.R;
 
 public class Device {
 
@@ -42,20 +37,9 @@ public class Device {
     }
 
     public static void makeDefaultApp(final Context context) {
-        AlertDialog.Builder b = new AlertDialog.Builder(context);
-        b.setTitle(R.string.default_app);
-        b.setMessage(R.string.default_app_message);
-        b.setNegativeButton(android.R.string.cancel, null);
-        b.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            @TargetApi(Build.VERSION_CODES.KITKAT)
-            @Override
-            public void onClick(final DialogInterface dialogInterface, final int i) {
-                Intent intent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
-                intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, context.getPackageName());
-                context.startActivity(intent);
-            }
-        });
-        b.show();
+        Intent intent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
+        intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, context.getPackageName());
+        context.startActivity(intent);
     }
 
     public static boolean hasAllPermissions(Context context, String[] permissions) {
