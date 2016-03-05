@@ -1,7 +1,10 @@
 package gr.crystalogic.sms.ui.activities;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -10,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -17,10 +21,13 @@ import gr.crystalogic.sms.R;
 import gr.crystalogic.sms.dao.SmsDao;
 import gr.crystalogic.sms.domain.Conversation;
 import gr.crystalogic.sms.ui.adapters.ConversationsAdapter;
+import gr.crystalogic.sms.utils.Constants;
+import gr.crystalogic.sms.utils.Device;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private final String[] permissions = new String[]{Manifest.permission.READ_SMS, Manifest.permission.READ_CONTACTS};
     private RecyclerView mRecyclerView;
     private ConversationsAdapter mAdapter;
 
@@ -63,6 +70,12 @@ public class MainActivity extends BaseActivity
     }
 
     private void loadConversations() {
+
+        if (!Device.hasAllPermissions(this, permissions)) {
+            Device.requestPermissions(this, permissions, Constants.REQUEST_CODE_READ_SMS_AND_CONTACTS);
+            return;
+        }
+
         SmsDao dao = new SmsDao(this);
         List<Conversation> conversations = dao.getConversations();
         mAdapter = new ConversationsAdapter(conversations,
@@ -81,6 +94,22 @@ public class MainActivity extends BaseActivity
                     }
                 });
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case Constants.REQUEST_CODE_READ_SMS_AND_CONTACTS:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission Granted
+                    loadConversations();
+                } else {
+                    Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 
     private void showConversation(long conversationId) {

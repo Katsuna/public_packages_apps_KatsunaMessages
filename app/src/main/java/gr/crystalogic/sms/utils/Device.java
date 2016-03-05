@@ -1,9 +1,7 @@
 package gr.crystalogic.sms.utils;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Telephony;
@@ -11,8 +9,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import gr.crystalogic.sms.BuildConfig;
-import gr.crystalogic.sms.R;
 
 public class Device {
 
@@ -37,38 +37,36 @@ public class Device {
         }
     }
 
-    public static boolean hasPermission(final Context context, final String permission) {
-        return ContextCompat.checkSelfPermission(context, permission)
-                == PackageManager.PERMISSION_GRANTED;
+    public static boolean hasAllPermissions(Context context, String[] permissions) {
+        for (String permission : permissions) {
+            if (!hasPermission(context, permission)) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    public static boolean requestPermission(final Activity activity, final String permission,
-                                            final int requestCode, final int message,
-                                            final DialogInterface.OnClickListener onCancelListener) {
-        Log.i(TAG, "requesting permission: " + permission);
-        if (!hasPermission(activity, permission)) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
-                new AlertDialog.Builder(activity)
-                        .setTitle(R.string.permissions)
-                        .setMessage(message)
-                        .setCancelable(false)
-                        .setNegativeButton(android.R.string.cancel, onCancelListener)
-                        .setPositiveButton(android.R.string.ok,
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(final DialogInterface dialogInterface,
-                                                        final int i) {
-                                        ActivityCompat.requestPermissions(activity,
-                                                new String[]{permission}, requestCode);
-                                    }
-                                })
-                        .show();
-            } else {
-                ActivityCompat.requestPermissions(activity, new String[]{permission}, requestCode);
-            }
-            return false;
-        } else {
-            return true;
+    public static boolean hasPermission(final Context context, final String permission) {
+        return ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static void requestPermissions(final Activity activity, final String[] permissions,
+                                          final int requestCode) {
+        String[] notGrantedPermissions = getNotGrantedPermissions(activity, permissions);
+
+        if (notGrantedPermissions.length > 0) {
+            ActivityCompat.requestPermissions(activity, notGrantedPermissions, requestCode);
         }
     }
+
+    private static String[] getNotGrantedPermissions(Context context, String[] permissions) {
+        List<String> notGrantedPermissions = new ArrayList<>();
+        for (String permission : permissions) {
+            if (!hasPermission(context, permission)) {
+                notGrantedPermissions.add(permission);
+            }
+        }
+        return notGrantedPermissions.toArray(new String[notGrantedPermissions.size()]);
+    }
+
 }
