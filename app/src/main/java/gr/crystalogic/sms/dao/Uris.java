@@ -17,4 +17,6 @@ public class Uris {
 
     public static final Uri URI_SENT = Uri.parse("content://sms/sent");
 
+    public static final Uri URI_INBOX = Uri.parse("content://sms/inbox");
+
 }

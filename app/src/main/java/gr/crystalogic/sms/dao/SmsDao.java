@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Handler;
 import android.provider.ContactsContract;
 import android.util.Log;
 
@@ -159,6 +160,45 @@ public class SmsDao {
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
+    }
+
+    public void receiveMessage(final Message message) {
+        //if you have multiple receivers don't save again
+        //check after 5 secs to allow other receivers to save first
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (isAlreadySaved(message)) {
+                    return;
+                }
+
+                ContentValues values = new ContentValues();
+                values.put(ConversationColumns.BODY, message.getBody());
+                values.put(ConversationColumns.ADDRESS, message.getAddress());
+                values.put(ConversationColumns.DATE_SENT, message.getDate());
+
+                try {
+                    cr.insert(Uris.URI_INBOX, values);
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage());
+                }
+            }
+        }, 5000);
+    }
+
+    private boolean isAlreadySaved(Message message) {
+        boolean output = false;
+        String[] projection = { ConversationColumns.ID };
+        String selection = ConversationColumns.DATE_SENT + "=" + message.getDate();
+
+        Cursor cursor = cr.query(Uris.URI_INBOX, projection, selection, null, null);
+        if (cursor.moveToFirst()) {
+            output = true;
+        } else {
+            output = false;
+        }
+        return output;
     }
 
     public void showRows(Uri u) {

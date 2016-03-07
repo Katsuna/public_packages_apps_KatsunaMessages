@@ -18,6 +18,7 @@ public class ConversationColumns extends BaseColumns {
     public static final String RETR_ST = "retr_st";
     public static final String TYPE = "type";
     public static final String DATE = "date";
+    public static final String DATE_SENT = "date_sent";
     public static final String CR_CLS = "ct_cls";
     public static final String SUB_CS = "sub_cs";
     public static final String READ = "read";
