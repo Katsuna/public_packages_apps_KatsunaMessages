@@ -13,14 +13,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gr.crystalogic.sms.ui.activities.MainActivity;
+import gr.crystalogic.sms.utils.Device;
 
-public class SmsReceiver extends BroadcastReceiver {
+ public class SmsReceiver extends BroadcastReceiver {
 
     private static final String ACTION = "android.provider.Telephony.SMS_RECEIVED";
     private final String TAG = this.getClass().getSimpleName();
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        if (!Device.isDefaultApp(context)) {
+            return;
+        }
+
         if (intent.getAction().equals(ACTION)) {
 
            /* The SMS-Messages are 'hiding' within the extras of the Intent. */
