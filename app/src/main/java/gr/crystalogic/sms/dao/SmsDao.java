@@ -201,6 +201,22 @@ public class SmsDao {
         return output;
     }
 
+    public long getConversationId(Message message) {
+        long output = -1;
+        String[] projection = { ConversationColumns.THREAD_ID };
+        String selection = ConversationColumns.DATE_SENT + "= ? AND " + ConversationColumns.BODY + "= ? ";
+        String[] selectionArgs = new String[] { String.valueOf(message.getDate()), message.getBody() };
+
+        Cursor cursor = cr.query(Uris.URI_SMS, projection, selection, selectionArgs, null);
+        if (cursor.moveToFirst()) {
+            output = cursor.getLong(cursor.getColumnIndex(ConversationColumns.THREAD_ID));
+        }
+
+        Log.e(TAG, "conversatioId: " + output);
+        return output;
+    }
+
+
     public void showRows(Uri u) {
         Log.e(TAG, "-----GET HEADERS-----");
         Log.e(TAG, "-- " + u.toString() + " --");

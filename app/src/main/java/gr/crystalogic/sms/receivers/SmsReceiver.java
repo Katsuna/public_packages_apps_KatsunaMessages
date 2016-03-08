@@ -13,7 +13,7 @@ import java.util.List;
 
 import gr.crystalogic.sms.dao.SmsDao;
 import gr.crystalogic.sms.domain.Message;
-import gr.crystalogic.sms.ui.activities.MainActivity;
+import gr.crystalogic.sms.ui.activities.ConversationActivity;
 import gr.crystalogic.sms.utils.Device;
 
 public class SmsReceiver extends BroadcastReceiver {
@@ -76,10 +76,15 @@ public class SmsReceiver extends BroadcastReceiver {
     }
 
     private void showConversation(Context context, Message message) {
-        Intent i = new Intent(context, MainActivity.class);
+        Intent i = new Intent(context, ConversationActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         //i.setLaunchFlags(Intent.NEW_TASK_LAUNCH);
-        //i.putExtra("conversationId", conversationId);
+        i.putExtra("conversationId", getConversationId(context, message));
         context.startActivity(i);
+    }
+
+    private long getConversationId(Context context, Message message) {
+        SmsDao dao = new SmsDao(context);
+        return dao.getConversationId(message);
     }
 }
