@@ -3,6 +3,7 @@ package gr.crystalogic.sms.receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
@@ -31,9 +32,14 @@ public class SmsReceiver extends BroadcastReceiver {
         Message message = getMessage(intent);
 
         if (message != null) {
-            SmsDao dao = new SmsDao(context);
-            dao.receiveMessage(message);
-            showConversation(context, message);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+                new SaveMessageTask(context).execute(message);
+            } else {
+                SmsDao dao = new SmsDao(context);
+                dao.receiveMessage(message);
+                long conversationId = dao.getConversationId(message);
+                showConversation(context, conversationId);
+            }
         }
     }
 
@@ -44,7 +50,6 @@ public class SmsReceiver extends BroadcastReceiver {
 
             message = new Message();
 
-           /* The SMS-Messages are 'hiding' within the extras of the Intent. */
             Bundle bundle = intent.getExtras();
             if (bundle != null) {
                 List<SmsMessage> smsMessages = new ArrayList<>();
@@ -75,16 +80,53 @@ public class SmsReceiver extends BroadcastReceiver {
         return message;
     }
 
-    private void showConversation(Context context, Message message) {
+    private void showConversation(Context context, long conversationId) {
         Intent i = new Intent(context, ConversationActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        //i.setLaunchFlags(Intent.NEW_TASK_LAUNCH);
-        i.putExtra("conversationId", getConversationId(context, message));
+        i.putExtra("conversationId", conversationId);
         context.startActivity(i);
     }
 
-    private long getConversationId(Context context, Message message) {
-        SmsDao dao = new SmsDao(context);
-        return dao.getConversationId(message);
+    //use this for api < 19
+    private class SaveMessageTask extends AsyncTask<Message, Void, Long> {
+
+        private Context mContext;
+
+        public SaveMessageTask(Context context) {
+            mContext = context;
+        }
+
+        @Override
+        protected Long doInBackground(Message... params) {
+            Message message = params[0];
+
+            long output;
+
+            try {
+                //if you have multiple receivers don't save again
+                //check after 5 secs to allow other receivers to save first
+                Thread.sleep(5000);
+
+                SmsDao dao = new SmsDao(mContext);
+                output = dao.getConversationId(message);
+                if (output == -1) {
+                    Log.e(TAG, "conversation not found");
+                    dao.receiveMessage(message);
+                    output = dao.getConversationId(message);
+                    Log.e(TAG, "conversation found after insert: " + output);
+                } else {
+                    Log.e(TAG, "conversation found before insert: " + output);
+                }
+
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            return output;
+        }
+
+        @Override
+        protected void onPostExecute(Long conversationId) {
+            showConversation(mContext, conversationId);
+        }
     }
 }

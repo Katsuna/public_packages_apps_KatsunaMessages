@@ -162,29 +162,17 @@ public class SmsDao {
         }
     }
 
-    public void receiveMessage(final Message message) {
-        //if you have multiple receivers don't save again
-        //check after 5 secs to allow other receivers to save first
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (isAlreadySaved(message)) {
-                    return;
-                }
+    public void receiveMessage(Message message) {
+        ContentValues values = new ContentValues();
+        values.put(ConversationColumns.BODY, message.getBody());
+        values.put(ConversationColumns.ADDRESS, message.getAddress());
+        values.put(ConversationColumns.DATE_SENT, message.getDate());
 
-                ContentValues values = new ContentValues();
-                values.put(ConversationColumns.BODY, message.getBody());
-                values.put(ConversationColumns.ADDRESS, message.getAddress());
-                values.put(ConversationColumns.DATE_SENT, message.getDate());
-
-                try {
-                    cr.insert(Uris.URI_INBOX, values);
-                } catch (Exception e) {
-                    Log.e(TAG, e.getMessage());
-                }
-            }
-        }, 5000);
+        try {
+            cr.insert(Uris.URI_INBOX, values);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
     }
 
     private boolean isAlreadySaved(Message message) {
