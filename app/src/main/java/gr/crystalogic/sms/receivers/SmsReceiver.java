@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
@@ -28,6 +29,11 @@ public class SmsReceiver extends BroadcastReceiver {
             return;
         }
 
+        //acquire wakelock
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        PowerManager.WakeLock wakelock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
+        wakelock.acquire();
+
         Log.e(TAG, "onReceive: intent-ACTION=" + intent.getAction());
         Message message = getMessage(intent);
 
@@ -41,6 +47,9 @@ public class SmsReceiver extends BroadcastReceiver {
                 showConversation(context, conversationId);
             }
         }
+
+        //release wakelock
+        wakelock.release();
     }
 
     private Message getMessage(Intent intent) {
