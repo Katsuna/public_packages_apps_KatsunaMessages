@@ -24,7 +24,6 @@ import gr.crystalogic.sms.utils.Device;
 public class SmsReceiver extends BroadcastReceiver {
 
     private static final String ACTION = "android.provider.Telephony.SMS_RECEIVED";
-    private static final String ACTION_NEW = "android.provider.Telephony.SMS_DELIVER";
     private final String TAG = this.getClass().getSimpleName();
 
     @Override
@@ -59,7 +58,7 @@ public class SmsReceiver extends BroadcastReceiver {
     private Message getMessage(Intent intent) {
         Message message = null;
 
-        if (intent.getAction().equals(ACTION) || intent.getAction().equals(ACTION_NEW)) {
+        if (intent.getAction().equals(ACTION)) {
 
             message = new Message();
 
