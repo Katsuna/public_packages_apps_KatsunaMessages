@@ -3,6 +3,9 @@ package gr.crystalogic.sms.receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +24,7 @@ import gr.crystalogic.sms.utils.Device;
 public class SmsReceiver extends BroadcastReceiver {
 
     private static final String ACTION = "android.provider.Telephony.SMS_RECEIVED";
+    private static final String ACTION_NEW = "android.provider.Telephony.SMS_DELIVER";
     private final String TAG = this.getClass().getSimpleName();
 
     @Override
@@ -55,7 +59,7 @@ public class SmsReceiver extends BroadcastReceiver {
     private Message getMessage(Intent intent) {
         Message message = null;
 
-        if (intent.getAction().equals(ACTION)) {
+        if (intent.getAction().equals(ACTION) || intent.getAction().equals(ACTION_NEW)) {
 
             message = new Message();
 
@@ -90,10 +94,22 @@ public class SmsReceiver extends BroadcastReceiver {
     }
 
     private void showConversation(Context context, long conversationId) {
+        playRingtone(context);
+
         Intent i = new Intent(context, ConversationActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         i.putExtra("conversationId", conversationId);
         context.startActivity(i);
+    }
+
+    private void playRingtone(Context context) {
+        try {
+            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Ringtone r = RingtoneManager.getRingtone(context, notification);
+            r.play();
+        } catch (Exception ex) {
+            Log.e(TAG, "Exception: " + ex);
+        }
     }
 
     //use this for api < 19

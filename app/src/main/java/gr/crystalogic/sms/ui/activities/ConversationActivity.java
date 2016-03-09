@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -36,15 +37,12 @@ import gr.crystalogic.sms.utils.Constants;
 public class ConversationActivity extends BaseActivity {
 
     private static final String TAG = "ConversationActivity";
-
-
-    private RecyclerView mRecyclerView;
-    private EditText mNewMessage;
-
-    private BaseBroadcastReceiver sendBroadcastReceiver;
-    private BaseBroadcastReceiver deliveryBroadcastReceiver;
     private final String SENT = "SMS_SENT";
     private final String DELIVERED = "SMS_DELIVERED";
+    private RecyclerView mRecyclerView;
+    private EditText mNewMessage;
+    private BaseBroadcastReceiver sendBroadcastReceiver;
+    private BaseBroadcastReceiver deliveryBroadcastReceiver;
     private String address;
     private String message;
     private long conversationId;
@@ -61,6 +59,10 @@ public class ConversationActivity extends BaseActivity {
         conversationId = getConversationIdFromIntent();
 
         loadMessages();
+
+        //this is needed to open will screen is locked
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
     }
 
     @Override
@@ -125,7 +127,7 @@ public class ConversationActivity extends BaseActivity {
         List<Message> messages = dao.getConversationMessages(conversationId);
         MessagesAdapter adapter = new MessagesAdapter(messages, null, null);
         mRecyclerView.setAdapter(adapter);
-        LinearLayoutManager linearLayoutManager = (LinearLayoutManager ) mRecyclerView.getLayoutManager();
+        LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
         linearLayoutManager.setReverseLayout(true);
 
         if (messages.size() > 0) {
