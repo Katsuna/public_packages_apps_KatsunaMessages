@@ -49,8 +49,6 @@ public class SmsReceiver extends BroadcastReceiver {
                 long conversationId = dao.getConversationId(message);
                 showConversation(context, conversationId);
             }
-
-
         }
 
         //release wakelock
