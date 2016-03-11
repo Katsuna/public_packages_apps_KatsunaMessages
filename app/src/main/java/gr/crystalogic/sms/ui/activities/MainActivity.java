@@ -38,12 +38,12 @@ public class MainActivity extends BaseActivity
 
         initToolbar();
 
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, ConversationActivity.class));
+                Intent i = new Intent(MainActivity.this, ContactsActivity.class);
+                startActivity(i);
             }
         });
 

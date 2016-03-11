@@ -5,7 +5,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Handler;
 import android.provider.ContactsContract;
 import android.util.Log;
 
@@ -123,6 +122,20 @@ public class SmsDao {
         return address;
     }
 
+    public long getConversationId(String address) {
+        String[] projection = new String[]{ConversationColumns.THREAD_ID};
+        String filteredAddress = address.replaceAll("[-()/ ]", "");
+        String selection = ConversationColumns.ADDRESS + " like '%" + filteredAddress + "'";
+
+        long conversationId = -1;
+        Cursor cursor = cr.query(Uris.URI_SMS, projection, selection, null, null);
+        if (cursor.moveToFirst()) {
+            conversationId = cursor.getLong(cursor.getColumnIndex(ConversationColumns.THREAD_ID));
+            cursor.close();
+        }
+        return conversationId;
+    }
+
     public Contact getContactByAddress(String address) {
         Contact contact = null;
 
@@ -175,20 +188,6 @@ public class SmsDao {
         }
     }
 
-    private boolean isAlreadySaved(Message message) {
-        boolean output = false;
-        String[] projection = { ConversationColumns.ID };
-        String selection = ConversationColumns.DATE_SENT + "=" + message.getDate();
-
-        Cursor cursor = cr.query(Uris.URI_INBOX, projection, selection, null, null);
-        if (cursor.moveToFirst()) {
-            output = true;
-        } else {
-            output = false;
-        }
-        return output;
-    }
-
     public long getConversationId(Message message) {
         long output = -1;
         String[] projection = { ConversationColumns.THREAD_ID };
@@ -198,6 +197,7 @@ public class SmsDao {
         Cursor cursor = cr.query(Uris.URI_SMS, projection, selection, selectionArgs, null);
         if (cursor.moveToFirst()) {
             output = cursor.getLong(cursor.getColumnIndex(ConversationColumns.THREAD_ID));
+            cursor.close();
         }
 
         Log.e(TAG, "conversatioId: " + output);

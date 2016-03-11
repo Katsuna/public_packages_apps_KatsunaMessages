@@ -37,6 +37,7 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
                     .into(mPhoto);
 
         } else {
+            mPhoto.setImageBitmap(null);
             name = conversation.getAddress();
         }
         mDisplayName.setText(name);

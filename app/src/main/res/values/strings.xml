@@ -15,4 +15,6 @@
     <string name="allow_sms_read">Please allow the application to access your sms.</string>
     <string name="permission_denied">Permission denied.</string>
     <string name="empty_message">Please type a message.</string>
+    <string name="select_contact">Select Contact</string>
+    <string name="select_phone">Select phone number</string>
 </resources>

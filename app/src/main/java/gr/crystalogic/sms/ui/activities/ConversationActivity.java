@@ -46,6 +46,7 @@ public class ConversationActivity extends BaseActivity {
     private String address;
     private String message;
     private long conversationId;
+    private String conversationNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +59,12 @@ public class ConversationActivity extends BaseActivity {
         //load decisions
         conversationId = getConversationIdFromIntent();
 
-        loadMessages();
+        if (conversationId != -1) {
+            loadMessages();
+        }
+        else {
+            setTitle(conversationNumber);
+        }
 
         //this is needed to open will screen is locked
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
@@ -204,7 +210,13 @@ public class ConversationActivity extends BaseActivity {
 
     private long getConversationIdFromIntent() {
         Intent i = getIntent();
-        return i.getExtras().getLong("conversationId");
+        conversationNumber = i.getExtras().getString("conversationNumber");
+        if (conversationNumber == null) {
+            return i.getExtras().getLong("conversationId");
+        } else {
+            SmsDao dao = new SmsDao(this);
+            return dao.getConversationId(conversationNumber);
+        }
     }
 
     //---sends an SMS message to another device---
