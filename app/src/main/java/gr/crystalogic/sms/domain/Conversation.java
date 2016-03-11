@@ -62,16 +62,7 @@ public class Conversation {
 
     public String getDateFormatted() {
         DateTime dateTime = new DateTime(date);
-        DateTime startOfToday = DateTime.now().toLocalDate().toDateTimeAtStartOfDay();
-
-        String output;
-        if (dateTime.isBefore(startOfToday)) {
-            output = dateTime.toString("dd/MM/yyyy");
-        } else {
-            output = dateTime.toString("HH:mm");
-        }
-
-        return output;
+        return  dateTime.toString("HH:mm EEEE d-M-yy");
     }
 
     public long getMessageCount() {

@@ -14,7 +14,6 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
 
     private final TextView mDisplayName;
     private final TextView mDateTime;
-    private final TextView mMessageCount;
     private final TextView mSnippet;
     private final ImageView mPhoto;
 
@@ -22,7 +21,6 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         mDisplayName = (TextView) itemView.findViewById(R.id.displayName);
         mDateTime = (TextView) itemView.findViewById(R.id.dateTime);
-        mMessageCount = (TextView) itemView.findViewById(R.id.messageCount);
         mSnippet = (TextView) itemView.findViewById(R.id.body);
         mPhoto = (ImageView) itemView.findViewById(R.id.photo);
     }
@@ -44,7 +42,6 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
         mDisplayName.setText(name);
 
         mDateTime.setText(conversation.getDateFormatted());
-        mMessageCount.setText(" (" + conversation.getMessageCount() + ") ");
         mSnippet.setText(conversation.getSnippet());
     }
 }
