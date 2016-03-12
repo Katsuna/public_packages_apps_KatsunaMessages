@@ -43,7 +43,6 @@ public class ConversationActivity extends BaseActivity {
     private EditText mNewMessage;
     private BaseBroadcastReceiver sendBroadcastReceiver;
     private BaseBroadcastReceiver deliveryBroadcastReceiver;
-    private String address;
     private String message;
     private long conversationId;
     private String conversationNumber;
@@ -83,7 +82,7 @@ public class ConversationActivity extends BaseActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_call) {
-            callContact(address);
+            callContact(conversationNumber);
             return true;
         }
 
@@ -107,7 +106,7 @@ public class ConversationActivity extends BaseActivity {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission Granted
                     Log.e(TAG, "call contact permission granted");
-                    callContact(address);
+                    callContact(conversationNumber);
                 }
                 break;
             case Constants.REQUEST_CODE_READ_SMS:
@@ -130,6 +129,9 @@ public class ConversationActivity extends BaseActivity {
 
         SmsDao dao = new SmsDao(this);
         //dao.showRows(Uris.PHONES);
+        if (conversationId == -1) {
+            conversationId = dao.getConversationId(conversationNumber);
+        }
         List<Message> messages = dao.getConversationMessages(conversationId);
         MessagesAdapter adapter = new MessagesAdapter(messages, null, null);
         mRecyclerView.setAdapter(adapter);
@@ -137,7 +139,7 @@ public class ConversationActivity extends BaseActivity {
         linearLayoutManager.setReverseLayout(true);
 
         if (messages.size() > 0) {
-            address = messages.get(0).getAddress();
+            conversationNumber = messages.get(0).getAddress();
             setTitle(messages.get(0).getDisplayName());
         }
     }
@@ -163,7 +165,7 @@ public class ConversationActivity extends BaseActivity {
                     case Activity.RESULT_OK:
                         //save new message
                         SmsDao smsDao = new SmsDao(ConversationActivity.this);
-                        smsDao.sendMessage(address, message);
+                        smsDao.sendMessage(conversationNumber, message);
                         loadMessages();
                         mNewMessage.setText(null);
                         Toast.makeText(getBaseContext(), "SMS Sent", Toast.LENGTH_SHORT).show();
@@ -229,6 +231,6 @@ public class ConversationActivity extends BaseActivity {
         PendingIntent sentPI = PendingIntent.getBroadcast(this, 0, new Intent(SENT), 0);
         PendingIntent deliveredPI = PendingIntent.getBroadcast(this, 0, new Intent(DELIVERED), 0);
         SmsManager sms = SmsManager.getDefault();
-        sms.sendTextMessage(address, null, message, sentPI, deliveredPI);
+        sms.sendTextMessage(conversationNumber, null, message, sentPI, deliveredPI);
     }
 }

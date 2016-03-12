@@ -1,6 +1,7 @@
 package gr.crystalogic.sms.dao;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -161,18 +162,22 @@ public class SmsDao {
         return contact;
     }
 
-    public void sendMessage(String address, String message) {
+    //returns the id of the created message
+    public long sendMessage(String address, String message) {
         ContentValues values = new ContentValues();
         values.put(ConversationColumns.TYPE, MessageType.OUTGOING);
         values.put(ConversationColumns.BODY, message);
         values.put(ConversationColumns.READ, 1);
         values.put(ConversationColumns.ADDRESS, address);
 
+        long output = -1;
         try {
-            cr.insert(Uris.URI_SENT, values);
+            Uri result = cr.insert(Uris.URI_SENT, values);
+            output = ContentUris.parseId(result);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
+        return output;
     }
 
     public void receiveMessage(Message message) {
