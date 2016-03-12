@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import gr.crystalogic.sms.R;
@@ -161,11 +162,16 @@ public class ConversationActivity extends BaseActivity {
         sendBroadcastReceiver = new BaseBroadcastReceiver() {
 
             public void onReceive(Context arg0, Intent arg1) {
+                Log.e(TAG, "SENT RESULT: " + getResultCode());
+
                 switch (getResultCode()) {
                     case Activity.RESULT_OK:
                         //save new message
                         SmsDao smsDao = new SmsDao(ConversationActivity.this);
-                        smsDao.sendMessage(conversationNumber, message);
+                        if (savedMessageId == -1) {
+                            savedMessageId = smsDao.sendMessage(conversationNumber, message);
+                        }
+
                         loadMessages();
                         mNewMessage.setText(null);
                         Toast.makeText(getBaseContext(), "SMS Sent", Toast.LENGTH_SHORT).show();
@@ -221,6 +227,8 @@ public class ConversationActivity extends BaseActivity {
         }
     }
 
+    private long savedMessageId = -1;
+
     //---sends an SMS message to another device---
     private void sendSMS(final String message) {
         if (TextUtils.isEmpty(message)) {
@@ -228,9 +236,25 @@ public class ConversationActivity extends BaseActivity {
             return;
         }
         this.message = message;
-        PendingIntent sentPI = PendingIntent.getBroadcast(this, 0, new Intent(SENT), 0);
-        PendingIntent deliveredPI = PendingIntent.getBroadcast(this, 0, new Intent(DELIVERED), 0);
-        SmsManager sms = SmsManager.getDefault();
-        sms.sendTextMessage(conversationNumber, null, message, sentPI, deliveredPI);
+
+        savedMessageId = -1;
+
+        PendingIntent sentPendingIntent = PendingIntent.getBroadcast(this, 0, new Intent(SENT), 0);
+        PendingIntent deliveredPendingIntent = PendingIntent.getBroadcast(this, 0, new Intent(DELIVERED), 0);
+
+        SmsManager smsManager = SmsManager.getDefault();
+        ArrayList<String> smsBodyParts = smsManager.divideMessage(message);
+        ArrayList<PendingIntent> sentPendingIntents = new ArrayList<>();
+        ArrayList<PendingIntent> deliveredPendingIntents = new ArrayList<>();
+
+        Log.e(TAG, "sms parts: " + smsBodyParts.size());
+
+        for (int i = 0; i < smsBodyParts.size(); i++) {
+            sentPendingIntents.add(sentPendingIntent);
+            deliveredPendingIntents.add(deliveredPendingIntent);
+        }
+
+        // Send a text based SMS
+        smsManager.sendMultipartTextMessage(conversationNumber, null, smsBodyParts, sentPendingIntents, deliveredPendingIntents);
     }
 }
