@@ -29,10 +29,15 @@
         <activity
             android:name=".ui.activities.ContactsActivity"
             android:label="@string/select_contact"
+            android:launchMode="singleTop"
             android:parentActivityName=".ui.activities.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
             <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.activities.MainActivity" />
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
 
         <receiver
