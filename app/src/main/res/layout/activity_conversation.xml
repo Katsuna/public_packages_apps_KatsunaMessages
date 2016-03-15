@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,22 +18,47 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_gravity="bottom">
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/new_message"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:background="@color/pink"
-                android:gravity="center_vertical"
-                android:hint="@string/type_message"
-                android:imeOptions="actionDone"
-                android:padding="10dp"
-                android:singleLine="true"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
-                android:textSize="25sp" />
+                android:layout_height="wrap_content"
+                android:background="@color/pink">
+
+                <Button
+                    android:id="@+id/showEmojis"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/emoji_button" />
+
+                <com.rockerhieu.emojicon.EmojiconEditText
+                    android:id="@+id/new_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_toLeftOf="@id/showEmojis"
+
+                    android:gravity="center_vertical"
+                    android:hint="@string/type_message"
+                    android:imeOptions="actionDone"
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="20sp"
+                    emojicon:emojiconSize="20sp" />
+            </RelativeLayout>
+
+            <FrameLayout
+                android:id="@+id/emojicons_container"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:visibility="gone" />
         </LinearLayout>
 
     </android.support.design.widget.CoordinatorLayout>

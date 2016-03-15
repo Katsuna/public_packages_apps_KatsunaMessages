@@ -19,11 +19,18 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.rockerhieu.emojicon.EmojiconEditText;
+import com.rockerhieu.emojicon.EmojiconGridFragment;
+import com.rockerhieu.emojicon.EmojiconsFragment;
+import com.rockerhieu.emojicon.emoji.Emojicon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,18 +42,21 @@ import gr.crystalogic.sms.receivers.BaseBroadcastReceiver;
 import gr.crystalogic.sms.ui.adapters.MessagesAdapter;
 import gr.crystalogic.sms.utils.Constants;
 
-public class ConversationActivity extends BaseActivity {
+public class ConversationActivity extends BaseActivity implements EmojiconGridFragment.OnEmojiconClickedListener, EmojiconsFragment.OnEmojiconBackspaceClickedListener {
 
     private static final String TAG = "ConversationActivity";
     private final String SENT = "SMS_SENT";
     private final String DELIVERED = "SMS_DELIVERED";
     private RecyclerView mRecyclerView;
-    private EditText mNewMessage;
+    private EmojiconEditText mNewMessage;
     private BaseBroadcastReceiver sendBroadcastReceiver;
     private BaseBroadcastReceiver deliveryBroadcastReceiver;
     private String message;
     private long conversationId;
     private String conversationNumber;
+    private Button mEmojiButton;
+    private FrameLayout mEmojiContainer;
+    private long savedMessageId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,14 +71,22 @@ public class ConversationActivity extends BaseActivity {
 
         if (conversationId != -1) {
             loadMessages();
-        }
-        else {
+        } else {
             setTitle(conversationNumber);
         }
 
         //this is needed to open will screen is locked
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
                 WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+
+        setEmojiconFragment(false);
+    }
+
+    private void setEmojiconFragment(boolean useSystemDefault) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.emojicons_container, EmojiconsFragment.newInstance(useSystemDefault))
+                .commit();
     }
 
     @Override
@@ -83,6 +101,7 @@ public class ConversationActivity extends BaseActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_call) {
+            //Log.e(TAG, mNewMessage.getText().toString());
             callContact(conversationNumber);
             return true;
         }
@@ -147,7 +166,7 @@ public class ConversationActivity extends BaseActivity {
 
     private void initControls() {
         mRecyclerView = (RecyclerView) findViewById(R.id.messagesRecyclerView);
-        mNewMessage = (EditText) findViewById(R.id.new_message);
+        mNewMessage = (EmojiconEditText) findViewById(R.id.new_message);
 
         mNewMessage.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -156,6 +175,20 @@ public class ConversationActivity extends BaseActivity {
                     sendSMS(mNewMessage.getText().toString());
                 }
                 return false;
+            }
+        });
+
+        mEmojiContainer = (FrameLayout) findViewById(R.id.emojicons_container);
+
+        mEmojiButton = (Button) findViewById(R.id.showEmojis);
+        mEmojiButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mEmojiContainer.getVisibility() == View.VISIBLE) {
+                    mEmojiContainer.setVisibility(View.GONE);
+                } else {
+                    mEmojiContainer.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -174,6 +207,7 @@ public class ConversationActivity extends BaseActivity {
 
                         loadMessages();
                         mNewMessage.setText(null);
+                        mEmojiContainer.setVisibility(View.GONE);
                         Toast.makeText(getBaseContext(), "SMS Sent", Toast.LENGTH_SHORT).show();
                         break;
                     case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
@@ -227,8 +261,6 @@ public class ConversationActivity extends BaseActivity {
         }
     }
 
-    private long savedMessageId = -1;
-
     //---sends an SMS message to another device---
     private void sendSMS(final String message) {
         if (TextUtils.isEmpty(message)) {
@@ -256,5 +288,15 @@ public class ConversationActivity extends BaseActivity {
 
         // Send a text based SMS
         smsManager.sendMultipartTextMessage(conversationNumber, null, smsBodyParts, sentPendingIntents, deliveredPendingIntents);
+    }
+
+    @Override
+    public void onEmojiconClicked(Emojicon emojicon) {
+        EmojiconsFragment.input(mNewMessage, emojicon);
+    }
+
+    @Override
+    public void onEmojiconBackspaceClicked(View v) {
+        EmojiconsFragment.backspace(mNewMessage);
     }
 }
