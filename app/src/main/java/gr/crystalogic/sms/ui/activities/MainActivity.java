@@ -23,6 +23,7 @@ import gr.crystalogic.sms.domain.Conversation;
 import gr.crystalogic.sms.ui.adapters.ConversationsAdapter;
 import gr.crystalogic.sms.utils.Constants;
 import gr.crystalogic.sms.utils.Device;
+import gr.crystalogic.sms.utils.Settings;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -58,8 +59,29 @@ public class MainActivity extends BaseActivity
 
         initControls();
 
-        if (!Device.isDefaultApp(this)) {
-            Device.makeDefaultApp(this);
+        checkIsDefaultSmsHandler();
+    }
+
+    private void checkIsDefaultSmsHandler() {
+        String smsDefaultSetting = Settings.readSetting(this, Constants.DEFAULT_SMS_KEY, Constants.DEFAULT_SMS_NOT_SET);
+        //check for for the first time only
+        if (smsDefaultSetting.equals(Constants.DEFAULT_SMS_NOT_SET)) {
+            if (!Device.isDefaultApp(this)) {
+                Device.makeDefaultApp(this, Constants.DEF_SMS_REQ_CODE);
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case Constants.DEF_SMS_REQ_CODE:
+                if (Device.isDefaultApp(this)) {
+                    Settings.setSetting(this, Constants.DEFAULT_SMS_KEY, Constants.DEFAULT_SMS_ON);
+                } else {
+                    Settings.setSetting(this, Constants.DEFAULT_SMS_KEY, Constants.DEFAULT_SMS_OFF);
+                }
+                break;
         }
     }
 
@@ -138,12 +160,16 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         if (id == R.id.drawer_settings) {
-            // Handle the camera action
-        } else if (id == R.id.drawer_help) {
+            Intent i = new Intent(this, SettingsActivity.class);
+            startActivity(i);
+        }
+/*
+        else if (id == R.id.drawer_help) {
 
         } else if (id == R.id.drawer_info) {
 
         }
+*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

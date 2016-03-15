@@ -38,10 +38,10 @@ public class Device {
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    public static void makeDefaultApp(final Context context) {
+    public static void makeDefaultApp(final Activity activity, int requestCode) {
         Intent intent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
-        intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, context.getPackageName());
-        context.startActivity(intent);
+        intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, activity.getPackageName());
+        activity.startActivityForResult(intent, requestCode);
     }
 
     public static boolean hasAllPermissions(Context context, String[] permissions) {
