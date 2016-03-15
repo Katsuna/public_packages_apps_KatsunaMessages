@@ -54,7 +54,6 @@ public class ConversationActivity extends BaseActivity implements EmojiconGridFr
     private String message;
     private long conversationId;
     private String conversationNumber;
-    private Button mEmojiButton;
     private FrameLayout mEmojiContainer;
     private long savedMessageId = -1;
 
@@ -180,7 +179,7 @@ public class ConversationActivity extends BaseActivity implements EmojiconGridFr
 
         mEmojiContainer = (FrameLayout) findViewById(R.id.emojicons_container);
 
-        mEmojiButton = (Button) findViewById(R.id.showEmojis);
+        Button mEmojiButton = (Button) findViewById(R.id.showEmojis);
         mEmojiButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

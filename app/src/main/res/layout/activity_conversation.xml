@@ -42,7 +42,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:layout_toLeftOf="@id/showEmojis"
-
+                    android:layout_toStartOf="@id/showEmojis"
                     android:gravity="center_vertical"
                     android:hint="@string/type_message"
                     android:imeOptions="actionDone"

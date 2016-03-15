@@ -13,14 +13,10 @@ import gr.crystalogic.sms.domain.Contact;
 import gr.crystalogic.sms.domain.Phone;
 
 public class ContactDao {
-    private static final String TAG = "ContactDao";
-
     private final ContentResolver cr;
-    private final Context mContext;
 
     public ContactDao(Context context) {
         cr = context.getContentResolver();
-        mContext = context;
     }
 
     public List<Contact> getContacts() {

@@ -1,5 +1,6 @@
 package gr.crystalogic.sms.utils;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -36,6 +37,7 @@ public class Device {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     public static void makeDefaultApp(final Context context) {
         Intent intent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
         intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, context.getPackageName());
