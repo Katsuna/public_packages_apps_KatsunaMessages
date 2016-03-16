@@ -33,7 +33,7 @@ public class SmsDao {
 
         String orderBy = ConversationColumns.DATE + " DESC";
 
-        Cursor cursor = cr.query(Uris.CONVERSATIONS_SIMPLE, ConversationColumns.PROJECTION_SIMPLE, null, null, orderBy);
+        Cursor cursor = cr.query(Uris.CONVERSATIONS_SIMPLE, null, null, null, orderBy);
         if (cursor.moveToFirst()) {
             do {
 /*                0:_id type:1 | 1:date type:1 | 2:message_count type:1 | 3:recipient_ids type:3 | 4:snippet type:3 | 5:snippet_cs type:1 | 6:read type:
@@ -45,6 +45,12 @@ public class SmsDao {
                 conversation.setRecipientIds(cursor.getLong(cursor.getColumnIndex(ConversationColumns.RECIPIENT_IDS)));
                 conversation.setSnippet(cursor.getString(cursor.getColumnIndex(ConversationColumns.SNIPPET)));
                 conversation.setSnippetCs(cursor.getLong(cursor.getColumnIndex(ConversationColumns.SNIPPET_CS)));
+
+                int messageType = getLastMessageType(conversation.getId());
+                Log.e(TAG, "messageType: " + messageType);
+                if (messageType == MessageType.INCOMING) {
+                    conversation.setUnanswered(true);
+                }
 
                 //find address
                 String address = getAddress(conversation.getRecipientIds());
@@ -61,6 +67,20 @@ public class SmsDao {
         }
 
         return conversations;
+    }
+
+    private int getLastMessageType(long conversationId) {
+        String[] projection = new String[]{ConversationColumns.TYPE, ConversationColumns.DATE};
+        Uri uri = Uri.withAppendedPath(Uris.CONVERSATIONS, String.valueOf(conversationId));
+        String orderBy = ConversationColumns.DATE + " DESC ";
+
+        int type = -1;
+        Cursor cursor = cr.query(uri, projection, null, null, orderBy);
+        if (cursor.moveToFirst()) {
+            type = cursor.getInt(cursor.getColumnIndex(ConversationColumns.TYPE));
+            cursor.close();
+        }
+        return type;
     }
 
     public List<Message> getConversationMessages(long threadId) {
@@ -195,9 +215,9 @@ public class SmsDao {
 
     public long getConversationId(Message message) {
         long output = -1;
-        String[] projection = { ConversationColumns.THREAD_ID };
+        String[] projection = {ConversationColumns.THREAD_ID};
         String selection = ConversationColumns.DATE_SENT + "= ? AND " + ConversationColumns.BODY + "= ? ";
-        String[] selectionArgs = new String[] { String.valueOf(message.getDate()), message.getBody() };
+        String[] selectionArgs = new String[]{String.valueOf(message.getDate()), message.getBody()};
 
         Cursor cursor = cr.query(Uris.URI_SMS, projection, selection, selectionArgs, null);
         if (cursor.moveToFirst()) {

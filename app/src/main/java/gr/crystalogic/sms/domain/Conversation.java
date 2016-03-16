@@ -12,6 +12,7 @@ public class Conversation {
     private String snippet;
     private long snippetCs;
     private String address;
+    private boolean  unanswered;
 
     private String ct_t;
 
@@ -62,7 +63,7 @@ public class Conversation {
 
     public String getDateFormatted() {
         DateTime dateTime = new DateTime(date);
-        return  dateTime.toString("HH:mm EEEE d-M-yy");
+        return dateTime.toString("HH:mm EEEE d-M-yy");
     }
 
     public long getMessageCount() {
@@ -103,5 +104,13 @@ public class Conversation {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public boolean isUnanswered() {
+        return unanswered;
+    }
+
+    public void setUnanswered(boolean unanswered) {
+        this.unanswered = unanswered;
     }
 }

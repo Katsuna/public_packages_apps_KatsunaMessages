@@ -1,5 +1,6 @@
 package gr.crystalogic.sms.ui.viewholders;
 
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -44,5 +45,9 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
 
         mDateTime.setText(conversation.getDateFormatted());
         mSnippet.setText(conversation.getSnippet());
+
+        if (conversation.isUnanswered()) {
+            mDisplayName.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.pink));
+        }
     }
 }
