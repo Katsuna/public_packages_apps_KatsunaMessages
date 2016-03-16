@@ -251,7 +251,12 @@ public class ConversationActivity extends BaseActivity implements EmojiconGridFr
 
     private long getConversationIdFromIntent() {
         Intent i = getIntent();
-        conversationNumber = i.getExtras().getString("conversationNumber");
+        if (i.getAction().equals(Intent.ACTION_VIEW)) {
+            conversationNumber = i.getData().getSchemeSpecificPart();
+        } else {
+            conversationNumber = i.getExtras().getString("conversationNumber");
+        }
+
         if (conversationNumber == null) {
             return i.getExtras().getLong("conversationId");
         } else {
