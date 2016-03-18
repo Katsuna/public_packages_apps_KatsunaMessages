@@ -4,6 +4,8 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -53,6 +55,7 @@ public class ContactsActivity extends BaseActivity {
         mNoResultsView = (TextView) findViewById(R.id.no_results);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
