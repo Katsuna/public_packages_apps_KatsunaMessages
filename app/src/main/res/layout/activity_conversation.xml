@@ -24,7 +24,8 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@color/white">
 
                 <Button
                     android:id="@+id/showEmojis"
@@ -47,8 +48,8 @@
                     android:imeOptions="actionDone"
                     android:padding="10dp"
                     android:singleLine="true"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
                     android:textSize="20sp"
                     emojicon:emojiconSize="20sp" />
             </RelativeLayout>
