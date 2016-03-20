@@ -6,7 +6,7 @@ public class Conversation {
 
     private long id;
     private long date;
-    private long messageCount;
+    private long unreadCount;
     //TODO check if multiple Ids (comma separated) arrive here....
     private long recipientIds;
     private String snippet;
@@ -20,7 +20,7 @@ public class Conversation {
 
     @Override
     public String toString() {
-        return "Conversation: id=" + id + " date=" + getDateFormatted("HH:mm dd/MM/yyyy") + " messageCount=" + messageCount + " "
+        return "Conversation: id=" + id + " date=" + getDateFormatted("HH:mm dd/MM/yyyy") + " unreadCount=" + unreadCount + " "
                 + " recipientIds=" + recipientIds + " snippet=" + snippet
                 + " snippetCs= " + snippetCs + " ct_t=" + ct_t;
     }
@@ -66,12 +66,12 @@ public class Conversation {
         return dateTime.toString("HH:mm EEEE d-M-yy");
     }
 
-    public long getMessageCount() {
-        return messageCount;
+    public long getUnreadCount() {
+        return unreadCount;
     }
 
-    public void setMessageCount(long messageCount) {
-        this.messageCount = messageCount;
+    public void setUnreadCount(long unreadCount) {
+        this.unreadCount = unreadCount;
     }
 
     public String getSnippet() {

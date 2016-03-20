@@ -28,7 +28,7 @@ public class ConversationColumns extends BaseColumns {
     public static final String ADDRESS = "address";
 
     //extra simple  uri columns
-    public static final String MESSAGE_COUNT = "message_count";
+    public static final String UNREAD_COUNT = "unread_count";
     public static final String RECIPIENT_IDS = "recipient_ids";
     public static final String SNIPPET = "snippet";
     public static final String SNIPPET_CS = "snippet_cs";
@@ -44,7 +44,7 @@ public class ConversationColumns extends BaseColumns {
     public static final String[] PROJECTION_FULL = new String[]{THREAD_ID, ID, BODY, ADDRESS, PERSON, SUB, SUBJECT, RETR_ST,
             TYPE, DATE, CR_CLS, SUB_CS, READ, CT_T};
 
-    public static final String[] PROJECTION_SIMPLE = new String[]{ID, DATE, MESSAGE_COUNT, RECIPIENT_IDS, SNIPPET, SNIPPET_CS,
+    public static final String[] PROJECTION_SIMPLE = new String[]{ID, DATE, UNREAD_COUNT, RECIPIENT_IDS, SNIPPET, SNIPPET_CS,
             READ, TYPE, ERROR, HAS_ATTACHMENT};
 
     public static final String[] PROJECTION_MESSAGES = new String[]{ID, ADDRESS, BODY, DATE, READ};

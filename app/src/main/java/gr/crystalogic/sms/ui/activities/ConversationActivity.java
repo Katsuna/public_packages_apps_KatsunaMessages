@@ -160,6 +160,14 @@ public class ConversationActivity extends BaseActivity implements EmojiconGridFr
         if (messages.size() > 0) {
             conversationNumber = messages.get(0).getAddress();
             setTitle(messages.get(0).getDisplayName());
+            markRead(messages);
+        }
+    }
+
+    private void markRead(List<Message> messages) {
+        SmsDao dao = new SmsDao(this);
+        for (Message message: messages) {
+            dao.markRead(message.getId());
         }
     }
 

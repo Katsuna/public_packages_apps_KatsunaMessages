@@ -41,7 +41,7 @@ public class SmsDao {
                 Conversation conversation = new Conversation();
                 conversation.setId(cursor.getLong(cursor.getColumnIndex(ConversationColumns.ID)));
                 conversation.setDate(cursor.getLong(cursor.getColumnIndex(ConversationColumns.DATE)));
-                conversation.setMessageCount(cursor.getLong(cursor.getColumnIndex(ConversationColumns.MESSAGE_COUNT)));
+                conversation.setUnreadCount(cursor.getLong(cursor.getColumnIndex(ConversationColumns.UNREAD_COUNT)));
                 conversation.setRecipientIds(cursor.getLong(cursor.getColumnIndex(ConversationColumns.RECIPIENT_IDS)));
                 conversation.setSnippet(cursor.getString(cursor.getColumnIndex(ConversationColumns.SNIPPET)));
                 conversation.setSnippetCs(cursor.getLong(cursor.getColumnIndex(ConversationColumns.SNIPPET_CS)));
@@ -229,6 +229,20 @@ public class SmsDao {
         return output;
     }
 
+    public void markRead(long messageId) {
+        ContentValues values = new ContentValues();
+        values.put(ConversationColumns.READ, true);
+
+        String selection = ConversationColumns.ID + "=? AND " + ConversationColumns.READ + "=?";
+        String[] selectionArgs = new String[]{String.valueOf(messageId), "0"};
+
+        try {
+            cr.update(Uris.URI_INBOX, values, selection, selectionArgs);
+        } catch (Exception ex) {
+            Log.e(TAG, "Error in Read: " + ex.toString());
+            throw new RuntimeException(ex);
+        }
+    }
 
     public void showRows(Uri u) {
         Log.e(TAG, "-----GET HEADERS-----");
