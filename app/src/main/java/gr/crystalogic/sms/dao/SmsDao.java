@@ -38,10 +38,17 @@ public class SmsDao {
             do {
 /*                0:_id type:1 | 1:date type:1 | 2:message_count type:1 | 3:recipient_ids type:3 | 4:snippet type:3 | 5:snippet_cs type:1 | 6:read type:
                 1 | 7:type type:1 | 8:error type:1 | 9:has_attachment type:1 |*/
+
+                //showCursor(cursor);
+
                 Conversation conversation = new Conversation();
                 conversation.setId(cursor.getLong(cursor.getColumnIndex(ConversationColumns.ID)));
                 conversation.setDate(cursor.getLong(cursor.getColumnIndex(ConversationColumns.DATE)));
-                conversation.setUnreadCount(cursor.getLong(cursor.getColumnIndex(ConversationColumns.UNREAD_COUNT)));
+                //TODO: support unread_count for lollipop and later devices
+                int unreadCountIndex = cursor.getColumnIndex(ConversationColumns.UNREAD_COUNT);
+                if (unreadCountIndex != -1) {
+                    conversation.setUnreadCount(cursor.getLong(unreadCountIndex));
+                }
                 conversation.setRecipientIds(cursor.getLong(cursor.getColumnIndex(ConversationColumns.RECIPIENT_IDS)));
                 conversation.setSnippet(cursor.getString(cursor.getColumnIndex(ConversationColumns.SNIPPET)));
                 conversation.setSnippetCs(cursor.getLong(cursor.getColumnIndex(ConversationColumns.SNIPPET_CS)));
@@ -92,6 +99,8 @@ public class SmsDao {
         Cursor cursor = cr.query(uri, ConversationColumns.PROJECTION_ULTRA, null, null, orderBy);
         if (cursor.moveToFirst()) {
             do {
+                //showCursor(cursor);
+
                 Message message = new Message();
                 message.setId(cursor.getLong(cursor.getColumnIndex(ConversationColumns.ID)));
                 message.setAddress(cursor.getString(cursor.getColumnIndex(ConversationColumns.ADDRESS)));
@@ -109,16 +118,6 @@ public class SmsDao {
                 } else {
                     // it's SMS
                 }*/
-                int l = cursor.getColumnCount();
-                StringBuilder buf = new StringBuilder();
-                for (int i = 0; i < l; i++) {
-                    buf.append(i).append(":");
-                    buf.append(cursor.getColumnName(i));
-                    buf.append("=");
-                    buf.append(cursor.getString(i));
-                    buf.append(" | ");
-                }
-                Log.e(TAG, buf.toString());
 
                 messages.add(message);
             } while (cursor.moveToNext());
@@ -244,23 +243,18 @@ public class SmsDao {
         }
     }
 
-    public void showRows(Uri u) {
-        Log.e(TAG, "-----GET HEADERS-----");
-        Log.e(TAG, "-- " + u.toString() + " --");
-        Cursor c = cr.query(u, null, null, null, null);
-        if (c != null) {
-            int l = c.getColumnCount();
-            StringBuilder buf = new StringBuilder();
-            c.moveToFirst();
-            for (int i = 0; i < l; i++) {
-                buf.append(i).append(":");
-                buf.append(c.getColumnName(i));
-                buf.append(" type:");
-                buf.append(c.getType(i));
-                buf.append(" | ");
-            }
-            c.close();
-            Log.e(TAG, buf.toString());
+    private void showCursor(Cursor cursor) {
+        int l = cursor.getColumnCount();
+        StringBuilder buf = new StringBuilder();
+        for (int i = 0; i < l; i++) {
+            buf.append(i).append(":");
+            buf.append(cursor.getColumnName(i));
+            buf.append("=");
+            buf.append(cursor.getString(i));
+            buf.append(" type=");
+            buf.append(cursor.getType(i));
+            buf.append(" | ");
         }
+        Log.e(TAG, buf.toString());
     }
 }
