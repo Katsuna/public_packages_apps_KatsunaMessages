@@ -46,11 +46,11 @@ public class ContactListItemModel {
         this.premium = premium;
     }
 
-    public boolean isSelected() {
+    private boolean isSelected() {
         return selected;
     }
 
-    public void setSelected(boolean selected) {
+    private void setSelected(boolean selected) {
         this.selected = selected;
     }
 }

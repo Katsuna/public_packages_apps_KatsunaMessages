@@ -1,9 +1,9 @@
-package gr.crystalogic.sms.dao;
+package gr.crystalogic.sms.providers;
 
 import android.net.Uri;
 import android.provider.ContactsContract;
 
-public class Uris {
+class Uris {
 
     public static final Uri CONVERSATIONS = Uri.parse("content://mms-sms/conversations");
     public static final Uri CONVERSATIONS_SIMPLE = Uri.parse("content://mms-sms/conversations")

@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import gr.crystalogic.sms.R;
-import gr.crystalogic.sms.dao.ContactDao;
+import gr.crystalogic.sms.providers.ContactProvider;
 import gr.crystalogic.sms.domain.Contact;
 import gr.crystalogic.sms.domain.Phone;
 import gr.crystalogic.sms.ui.activities.ConversationActivity;
@@ -96,7 +96,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
     private class PopupPhone implements View.OnClickListener {
 
-        private int mPosition;
+        private final int mPosition;
 
         public PopupPhone(int position) {
             mPosition = position;
@@ -107,7 +107,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
             Contact contact = mModels.get(mPosition).getContact();
 
-            ContactDao dao = new ContactDao(v.getContext());
+            ContactProvider dao = new ContactProvider(v.getContext());
             List<Phone> phones = dao.getPhones(contact.getId());
 
             if (phones.size() == 1) {

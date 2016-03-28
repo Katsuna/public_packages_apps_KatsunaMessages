@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 
 public abstract class BaseBroadcastReceiver extends BroadcastReceiver {
-    public boolean isRegistered;
+    private boolean isRegistered;
 
     public Intent register(Context context, IntentFilter filter) {
         isRegistered = true;

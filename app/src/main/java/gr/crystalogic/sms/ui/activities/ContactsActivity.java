@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gr.crystalogic.sms.R;
-import gr.crystalogic.sms.dao.ContactDao;
+import gr.crystalogic.sms.providers.ContactProvider;
 import gr.crystalogic.sms.domain.Contact;
 import gr.crystalogic.sms.ui.adapters.ContactsRecyclerViewAdapter;
 import gr.crystalogic.sms.ui.adapters.models.ContactListItemModel;
@@ -162,7 +162,7 @@ public class ContactsActivity extends BaseActivity {
     }
 
     private void loadContacts() {
-        ContactDao dao = new ContactDao(this);
+        ContactProvider dao = new ContactProvider(this);
         List<Contact> contactList = dao.getContacts();
         mModels = ContactArranger.getContactsProcessed(contactList);
         mAdapter = new ContactsRecyclerViewAdapter(getDeepCopy(mModels));

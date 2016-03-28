@@ -1,4 +1,4 @@
-package gr.crystalogic.sms.dao;
+package gr.crystalogic.sms.providers;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -12,19 +12,19 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import gr.crystalogic.sms.dao.metadata.ConversationColumns;
-import gr.crystalogic.sms.dao.metadata.MessageType;
+import gr.crystalogic.sms.providers.metadata.ConversationColumns;
+import gr.crystalogic.sms.providers.metadata.MessageType;
 import gr.crystalogic.sms.domain.Contact;
 import gr.crystalogic.sms.domain.Conversation;
 import gr.crystalogic.sms.domain.Message;
 
-public class SmsDao {
+public class SmsProvider {
 
-    private static final String TAG = "ContactDao";
+    private static final String TAG = "SmsProvider";
 
     private final ContentResolver cr;
 
-    public SmsDao(Context context) {
+    public SmsProvider(Context context) {
         cr = context.getContentResolver();
     }
 
@@ -34,7 +34,7 @@ public class SmsDao {
         String orderBy = ConversationColumns.DATE + " DESC";
 
         Cursor cursor = cr.query(Uris.CONVERSATIONS_SIMPLE, null, null, null, orderBy);
-        if (cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             do {
 /*                0:_id type:1 | 1:date type:1 | 2:message_count type:1 | 3:recipient_ids type:3 | 4:snippet type:3 | 5:snippet_cs type:1 | 6:read type:
                 1 | 7:type type:1 | 8:error type:1 | 9:has_attachment type:1 |*/
@@ -83,7 +83,7 @@ public class SmsDao {
 
         int type = -1;
         Cursor cursor = cr.query(uri, projection, null, null, orderBy);
-        if (cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             type = cursor.getInt(cursor.getColumnIndex(ConversationColumns.TYPE));
             cursor.close();
         }
@@ -97,7 +97,7 @@ public class SmsDao {
         String orderBy = ConversationColumns.DATE + " DESC ";
 
         Cursor cursor = cr.query(uri, ConversationColumns.PROJECTION_ULTRA, null, null, orderBy);
-        if (cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             do {
                 //showCursor(cursor);
 
@@ -127,7 +127,7 @@ public class SmsDao {
         return messages;
     }
 
-    public String getAddress(long recipientId) {
+    private String getAddress(long recipientId) {
         String address = null;
 
         Uri uri = Uri.withAppendedPath(Uris.CANONICAL_ADDRESS, String.valueOf(recipientId));
@@ -135,7 +135,7 @@ public class SmsDao {
         String[] projection = new String[]{"address"};
 
         Cursor cursor = cr.query(uri, projection, null, null, null);
-        if (cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             address = cursor.getString(cursor.getColumnIndex("address"));
             cursor.close();
         }
@@ -149,14 +149,14 @@ public class SmsDao {
 
         long conversationId = -1;
         Cursor cursor = cr.query(Uris.URI_SMS, projection, selection, null, null);
-        if (cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             conversationId = cursor.getLong(cursor.getColumnIndex(ConversationColumns.THREAD_ID));
             cursor.close();
         }
         return conversationId;
     }
 
-    public Contact getContactByAddress(String address) {
+    private Contact getContactByAddress(String address) {
         Contact contact = null;
 
         String[] projection = {
@@ -169,7 +169,7 @@ public class SmsDao {
         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(address));
 
         Cursor cursor = cr.query(uri, projection, null, null, null);
-        if (cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             contact = new Contact();
             contact.setId(cursor.getLong(cursor.getColumnIndex(ContactsContract.PhoneLookup._ID)));
             contact.setName(cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME)));
@@ -219,7 +219,7 @@ public class SmsDao {
         String[] selectionArgs = new String[]{String.valueOf(message.getDate()), message.getBody()};
 
         Cursor cursor = cr.query(Uris.URI_SMS, projection, selection, selectionArgs, null);
-        if (cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             output = cursor.getLong(cursor.getColumnIndex(ConversationColumns.THREAD_ID));
             cursor.close();
         }

@@ -11,7 +11,7 @@ import gr.crystalogic.sms.ui.adapters.models.ContactListItemModel;
 
 public class ContactArranger {
 
-    public static List<ContactListItemModel> sortContactsBySurname(List<Contact> contacts) {
+    private static List<ContactListItemModel> sortContactsBySurname(List<Contact> contacts) {
         Collections.sort(contacts);
 
         List<ContactListItemModel> output = new ArrayList<>();

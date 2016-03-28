@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import gr.crystalogic.sms.R;
-import gr.crystalogic.sms.dao.metadata.MessageType;
+import gr.crystalogic.sms.providers.metadata.MessageType;
 import gr.crystalogic.sms.domain.Message;
 
 public class MessageViewHolder extends RecyclerView.ViewHolder {

@@ -16,7 +16,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import gr.crystalogic.sms.dao.SmsDao;
+import gr.crystalogic.sms.providers.SmsProvider;
 import gr.crystalogic.sms.domain.Message;
 import gr.crystalogic.sms.ui.activities.ConversationActivity;
 import gr.crystalogic.sms.utils.Device;
@@ -44,7 +44,7 @@ public class SmsReceiver extends BroadcastReceiver {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
                 new SaveMessageTask(context).execute(message);
             } else {
-                SmsDao dao = new SmsDao(context);
+                SmsProvider dao = new SmsProvider(context);
                 dao.receiveMessage(message);
                 long conversationId = dao.getConversationId(message);
                 showConversation(context, conversationId);
@@ -69,11 +69,13 @@ public class SmsReceiver extends BroadcastReceiver {
                 Object[] smsextras = (Object[]) bundle.get("pdus");
                 String format = intent.getStringExtra("format");
 
+                assert smsextras != null;
                 for (Object smsextra : smsextras) {
                     SmsMessage smsMessage;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         smsMessage = SmsMessage.createFromPdu((byte[]) smsextra, format);
                     } else {
+                        //noinspection deprecation
                         smsMessage = SmsMessage.createFromPdu((byte[]) smsextra);
                     }
                     smsMessages.add(smsMessage);
@@ -114,7 +116,7 @@ public class SmsReceiver extends BroadcastReceiver {
     //use this for api < 19
     private class SaveMessageTask extends AsyncTask<Message, Void, Long> {
 
-        private Context mContext;
+        private final Context mContext;
 
         public SaveMessageTask(Context context) {
             mContext = context;
@@ -131,7 +133,7 @@ public class SmsReceiver extends BroadcastReceiver {
                 //check after 5 secs to allow other receivers to save first
                 Thread.sleep(5000);
 
-                SmsDao dao = new SmsDao(mContext);
+                SmsProvider dao = new SmsProvider(mContext);
                 output = dao.getConversationId(message);
                 if (output == -1) {
                     Log.e(TAG, "conversation not found");

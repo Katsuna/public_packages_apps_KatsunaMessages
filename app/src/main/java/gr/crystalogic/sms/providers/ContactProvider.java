@@ -1,4 +1,4 @@
-package gr.crystalogic.sms.dao;
+package gr.crystalogic.sms.providers;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -12,10 +12,10 @@ import java.util.List;
 import gr.crystalogic.sms.domain.Contact;
 import gr.crystalogic.sms.domain.Phone;
 
-public class ContactDao {
+public class ContactProvider {
     private final ContentResolver cr;
 
-    public ContactDao(Context context) {
+    public ContactProvider(Context context) {
         cr = context.getContentResolver();
     }
 

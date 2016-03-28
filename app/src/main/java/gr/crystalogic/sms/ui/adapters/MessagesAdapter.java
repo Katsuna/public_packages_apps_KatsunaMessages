@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import gr.crystalogic.sms.R;
-import gr.crystalogic.sms.dao.metadata.MessageType;
+import gr.crystalogic.sms.providers.metadata.MessageType;
 import gr.crystalogic.sms.domain.Message;
 import gr.crystalogic.sms.ui.viewholders.MessageViewHolder;
 
@@ -39,7 +39,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = null;
+        View view;
         switch (viewType) {
             case INCOMING_MESSAGE:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_incoming, parent, false);
@@ -47,6 +47,8 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case OUTGOING_MESSAGE:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_outgoing, parent, false);
                 break;
+            default:
+                throw new RuntimeException("Unrecognized message type");
         }
         view.setOnClickListener(mOnClickListener);
         view.setOnLongClickListener(mOnLongClickListener);

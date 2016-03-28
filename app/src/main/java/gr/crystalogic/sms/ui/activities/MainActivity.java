@@ -18,7 +18,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import gr.crystalogic.sms.R;
-import gr.crystalogic.sms.dao.SmsDao;
+import gr.crystalogic.sms.providers.SmsProvider;
 import gr.crystalogic.sms.domain.Conversation;
 import gr.crystalogic.sms.ui.adapters.ConversationsAdapter;
 import gr.crystalogic.sms.utils.Constants;
@@ -102,7 +102,7 @@ public class MainActivity extends BaseActivity
             return;
         }
 
-        SmsDao dao = new SmsDao(this);
+        SmsProvider dao = new SmsProvider(this);
         List<Conversation> conversations = dao.getConversations();
         mAdapter = new ConversationsAdapter(conversations,
                 new View.OnClickListener() {

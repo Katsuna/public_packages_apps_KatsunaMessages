@@ -1,4 +1,4 @@
-package gr.crystalogic.sms.dao.metadata;
+package gr.crystalogic.sms.providers.metadata;
 
 public class MessageType {
 

@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gr.crystalogic.sms.R;
-import gr.crystalogic.sms.dao.SmsDao;
+import gr.crystalogic.sms.providers.SmsProvider;
 import gr.crystalogic.sms.domain.Message;
 import gr.crystalogic.sms.receivers.BaseBroadcastReceiver;
 import gr.crystalogic.sms.ui.adapters.MessagesAdapter;
@@ -108,7 +108,7 @@ public class ConversationActivity extends BaseActivity implements EmojiconGridFr
         return super.onOptionsItemSelected(item);
     }
 
-    public void callContact(String address) {
+    private void callContact(String address) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, Constants.REQUEST_CODE_ASK_CALL_PERMISSION);
             return;
@@ -146,7 +146,7 @@ public class ConversationActivity extends BaseActivity implements EmojiconGridFr
             return;
         }
 
-        SmsDao dao = new SmsDao(this);
+        SmsProvider dao = new SmsProvider(this);
         //dao.showRows(Uris.PHONES);
         if (conversationId == -1) {
             conversationId = dao.getConversationId(conversationNumber);
@@ -165,7 +165,7 @@ public class ConversationActivity extends BaseActivity implements EmojiconGridFr
     }
 
     private void markRead(List<Message> messages) {
-        SmsDao dao = new SmsDao(this);
+        SmsProvider dao = new SmsProvider(this);
         for (Message message: messages) {
             dao.markRead(message.getId());
         }
@@ -207,9 +207,9 @@ public class ConversationActivity extends BaseActivity implements EmojiconGridFr
                 switch (getResultCode()) {
                     case Activity.RESULT_OK:
                         //save new message
-                        SmsDao smsDao = new SmsDao(ConversationActivity.this);
+                        SmsProvider smsProvider = new SmsProvider(ConversationActivity.this);
                         if (savedMessageId == -1) {
-                            savedMessageId = smsDao.sendMessage(conversationNumber, message);
+                            savedMessageId = smsProvider.sendMessage(conversationNumber, message);
                         }
 
                         loadMessages();
@@ -268,7 +268,7 @@ public class ConversationActivity extends BaseActivity implements EmojiconGridFr
         if (conversationNumber == null) {
             return i.getExtras().getLong("conversationId");
         } else {
-            SmsDao dao = new SmsDao(this);
+            SmsProvider dao = new SmsProvider(this);
             return dao.getConversationId(conversationNumber);
         }
     }

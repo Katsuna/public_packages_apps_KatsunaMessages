@@ -46,15 +46,15 @@ public class Device {
 
     public static boolean hasAllPermissions(Context context, String[] permissions) {
         for (String permission : permissions) {
-            if (!hasPermission(context, permission)) {
+            if (permissionMissing(context, permission)) {
                 return false;
             }
         }
         return true;
     }
 
-    public static boolean hasPermission(final Context context, final String permission) {
-        return ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED;
+    private static boolean permissionMissing(final Context context, final String permission) {
+        return !(ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED);
     }
 
     public static void requestPermissions(final Activity activity, final String[] permissions,
@@ -69,7 +69,7 @@ public class Device {
     private static String[] getNotGrantedPermissions(Context context, String[] permissions) {
         List<String> notGrantedPermissions = new ArrayList<>();
         for (String permission : permissions) {
-            if (!hasPermission(context, permission)) {
+            if (permissionMissing(context, permission)) {
                 notGrantedPermissions.add(permission);
             }
         }
