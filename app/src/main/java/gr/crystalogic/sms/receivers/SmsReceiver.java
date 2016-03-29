@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -16,8 +15,8 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import gr.crystalogic.sms.providers.SmsProvider;
 import gr.crystalogic.sms.domain.Message;
+import gr.crystalogic.sms.providers.SmsProvider;
 import gr.crystalogic.sms.ui.activities.ConversationActivity;
 import gr.crystalogic.sms.utils.Device;
 
@@ -41,14 +40,10 @@ public class SmsReceiver extends BroadcastReceiver {
         Message message = getMessage(intent);
 
         if (message != null) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                new SaveMessageTask(context).execute(message);
-            } else {
-                SmsProvider dao = new SmsProvider(context);
-                dao.receiveMessage(message);
-                long conversationId = dao.getConversationId(message);
-                showConversation(context, conversationId);
-            }
+            SmsProvider dao = new SmsProvider(context);
+            dao.receiveMessage(message);
+            long conversationId = dao.getConversationId(message);
+            showConversation(context, conversationId);
         }
 
         //release wakelock
@@ -110,49 +105,6 @@ public class SmsReceiver extends BroadcastReceiver {
             r.play();
         } catch (Exception ex) {
             Log.e(TAG, "Exception: " + ex);
-        }
-    }
-
-    //use this for api < 19
-    private class SaveMessageTask extends AsyncTask<Message, Void, Long> {
-
-        private final Context mContext;
-
-        public SaveMessageTask(Context context) {
-            mContext = context;
-        }
-
-        @Override
-        protected Long doInBackground(Message... params) {
-            Message message = params[0];
-
-            long output;
-
-            try {
-                //if you have multiple receivers don't save again
-                //check after 5 secs to allow other receivers to save first
-                Thread.sleep(5000);
-
-                SmsProvider dao = new SmsProvider(mContext);
-                output = dao.getConversationId(message);
-                if (output == -1) {
-                    Log.e(TAG, "conversation not found");
-                    dao.receiveMessage(message);
-                    output = dao.getConversationId(message);
-                    Log.e(TAG, "conversation found after insert: " + output);
-                } else {
-                    Log.e(TAG, "conversation found before insert: " + output);
-                }
-
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            return output;
-        }
-
-        @Override
-        protected void onPostExecute(Long conversationId) {
-            showConversation(mContext, conversationId);
         }
     }
 }
