@@ -11,6 +11,7 @@ import com.squareup.picasso.Picasso;
 import gr.crystalogic.sms.R;
 import gr.crystalogic.sms.providers.metadata.MessageType;
 import gr.crystalogic.sms.domain.Message;
+import gr.crystalogic.sms.utils.DateFormatter;
 
 public class MessageViewHolder extends RecyclerView.ViewHolder {
 
@@ -55,7 +56,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
             mDisplayName.setText(name);
         }
 
-        mDateTime.setText(message.getDateFormatted());
+        mDateTime.setText(DateFormatter.format(itemView.getContext(), message.getDate()));
         mBody.setText(message.getBody());
     }
 }

@@ -32,7 +32,6 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_margin="10dp"
                     android:background="@drawable/emoji_button" />
@@ -41,7 +40,6 @@
                     android:id="@+id/new_message"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
-                    android:layout_toLeftOf="@id/showEmojis"
                     android:layout_toStartOf="@id/showEmojis"
                     android:gravity="center_vertical"
                     android:hint="@string/type_message"

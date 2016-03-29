@@ -1,7 +1,5 @@
 package gr.crystalogic.sms.domain;
 
-import org.joda.time.DateTime;
-
 public class Conversation {
 
     private long id;
@@ -12,7 +10,7 @@ public class Conversation {
     private String snippet;
     private long snippetCs;
     private String address;
-    private boolean  unanswered;
+    private boolean unanswered;
 
     private String ct_t;
 
@@ -20,7 +18,7 @@ public class Conversation {
 
     @Override
     public String toString() {
-        return "Conversation: id=" + id + " date=" + getDateFormatted("HH:mm dd/MM/yyyy") + " unreadCount=" + unreadCount + " "
+        return "Conversation: id=" + id + " date=" + date + " unreadCount=" + unreadCount + " "
                 + " recipientIds=" + recipientIds + " snippet=" + snippet
                 + " snippetCs= " + snippetCs + " ct_t=" + ct_t;
     }
@@ -55,15 +53,6 @@ public class Conversation {
 
     public void setDate(long date) {
         this.date = date;
-    }
-
-    public String getDateFormatted(String pattern) {
-        return new DateTime(date).toString(pattern);
-    }
-
-    public String getDateFormatted() {
-        DateTime dateTime = new DateTime(date);
-        return dateTime.toString("HH:mm EEEE d-M-yy");
     }
 
     public long getUnreadCount() {

@@ -1,7 +1,5 @@
 package gr.crystalogic.sms.domain;
 
-import org.joda.time.DateTime;
-
 public class Message {
 
     private long id;
@@ -41,6 +39,10 @@ public class Message {
         return address;
     }
 
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public String getDisplayName() {
         String displayName;
         if (contact != null) {
@@ -49,10 +51,6 @@ public class Message {
             displayName = address;
         }
         return displayName;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     public String getBody() {
@@ -87,8 +85,4 @@ public class Message {
         this.contact = contact;
     }
 
-    public String getDateFormatted() {
-        DateTime dateTime = new DateTime(date);
-        return  dateTime.toString("HH:mm EEEE d-M-yy");
-    }
 }
