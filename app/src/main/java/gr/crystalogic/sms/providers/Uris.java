@@ -1,7 +1,6 @@
 package gr.crystalogic.sms.providers;
 
 import android.net.Uri;
-import android.provider.ContactsContract;
 
 class Uris {
 
