@@ -10,6 +10,7 @@ import android.provider.ContactsContract;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import gr.crystalogic.sms.providers.metadata.ConversationColumns;
@@ -96,6 +97,8 @@ public class SmsProvider {
         Uri uri = Uri.withAppendedPath(Uris.CONVERSATIONS, String.valueOf(threadId));
         String orderBy = ConversationColumns.DATE + " DESC ";
 
+        LinkedHashMap<String, Contact> map = new LinkedHashMap<>();
+
         Cursor cursor = cr.query(uri, ConversationColumns.PROJECTION_ULTRA, null, null, orderBy);
         if (cursor != null && cursor.moveToFirst()) {
             do {
@@ -110,14 +113,12 @@ public class SmsProvider {
                 message.setType(cursor.getInt(cursor.getColumnIndex(ConversationColumns.TYPE)));
 
                 //find contact
-                Contact contact = getContactByAddress(message.getAddress());
+                Contact contact = map.get(message.getAddress());
+                if (contact == null) {
+                    contact = getContactByAddress(message.getAddress());
+                    map.put(message.getAddress(), contact);
+                }
                 message.setContact(contact);
-
-/*                 if ("application/vnd.wap.multipart.related".equals(ct_t)) {
-                    // it's MMS
-                } else {
-                    // it's SMS
-                }*/
 
                 messages.add(message);
             } while (cursor.moveToNext());
