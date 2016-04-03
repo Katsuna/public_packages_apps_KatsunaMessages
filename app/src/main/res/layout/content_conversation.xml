@@ -5,7 +5,7 @@
     android:id="@+id/messagesRecyclerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="80dp"
+    android:paddingBottom="120dp"
     app:layoutManager="LinearLayoutManager"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:listitem="@layout/message_incoming" />
