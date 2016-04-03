@@ -22,12 +22,12 @@ import gr.crystalogic.sms.utils.Device;
 
 public class SmsReceiver extends BroadcastReceiver {
 
-    private static final String ACTION = "android.provider.Telephony.SMS_RECEIVED";
+    private static final String ACTION = "android.provider.Telephony.SMS_DELIVER";
     private final String TAG = this.getClass().getSimpleName();
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (!Device.isDefaultApp(context)) {
+        if (!intent.getAction().equals(ACTION) || !Device.isDefaultApp(context)) {
             return;
         }
 
@@ -51,41 +51,37 @@ public class SmsReceiver extends BroadcastReceiver {
     }
 
     private Message getMessage(Intent intent) {
-        Message message = null;
+        Message message = new Message();
 
-        if (intent.getAction().equals(ACTION)) {
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+            List<SmsMessage> smsMessages = new ArrayList<>();
 
-            message = new Message();
+            Object[] smsextras = (Object[]) bundle.get("pdus");
+            String format = intent.getStringExtra("format");
 
-            Bundle bundle = intent.getExtras();
-            if (bundle != null) {
-                List<SmsMessage> smsMessages = new ArrayList<>();
-
-                Object[] smsextras = (Object[]) bundle.get("pdus");
-                String format = intent.getStringExtra("format");
-
-                assert smsextras != null;
-                for (Object smsextra : smsextras) {
-                    SmsMessage smsMessage;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        smsMessage = SmsMessage.createFromPdu((byte[]) smsextra, format);
-                    } else {
-                        //noinspection deprecation
-                        smsMessage = SmsMessage.createFromPdu((byte[]) smsextra);
-                    }
-                    smsMessages.add(smsMessage);
+            assert smsextras != null;
+            for (Object smsextra : smsextras) {
+                SmsMessage smsMessage;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    smsMessage = SmsMessage.createFromPdu((byte[]) smsextra, format);
+                } else {
+                    //noinspection deprecation
+                    smsMessage = SmsMessage.createFromPdu((byte[]) smsextra);
                 }
-
-                message.setAddress(smsMessages.get(0).getDisplayOriginatingAddress());
-                message.setDate(smsMessages.get(0).getTimestampMillis());
-
-                StringBuilder sb = new StringBuilder();
-                for (SmsMessage currentMessage : smsMessages) {
-                    sb.append(currentMessage.getDisplayMessageBody());
-                }
-                message.setBody(sb.toString());
+                smsMessages.add(smsMessage);
             }
+
+            message.setAddress(smsMessages.get(0).getDisplayOriginatingAddress());
+            message.setDate(smsMessages.get(0).getTimestampMillis());
+
+            StringBuilder sb = new StringBuilder();
+            for (SmsMessage currentMessage : smsMessages) {
+                sb.append(currentMessage.getDisplayMessageBody());
+            }
+            message.setBody(sb.toString());
         }
+
         return message;
     }
 
