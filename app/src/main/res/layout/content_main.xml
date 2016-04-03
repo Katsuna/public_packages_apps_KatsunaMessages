@@ -5,7 +5,7 @@
     android:id="@+id/conversations_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    style="@style/ContentMainStyle"
     android:clipToPadding="false"
     android:paddingBottom="80dp"
     app:layoutManager="LinearLayoutManager"

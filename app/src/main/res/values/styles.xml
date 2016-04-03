@@ -14,4 +14,8 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
+    <style name="ContentMainStyle">
+        <item name="android:background">@color/white</item>
+    </style>
+
 </resources>
