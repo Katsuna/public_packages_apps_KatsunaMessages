@@ -13,11 +13,12 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import gr.crystalogic.sms.providers.metadata.ConversationColumns;
-import gr.crystalogic.sms.providers.metadata.MessageType;
 import gr.crystalogic.sms.domain.Contact;
 import gr.crystalogic.sms.domain.Conversation;
 import gr.crystalogic.sms.domain.Message;
+import gr.crystalogic.sms.providers.metadata.ConversationColumns;
+import gr.crystalogic.sms.providers.metadata.MessageColumns;
+import gr.crystalogic.sms.providers.metadata.MessageType;
 
 public class SmsProvider {
 
@@ -43,7 +44,7 @@ public class SmsProvider {
                 //showCursor(cursor);
 
                 Conversation conversation = new Conversation();
-                conversation.setId(cursor.getLong(cursor.getColumnIndex(ConversationColumns.ID)));
+                conversation.setId(cursor.getLong(cursor.getColumnIndex(ConversationColumns._ID)));
                 conversation.setDate(cursor.getLong(cursor.getColumnIndex(ConversationColumns.DATE)));
                 //TODO: support unread_count for lollipop and later devices
                 int unreadCountIndex = cursor.getColumnIndex(ConversationColumns.UNREAD_COUNT);
@@ -95,22 +96,24 @@ public class SmsProvider {
         List<Message> messages = new ArrayList<>();
 
         Uri uri = Uri.withAppendedPath(Uris.CONVERSATIONS, String.valueOf(threadId));
+        String[] projection = new String[]{MessageColumns._ID, MessageColumns.ADDRESS,
+                MessageColumns.BODY, MessageColumns.DATE, MessageColumns.READ, MessageColumns.TYPE};
         String orderBy = ConversationColumns.DATE + " DESC ";
 
         LinkedHashMap<String, Contact> map = new LinkedHashMap<>();
 
-        Cursor cursor = cr.query(uri, ConversationColumns.PROJECTION_ULTRA, null, null, orderBy);
+        Cursor cursor = cr.query(uri, projection, null, null, orderBy);
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 //showCursor(cursor);
 
                 Message message = new Message();
-                message.setId(cursor.getLong(cursor.getColumnIndex(ConversationColumns.ID)));
-                message.setAddress(cursor.getString(cursor.getColumnIndex(ConversationColumns.ADDRESS)));
-                message.setBody(cursor.getString(cursor.getColumnIndex(ConversationColumns.BODY)));
-                message.setDate(cursor.getLong(cursor.getColumnIndex(ConversationColumns.DATE)));
-                message.setRead(cursor.getInt(cursor.getColumnIndex(ConversationColumns.READ)));
-                message.setType(cursor.getInt(cursor.getColumnIndex(ConversationColumns.TYPE)));
+                message.setId(cursor.getLong(cursor.getColumnIndex(MessageColumns._ID)));
+                message.setAddress(cursor.getString(cursor.getColumnIndex(MessageColumns.ADDRESS)));
+                message.setBody(cursor.getString(cursor.getColumnIndex(MessageColumns.BODY)));
+                message.setDate(cursor.getLong(cursor.getColumnIndex(MessageColumns.DATE)));
+                message.setRead(cursor.getInt(cursor.getColumnIndex(MessageColumns.READ)));
+                message.setType(cursor.getInt(cursor.getColumnIndex(MessageColumns.TYPE)));
 
                 //find contact
                 Contact contact = map.get(message.getAddress());
@@ -233,7 +236,7 @@ public class SmsProvider {
         ContentValues values = new ContentValues();
         values.put(ConversationColumns.READ, true);
 
-        String selection = ConversationColumns.ID + "=? AND " + ConversationColumns.READ + "=?";
+        String selection = ConversationColumns._ID + "=? AND " + ConversationColumns.READ + "=?";
         String[] selectionArgs = new String[]{String.valueOf(messageId), "0"};
 
         try {
