@@ -10,6 +10,5 @@ public class ThreadColumns implements BaseColumns {
     public static final String READ = Telephony.ThreadsColumns.READ;
     public static final String RECIPIENT_IDS = Telephony.ThreadsColumns.RECIPIENT_IDS;
     public static final String SNIPPET = Telephony.ThreadsColumns.SNIPPET;
-    public static final String SNIPPET_CHARSET = Telephony.ThreadsColumns.SNIPPET_CHARSET;
 
 }

@@ -70,24 +70,15 @@ public class ContactProvider {
         List<Phone> phones = new ArrayList<>();
 
         Uri baseUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-        String[] projection = {
-                ContactsContract.CommonDataKinds.Phone._ID,
-                ContactsContract.CommonDataKinds.Phone.NUMBER,
-                ContactsContract.CommonDataKinds.Phone.TYPE
-        };
+        String[] projection = { ContactsContract.CommonDataKinds.Phone.NUMBER };
         String selection = ContactsContract.Data.CONTACT_ID + "=" + contactId;
         String orderBy = ContactsContract.CommonDataKinds.Phone.IS_PRIMARY + " DESC";
 
         Cursor cursor = cr.query(baseUri, projection, selection, null, orderBy);
         if (cursor != null && cursor.moveToFirst()) {
-            int idIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone._ID);
-            int numberIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-            int typeIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE);
             do {
                 Phone phone = new Phone();
-                phone.setId(cursor.getString(idIndex));
-                phone.setNumber(cursor.getString(numberIndex));
-                phone.setType(cursor.getString(typeIndex));
+                phone.setNumber(cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
                 phones.add(phone);
             } while (cursor.moveToNext());
             cursor.close();

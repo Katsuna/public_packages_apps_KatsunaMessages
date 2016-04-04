@@ -33,9 +33,8 @@ public class SmsProvider {
     public List<Conversation> getConversations() {
         List<Conversation> conversations = new ArrayList<>();
 
-        String[] projection = new String[] { ThreadColumns._ID, ThreadColumns.DATE,
-                ThreadColumns.READ, ThreadColumns.RECIPIENT_IDS,
-                ThreadColumns.SNIPPET, ThreadColumns.SNIPPET_CHARSET };
+        String[] projection = new String[]{ThreadColumns._ID, ThreadColumns.DATE,
+                ThreadColumns.READ, ThreadColumns.RECIPIENT_IDS, ThreadColumns.SNIPPET};
 
         String orderBy = ThreadColumns.DATE + " DESC";
 
@@ -50,7 +49,6 @@ public class SmsProvider {
                 conversation.setRead(cursor.getInt(cursor.getColumnIndex(ThreadColumns.READ)));
                 conversation.setRecipientIds(cursor.getLong(cursor.getColumnIndex(ThreadColumns.RECIPIENT_IDS)));
                 conversation.setSnippet(cursor.getString(cursor.getColumnIndex(ThreadColumns.SNIPPET)));
-                conversation.setSnippetCs(cursor.getLong(cursor.getColumnIndex(ThreadColumns.SNIPPET_CHARSET)));
 
                 int messageType = getLastMessageType(conversation.getId());
                 Log.e(TAG, "messageType: " + messageType);
@@ -109,7 +107,6 @@ public class SmsProvider {
                 message.setAddress(cursor.getString(cursor.getColumnIndex(MessageColumns.ADDRESS)));
                 message.setBody(cursor.getString(cursor.getColumnIndex(MessageColumns.BODY)));
                 message.setDate(cursor.getLong(cursor.getColumnIndex(MessageColumns.DATE)));
-                message.setRead(cursor.getInt(cursor.getColumnIndex(MessageColumns.READ)));
                 message.setType(cursor.getInt(cursor.getColumnIndex(MessageColumns.TYPE)));
 
                 //find contact
@@ -163,7 +160,6 @@ public class SmsProvider {
         String[] projection = {
                 ContactsContract.PhoneLookup._ID,
                 ContactsContract.PhoneLookup.DISPLAY_NAME,
-                ContactsContract.PhoneLookup.NUMBER,
                 ContactsContract.PhoneLookup.PHOTO_THUMBNAIL_URI
         };
 
@@ -174,7 +170,6 @@ public class SmsProvider {
             contact = new Contact();
             contact.setId(cursor.getLong(cursor.getColumnIndex(ContactsContract.PhoneLookup._ID)));
             contact.setName(cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME)));
-            contact.setNumber(cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.NUMBER)));
             contact.setPhotoUri(cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.PHOTO_THUMBNAIL_URI)));
 
             cursor.close();

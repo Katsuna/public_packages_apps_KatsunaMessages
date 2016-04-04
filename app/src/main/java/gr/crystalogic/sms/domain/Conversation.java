@@ -4,24 +4,18 @@ public class Conversation {
 
     private long id;
     private long date;
-    private long unreadCount;
     //TODO check if multiple Ids (comma separated) arrive here....
     private long recipientIds;
     private String snippet;
-    private long snippetCs;
     private String address;
     private boolean unanswered;
     private int read;
-
-    private String ct_t;
 
     private Contact contact;
 
     @Override
     public String toString() {
-        return "Conversation: id=" + id + " date=" + date + " unreadCount=" + unreadCount + " "
-                + " recipientIds=" + recipientIds + " snippet=" + snippet
-                + " snippetCs= " + snippetCs + " ct_t=" + ct_t;
+        return "Conversation: id=" + id + " date=" + date + " recipientIds=" + recipientIds + " snippet=" + snippet;
     }
 
     public long getId() {
@@ -30,14 +24,6 @@ public class Conversation {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getCt_t() {
-        return ct_t;
-    }
-
-    public void setCt_t(String ct_t) {
-        this.ct_t = ct_t;
     }
 
     public long getRecipientIds() {
@@ -56,28 +42,12 @@ public class Conversation {
         this.date = date;
     }
 
-    public long getUnreadCount() {
-        return unreadCount;
-    }
-
-    public void setUnreadCount(long unreadCount) {
-        this.unreadCount = unreadCount;
-    }
-
     public String getSnippet() {
         return snippet;
     }
 
     public void setSnippet(String snippet) {
         this.snippet = snippet;
-    }
-
-    public long getSnippetCs() {
-        return snippetCs;
-    }
-
-    public void setSnippetCs(long snippetCs) {
-        this.snippetCs = snippetCs;
     }
 
     public Contact getContact() {

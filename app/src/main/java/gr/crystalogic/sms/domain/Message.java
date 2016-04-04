@@ -3,12 +3,10 @@ package gr.crystalogic.sms.domain;
 public class Message {
 
     private long id;
-    private long threadId;
     private long date;
     private String address;
     private String body;
     private int type;
-    private int read;
     private Contact contact;
 
     public long getId() {
@@ -17,14 +15,6 @@ public class Message {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public long getThreadId() {
-        return threadId;
-    }
-
-    public void setThreadId(long threadId) {
-        this.threadId = threadId;
     }
 
     public long getDate() {
@@ -67,14 +57,6 @@ public class Message {
 
     public void setType(int type) {
         this.type = type;
-    }
-
-    public int getRead() {
-        return read;
-    }
-
-    public void setRead(int read) {
-        this.read = read;
     }
 
     public Contact getContact() {

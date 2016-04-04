@@ -10,7 +10,6 @@ public class Contact implements Comparable<Contact>, Serializable {
 
     private long id;
     private String name;
-    private String number;
     private String photoUri;
     private String displayName;
     private int timesContacted;
@@ -23,7 +22,6 @@ public class Contact implements Comparable<Contact>, Serializable {
     public Contact(Contact contact) {
         id = contact.getId();
         name = contact.getName();
-        number = contact.getNumber();
         photoUri = contact.getPhotoUri();
 
         displayName = contact.getDisplayName();
@@ -34,7 +32,7 @@ public class Contact implements Comparable<Contact>, Serializable {
 
     @Override
     public String toString() {
-        return "Contact: id=" + id + " name=" + name + " number=" + number;
+        return "Contact: id=" + id + " name=" + name;
     }
 
     public long getId() {
@@ -51,14 +49,6 @@ public class Contact implements Comparable<Contact>, Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
     }
 
     public String getPhotoUri() {

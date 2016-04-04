@@ -49,7 +49,7 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
         mSnippet.setText(conversation.getSnippet());
 
         mDisplayName.setTypeface(null, Typeface.NORMAL);
-        if (conversation.getUnreadCount() > 0) {
+        if (conversation.getRead() == 0) {
             mDisplayName.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.black));
             mDisplayName.setTypeface(null, Typeface.BOLD);
         } else if (conversation.isUnanswered()) {
