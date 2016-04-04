@@ -16,9 +16,9 @@ import java.util.List;
 import gr.crystalogic.sms.domain.Contact;
 import gr.crystalogic.sms.domain.Conversation;
 import gr.crystalogic.sms.domain.Message;
-import gr.crystalogic.sms.providers.metadata.ConversationColumns;
 import gr.crystalogic.sms.providers.metadata.MessageColumns;
 import gr.crystalogic.sms.providers.metadata.MessageType;
+import gr.crystalogic.sms.providers.metadata.ThreadColumns;
 
 public class SmsProvider {
 
@@ -33,27 +33,24 @@ public class SmsProvider {
     public List<Conversation> getConversations() {
         List<Conversation> conversations = new ArrayList<>();
 
-        String orderBy = ConversationColumns.DATE + " DESC";
+        String[] projection = new String[] { ThreadColumns._ID, ThreadColumns.DATE,
+                ThreadColumns.READ, ThreadColumns.RECIPIENT_IDS,
+                ThreadColumns.SNIPPET, ThreadColumns.SNIPPET_CHARSET };
 
-        Cursor cursor = cr.query(Uris.CONVERSATIONS_SIMPLE, null, null, null, orderBy);
+        String orderBy = ThreadColumns.DATE + " DESC";
+
+        Cursor cursor = cr.query(Uris.THREADS_URI_SIMPLE, projection, null, null, orderBy);
         if (cursor != null && cursor.moveToFirst()) {
             do {
-/*                0:_id type:1 | 1:date type:1 | 2:message_count type:1 | 3:recipient_ids type:3 | 4:snippet type:3 | 5:snippet_cs type:1 | 6:read type:
-                1 | 7:type type:1 | 8:error type:1 | 9:has_attachment type:1 |*/
-
                 //showCursor(cursor);
 
                 Conversation conversation = new Conversation();
-                conversation.setId(cursor.getLong(cursor.getColumnIndex(ConversationColumns._ID)));
-                conversation.setDate(cursor.getLong(cursor.getColumnIndex(ConversationColumns.DATE)));
-                //TODO: support unread_count for lollipop and later devices
-                int unreadCountIndex = cursor.getColumnIndex(ConversationColumns.UNREAD_COUNT);
-                if (unreadCountIndex != -1) {
-                    conversation.setUnreadCount(cursor.getLong(unreadCountIndex));
-                }
-                conversation.setRecipientIds(cursor.getLong(cursor.getColumnIndex(ConversationColumns.RECIPIENT_IDS)));
-                conversation.setSnippet(cursor.getString(cursor.getColumnIndex(ConversationColumns.SNIPPET)));
-                conversation.setSnippetCs(cursor.getLong(cursor.getColumnIndex(ConversationColumns.SNIPPET_CS)));
+                conversation.setId(cursor.getLong(cursor.getColumnIndex(ThreadColumns._ID)));
+                conversation.setDate(cursor.getLong(cursor.getColumnIndex(ThreadColumns.DATE)));
+                conversation.setRead(cursor.getInt(cursor.getColumnIndex(ThreadColumns.READ)));
+                conversation.setRecipientIds(cursor.getLong(cursor.getColumnIndex(ThreadColumns.RECIPIENT_IDS)));
+                conversation.setSnippet(cursor.getString(cursor.getColumnIndex(ThreadColumns.SNIPPET)));
+                conversation.setSnippetCs(cursor.getLong(cursor.getColumnIndex(ThreadColumns.SNIPPET_CHARSET)));
 
                 int messageType = getLastMessageType(conversation.getId());
                 Log.e(TAG, "messageType: " + messageType);
@@ -78,15 +75,15 @@ public class SmsProvider {
         return conversations;
     }
 
-    private int getLastMessageType(long conversationId) {
-        String[] projection = new String[]{ConversationColumns.TYPE, ConversationColumns.DATE};
-        Uri uri = Uri.withAppendedPath(Uris.CONVERSATIONS, String.valueOf(conversationId));
-        String orderBy = ConversationColumns.DATE + " DESC ";
+    private int getLastMessageType(long threadId) {
+        String[] projection = new String[]{ThreadColumns.TYPE, ThreadColumns.DATE};
+        Uri uri = Uri.withAppendedPath(Uris.THREADS_URI, String.valueOf(threadId));
+        String orderBy = ThreadColumns.DATE + " DESC ";
 
         int type = -1;
         Cursor cursor = cr.query(uri, projection, null, null, orderBy);
         if (cursor != null && cursor.moveToFirst()) {
-            type = cursor.getInt(cursor.getColumnIndex(ConversationColumns.TYPE));
+            type = cursor.getInt(cursor.getColumnIndex(ThreadColumns.TYPE));
             cursor.close();
         }
         return type;
@@ -95,10 +92,10 @@ public class SmsProvider {
     public List<Message> getConversationMessages(long threadId) {
         List<Message> messages = new ArrayList<>();
 
-        Uri uri = Uri.withAppendedPath(Uris.CONVERSATIONS, String.valueOf(threadId));
+        Uri uri = Uri.withAppendedPath(Uris.THREADS_URI, String.valueOf(threadId));
         String[] projection = new String[]{MessageColumns._ID, MessageColumns.ADDRESS,
                 MessageColumns.BODY, MessageColumns.DATE, MessageColumns.READ, MessageColumns.TYPE};
-        String orderBy = ConversationColumns.DATE + " DESC ";
+        String orderBy = ThreadColumns.DATE + " DESC ";
 
         LinkedHashMap<String, Contact> map = new LinkedHashMap<>();
 
@@ -147,14 +144,14 @@ public class SmsProvider {
     }
 
     public long getConversationId(String address) {
-        String[] projection = new String[]{ConversationColumns.THREAD_ID};
+        String[] projection = new String[]{MessageColumns.THREAD_ID};
         String filteredAddress = address.replaceAll("[-()/ ]", "");
-        String selection = ConversationColumns.ADDRESS + " like '%" + filteredAddress + "'";
+        String selection = MessageColumns.ADDRESS + " like '%" + filteredAddress + "'";
 
         long conversationId = -1;
         Cursor cursor = cr.query(Uris.URI_SMS, projection, selection, null, null);
         if (cursor != null && cursor.moveToFirst()) {
-            conversationId = cursor.getLong(cursor.getColumnIndex(ConversationColumns.THREAD_ID));
+            conversationId = cursor.getLong(cursor.getColumnIndex(MessageColumns.THREAD_ID));
             cursor.close();
         }
         return conversationId;
@@ -188,10 +185,10 @@ public class SmsProvider {
     //returns the id of the created message
     public long sendMessage(String address, String message) {
         ContentValues values = new ContentValues();
-        values.put(ConversationColumns.TYPE, MessageType.OUTGOING);
-        values.put(ConversationColumns.BODY, message);
-        values.put(ConversationColumns.READ, 1);
-        values.put(ConversationColumns.ADDRESS, address);
+        values.put(MessageColumns.TYPE, MessageType.OUTGOING);
+        values.put(MessageColumns.BODY, message);
+        values.put(MessageColumns.READ, 1);
+        values.put(MessageColumns.ADDRESS, address);
 
         long output = -1;
         try {
@@ -205,9 +202,9 @@ public class SmsProvider {
 
     public void receiveMessage(Message message) {
         ContentValues values = new ContentValues();
-        values.put(ConversationColumns.BODY, message.getBody());
-        values.put(ConversationColumns.ADDRESS, message.getAddress());
-        values.put(ConversationColumns.DATE_SENT, message.getDate());
+        values.put(MessageColumns.BODY, message.getBody());
+        values.put(MessageColumns.ADDRESS, message.getAddress());
+        values.put(MessageColumns.DATE_SENT, message.getDate());
 
         try {
             cr.insert(Uris.URI_INBOX, values);
@@ -218,25 +215,25 @@ public class SmsProvider {
 
     public long getConversationId(Message message) {
         long output = -1;
-        String[] projection = {ConversationColumns.THREAD_ID};
-        String selection = ConversationColumns.DATE_SENT + "= ? AND " + ConversationColumns.BODY + "= ? ";
+        String[] projection = {MessageColumns.THREAD_ID};
+        String selection = MessageColumns.DATE_SENT + "= ? AND " + MessageColumns.BODY + "= ? ";
         String[] selectionArgs = new String[]{String.valueOf(message.getDate()), message.getBody()};
 
         Cursor cursor = cr.query(Uris.URI_SMS, projection, selection, selectionArgs, null);
         if (cursor != null && cursor.moveToFirst()) {
-            output = cursor.getLong(cursor.getColumnIndex(ConversationColumns.THREAD_ID));
+            output = cursor.getLong(cursor.getColumnIndex(MessageColumns.THREAD_ID));
             cursor.close();
         }
 
-        Log.e(TAG, "conversatioId: " + output);
+        Log.e(TAG, "conversationId: " + output);
         return output;
     }
 
     public void markRead(long messageId) {
         ContentValues values = new ContentValues();
-        values.put(ConversationColumns.READ, true);
+        values.put(MessageColumns.READ, true);
 
-        String selection = ConversationColumns._ID + "=? AND " + ConversationColumns.READ + "=?";
+        String selection = MessageColumns._ID + "=? AND " + MessageColumns.READ + "=?";
         String[] selectionArgs = new String[]{String.valueOf(messageId), "0"};
 
         try {

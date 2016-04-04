@@ -11,6 +11,7 @@ public class Conversation {
     private long snippetCs;
     private String address;
     private boolean unanswered;
+    private int read;
 
     private String ct_t;
 
@@ -101,5 +102,13 @@ public class Conversation {
 
     public void setUnanswered(boolean unanswered) {
         this.unanswered = unanswered;
+    }
+
+    public int getRead() {
+        return read;
+    }
+
+    public void setRead(int read) {
+        this.read = read;
     }
 }

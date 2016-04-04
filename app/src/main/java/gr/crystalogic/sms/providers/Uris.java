@@ -1,12 +1,12 @@
 package gr.crystalogic.sms.providers;
 
 import android.net.Uri;
+import android.provider.Telephony;
 
 class Uris {
 
-    public static final Uri CONVERSATIONS = Uri.parse("content://mms-sms/conversations");
-    public static final Uri CONVERSATIONS_SIMPLE = Uri.parse("content://mms-sms/conversations")
-            .buildUpon().appendQueryParameter("simple", "true").build();
+    public static final Uri THREADS_URI = Telephony.Threads.CONTENT_URI;
+    public static final Uri THREADS_URI_SIMPLE = THREADS_URI.buildUpon().appendQueryParameter("simple", "true").build();
 
     public static final Uri CANONICAL_ADDRESS = Uri.parse("content://mms-sms/canonical-address");
 
