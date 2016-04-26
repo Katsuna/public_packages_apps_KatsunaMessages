@@ -56,14 +56,6 @@ public class SmsProvider {
                     conversation.setUnanswered(true);
                 }
 
-                //find address
-                String address = getAddress(conversation.getRecipientIds());
-                conversation.setAddress(address);
-
-                //find contact
-                Contact contact = getContactByAddress(address);
-                conversation.setContact(contact);
-
                 conversations.add(conversation);
             } while (cursor.moveToNext());
 
@@ -125,7 +117,7 @@ public class SmsProvider {
         return messages;
     }
 
-    private String getAddress(long recipientId) {
+    public String getAddress(long recipientId) {
         String address = null;
 
         Uri uri = Uri.withAppendedPath(Uris.CANONICAL_ADDRESS, String.valueOf(recipientId));
@@ -154,8 +146,9 @@ public class SmsProvider {
         return conversationId;
     }
 
-    private Contact getContactByAddress(String address) {
-        Contact contact = null;
+    public Contact getContactByAddress(String address) {
+        Contact contact = new Contact();
+        contact.setAddress(address);
 
         String[] projection = {
                 ContactsContract.PhoneLookup._ID,
@@ -167,7 +160,6 @@ public class SmsProvider {
 
         Cursor cursor = cr.query(uri, projection, null, null, null);
         if (cursor != null && cursor.moveToFirst()) {
-            contact = new Contact();
             contact.setId(cursor.getLong(cursor.getColumnIndex(ContactsContract.PhoneLookup._ID)));
             contact.setName(cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME)));
             contact.setPhotoUri(cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.PHOTO_THUMBNAIL_URI)));

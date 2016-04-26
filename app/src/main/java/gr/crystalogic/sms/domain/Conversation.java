@@ -7,7 +7,6 @@ public class Conversation {
     //TODO check if multiple Ids (comma separated) arrive here....
     private long recipientIds;
     private String snippet;
-    private String address;
     private boolean unanswered;
     private int read;
 
@@ -56,14 +55,6 @@ public class Conversation {
 
     public void setContact(Contact contact) {
         this.contact = contact;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     public boolean isUnanswered() {

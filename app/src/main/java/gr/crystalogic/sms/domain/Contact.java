@@ -15,6 +15,7 @@ public class Contact implements Comparable<Contact>, Serializable {
     private int timesContacted;
     private long lastTimeContacted;
     private boolean starred;
+    private String address;
 
     public Contact() {
     }
@@ -96,5 +97,11 @@ public class Contact implements Comparable<Contact>, Serializable {
         return displayName.compareTo(another.displayName);
     }
 
+    public String getAddress() {
+        return address;
+    }
 
+    public void setAddress(String address) {
+        this.address = address;
+    }
 }

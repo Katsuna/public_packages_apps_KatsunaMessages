@@ -65,7 +65,6 @@ public class ConversationActivity extends BaseActivity implements EmojiconGridFr
         initToolbar();
         initControls();
 
-        //load decisions
         conversationId = getConversationIdFromIntent();
 
         if (conversationId != -1) {

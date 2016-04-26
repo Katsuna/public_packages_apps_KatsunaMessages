@@ -35,7 +35,7 @@ public class Message {
 
     public String getDisplayName() {
         String displayName;
-        if (contact != null) {
+        if (contact.getId() > 0) {
             displayName = contact.getName();
         } else {
             displayName = address;

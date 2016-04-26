@@ -30,7 +30,7 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(Conversation conversation) {
         String name;
-        if (conversation.getContact() != null) {
+        if (conversation.getContact().getId() > 0) {
             name = conversation.getContact().getName();
 
             //load photo
@@ -41,7 +41,7 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
 
         } else {
             mPhoto.setImageBitmap(null);
-            name = conversation.getAddress();
+            name = conversation.getContact().getAddress();
         }
         mDisplayName.setText(name);
 
