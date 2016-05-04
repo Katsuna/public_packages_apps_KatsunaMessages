@@ -27,5 +27,6 @@
 
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
+    <string name="new_message">You have a new message.</string>
 
 </resources>

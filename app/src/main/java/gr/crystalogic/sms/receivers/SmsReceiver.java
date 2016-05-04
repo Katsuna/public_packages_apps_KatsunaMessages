@@ -1,5 +1,7 @@
 package gr.crystalogic.sms.receivers;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,12 +11,15 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import gr.crystalogic.sms.R;
 import gr.crystalogic.sms.domain.Message;
 import gr.crystalogic.sms.providers.SmsProvider;
 import gr.crystalogic.sms.ui.activities.ConversationActivity;
@@ -43,7 +48,8 @@ public class SmsReceiver extends BroadcastReceiver {
             SmsProvider dao = new SmsProvider(context);
             dao.receiveMessage(message);
             long conversationId = dao.getConversationId(message);
-            showConversation(context, conversationId);
+            //showConversation(context, conversationId);
+            sendNotification(context, conversationId, message);
         }
 
         //release wakelock
@@ -92,6 +98,34 @@ public class SmsReceiver extends BroadcastReceiver {
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         i.putExtra("conversationId", conversationId);
         context.startActivity(i);
+    }
+
+    protected void sendNotification(Context context, long conversationId, Message message) {
+        playRingtone(context);
+
+        Intent resultIntent = new Intent(context, ConversationActivity.class);
+        resultIntent.putExtra("conversationId", conversationId);
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        // Adds the back stack
+        stackBuilder.addParentStack(ConversationActivity.class);
+        // Adds the Intent to the top of the stack
+        stackBuilder.addNextIntent(resultIntent);
+
+
+        String convIdStr = String.valueOf(conversationId);
+
+        // Gets a PendingIntent containing the entire back stack
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(123, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        builder.setSmallIcon(R.drawable.ic_sms_white_18dp)
+                .setContentTitle(context.getResources().getString(R.string.new_message))
+                .setContentText(message.getBody());
+        builder.setAutoCancel(true);
+        builder.setContentIntent(resultPendingIntent);
+        NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(Integer.parseInt(convIdStr), builder.build());
     }
 
     private void playRingtone(Context context) {
