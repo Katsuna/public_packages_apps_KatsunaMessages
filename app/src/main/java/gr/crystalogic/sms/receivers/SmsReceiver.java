@@ -48,8 +48,8 @@ public class SmsReceiver extends BroadcastReceiver {
             SmsProvider dao = new SmsProvider(context);
             dao.receiveMessage(message);
             long conversationId = dao.getConversationId(message);
-            //showConversation(context, conversationId);
-            sendNotification(context, conversationId, message);
+            showConversation(context, conversationId);
+            //sendNotification(context, conversationId, message);
         }
 
         //release wakelock
