@@ -103,28 +103,28 @@ public class SmsReceiver extends BroadcastReceiver {
     protected void sendNotification(Context context, long conversationId, Message message) {
         playRingtone(context);
 
+        //create a pending intent with stack
         Intent resultIntent = new Intent(context, ConversationActivity.class);
         resultIntent.putExtra("conversationId", conversationId);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        // Adds the back stack
         stackBuilder.addParentStack(ConversationActivity.class);
-        // Adds the Intent to the top of the stack
         stackBuilder.addNextIntent(resultIntent);
 
-
-        String convIdStr = String.valueOf(conversationId);
-
         // Gets a PendingIntent containing the entire back stack
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(123, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        //build the notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setSmallIcon(R.drawable.ic_sms_white_18dp)
                 .setContentTitle(context.getResources().getString(R.string.new_message))
-                .setContentText(message.getBody());
-        builder.setAutoCancel(true);
-        builder.setContentIntent(resultPendingIntent);
+                .setContentText(message.getDisplayName() + ": " + message.getBody())
+                .setAutoCancel(true)
+                .setContentIntent(resultPendingIntent);
+
+        //send the notification
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        String convIdStr = String.valueOf(conversationId);
         mNotificationManager.notify(Integer.parseInt(convIdStr), builder.build());
     }
 
