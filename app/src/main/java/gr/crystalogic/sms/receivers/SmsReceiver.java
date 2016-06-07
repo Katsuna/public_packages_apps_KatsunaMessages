@@ -36,11 +36,6 @@ public class SmsReceiver extends BroadcastReceiver {
             return;
         }
 
-        //acquire wakelock
-        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        PowerManager.WakeLock wakelock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
-        wakelock.acquire();
-
         Log.e(TAG, "onReceive: intent-ACTION=" + intent.getAction());
         Message message = getMessage(intent);
 
@@ -48,12 +43,18 @@ public class SmsReceiver extends BroadcastReceiver {
             SmsProvider dao = new SmsProvider(context);
             dao.receiveMessage(message);
             long conversationId = dao.getConversationId(message);
-            showConversation(context, conversationId);
-            //sendNotification(context, conversationId, message);
+            //showConversation(context, conversationId);
+            sendNotification(context, conversationId, message);
+            wakeUp(context);
         }
+    }
 
-        //release wakelock
-        wakelock.release();
+    private long timeout = 30000;
+
+    private void wakeUp(Context context) {
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");
+        wl.acquire(timeout);
     }
 
     private Message getMessage(Intent intent) {
