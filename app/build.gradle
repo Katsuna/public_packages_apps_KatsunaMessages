@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "gr.crystalogic.sms"
+        applicationId "com.katsuna.sms"
         minSdkVersion 19
         targetSdkVersion 23
         versionCode 1

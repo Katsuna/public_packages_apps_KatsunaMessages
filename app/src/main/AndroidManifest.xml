@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="gr.crystalogic.sms">
+    package="com.katsuna.sms">
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_SMS" />
@@ -129,7 +129,7 @@
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="gr.crystalogic.sms.ui.activities.MainActivity" />
+                android:value="com.katsuna.sms.ui.activities.MainActivity" />
         </activity>
     </application>
 

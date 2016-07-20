@@ -10,7 +10,7 @@
         android:id="@+id/coordinator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="gr.crystalogic.sms.ui.activities.ContactsActivity">
+        tools:context="com.katsuna.sms.ui.activities.ContactsActivity">
 
         <include layout="@layout/toolbar" />
 
@@ -41,7 +41,7 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
             android:src="@drawable/ic_dialpad_white_24dp"
-            app:layout_behavior="gr.crystalogic.sms.ui.behaviors.ScrollingFABBehavior" />
+            app:layout_behavior="com.katsuna.sms.ui.behaviors.ScrollingFABBehavior" />
 
     </android.support.design.widget.CoordinatorLayout>
 
