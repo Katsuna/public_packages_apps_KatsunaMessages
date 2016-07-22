@@ -3,9 +3,14 @@ package com.katsuna.sms.ui.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.katsuna.commons.KatsunaConstants;
+import com.katsuna.commons.entities.ProfileType;
+import com.katsuna.commons.utils.SettingsManager;
 import com.katsuna.sms.R;
 import com.katsuna.sms.utils.Constants;
 import com.katsuna.sms.utils.Device;
@@ -37,6 +42,21 @@ public class SettingsActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Device.makeDefaultApp(SettingsActivity.this, 0);
+            }
+        });
+
+        Spinner mProfileTypes = (Spinner) findViewById(R.id.profiles);
+        int profileSetting = SettingsManager.readSetting(this, KatsunaConstants.PROFILE_KEY, ProfileType.INTERMEDIATE.getNumVal());
+        mProfileTypes.setSelection(profileSetting);
+        mProfileTypes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                SettingsManager.setSetting(SettingsActivity.this, KatsunaConstants.PROFILE_KEY, i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
     }

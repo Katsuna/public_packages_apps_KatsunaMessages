@@ -37,12 +37,10 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
             String name = "";
             if (message.getType() == MessageType.OUTGOING) {
                 mPhoto.setImageBitmap(null);
-                mBody.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.black));
-                mBody.setBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.white));
+                mBody.setBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.grey200));
             } else {
                 name = message.getDisplayName();
-                mBody.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.white));
-                mBody.setBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.blue));
+                mBody.setBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.white));
 
                 if (message.getContact() != null) {
                     //load photo

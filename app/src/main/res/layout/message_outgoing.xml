@@ -28,10 +28,12 @@
 
         <TextView
             android:id="@+id/body"
+            style="@style/RobotoMedium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:gravity="end"
+            android:textColor="@color/black87"
             android:textSize="18sp" />
 
         <TextView

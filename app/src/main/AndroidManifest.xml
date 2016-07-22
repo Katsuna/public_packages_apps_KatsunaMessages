@@ -10,6 +10,9 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
+    <uses-permission android:name="com.katsuna.datastore.permission.errors" />
+    <uses-permission android:name="com.katsuna.datastore.permission.profiles" />
+
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"

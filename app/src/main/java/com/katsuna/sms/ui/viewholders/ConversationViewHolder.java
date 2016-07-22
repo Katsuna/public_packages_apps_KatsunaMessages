@@ -1,17 +1,15 @@
 package com.katsuna.sms.ui.viewholders;
 
-import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import com.katsuna.sms.R;
 import com.katsuna.sms.domain.Conversation;
 import com.katsuna.sms.utils.DateFormatter;
+import com.squareup.picasso.Picasso;
 
 public class ConversationViewHolder extends RecyclerView.ViewHolder {
 
@@ -48,14 +46,12 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
         mDateTime.setText(DateFormatter.format(itemView.getContext(), conversation.getDate()));
         mSnippet.setText(conversation.getSnippet());
 
-        mDisplayName.setTypeface(null, Typeface.NORMAL);
         if (conversation.getRead() == 0) {
-            mDisplayName.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.black));
-            mDisplayName.setTypeface(null, Typeface.BOLD);
+            mDisplayName.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.dark_grey));
         } else if (conversation.isUnanswered()) {
             mDisplayName.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.pink));
         } else {
-            mDisplayName.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.dark_grey));
+            mDisplayName.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.black87));
         }
     }
 }

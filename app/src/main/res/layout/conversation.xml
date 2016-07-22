@@ -5,17 +5,18 @@
     android:layout_height="wrap_content"
     android:background="@drawable/selector_row"
     android:orientation="horizontal"
-    android:padding="10dp">
+    android:paddingBottom="4dp"
+    android:paddingEnd="16dp"
+    android:paddingStart="16dp"
+    android:paddingTop="4dp">
 
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/photo"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="@dimen/contact_photo_size_intemediate"
+        android:layout_height="@dimen/contact_photo_size_intemediate"
         android:layout_gravity="center"
         android:layout_margin="5dp"
         android:background="@drawable/ic_person_grey_50px"
-        app:riv_border_color="@color/pink"
-        app:riv_border_width="2dp"
         app:riv_corner_radius="50dp"
         app:riv_mutate_background="true"
         app:riv_oval="false"
@@ -28,11 +29,12 @@
 
         <TextView
             android:id="@+id/displayName"
+            style="@style/RobotoBold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textColor="@color/black87"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/body"
