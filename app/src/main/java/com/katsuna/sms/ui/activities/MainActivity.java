@@ -17,6 +17,9 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import com.katsuna.commons.entities.Profile;
+import com.katsuna.commons.entities.ProfileType;
+import com.katsuna.commons.utils.ProfileReader;
 import com.katsuna.sms.R;
 import com.katsuna.sms.providers.SmsProvider;
 import com.katsuna.sms.domain.Conversation;
@@ -88,7 +91,22 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onResume() {
         super.onResume();
+        setupProfile();
         loadConversations();
+    }
+
+    private void setupProfile() {
+        Profile freshProfileFromContentProvider = ProfileReader.getProfile(this);
+        Profile profileFromPreferences = getProfileFromPreferences();
+        if (freshProfileFromContentProvider == null) {
+            setSelectedProfile(profileFromPreferences);
+        } else {
+            if (profileFromPreferences.getType() == ProfileType.AUTO.getNumVal()) {
+                setSelectedProfile(freshProfileFromContentProvider);
+            } else {
+                setSelectedProfile(profileFromPreferences);
+            }
+        }
     }
 
     private void initControls() {
@@ -118,7 +136,7 @@ public class MainActivity extends BaseActivity
                     public boolean onLongClick(View v) {
                         return false;
                     }
-                });
+                }, mProfile);
         mRecyclerView.setAdapter(mAdapter);
     }
 

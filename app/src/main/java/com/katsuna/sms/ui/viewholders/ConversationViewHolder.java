@@ -2,10 +2,14 @@ package com.katsuna.sms.ui.viewholders;
 
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.katsuna.commons.entities.Profile;
+import com.katsuna.commons.entities.ProfileType;
 import com.katsuna.sms.R;
 import com.katsuna.sms.domain.Conversation;
 import com.katsuna.sms.utils.DateFormatter;
@@ -17,13 +21,38 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
     private final TextView mDateTime;
     private final TextView mSnippet;
     private final ImageView mPhoto;
+    private final Profile mProfile;
 
-    public ConversationViewHolder(View itemView) {
+    public ConversationViewHolder(View itemView, Profile profile) {
         super(itemView);
         mDisplayName = (TextView) itemView.findViewById(R.id.displayName);
         mDateTime = (TextView) itemView.findViewById(R.id.dateTime);
         mSnippet = (TextView) itemView.findViewById(R.id.body);
         mPhoto = (ImageView) itemView.findViewById(R.id.photo);
+        mProfile = profile;
+        adjustProfile();
+    }
+
+    private void adjustProfile() {
+        if (mProfile != null) {
+            int size = itemView.getResources().getDimensionPixelSize(R.dimen.contact_photo_size_intemediate);
+            int fontSize = itemView.getResources().getDimensionPixelSize(R.dimen.font_size_intemediate);
+            if (mProfile.getType() == ProfileType.ADVANCED.getNumVal()) {
+                size = itemView.getResources().getDimensionPixelSize(R.dimen.contact_photo_size_advanced);
+                fontSize = itemView.getResources().getDimensionPixelSize(R.dimen.font_size_advanced);
+            } else if (mProfile.getType() == ProfileType.SIMPLE.getNumVal()) {
+                size = itemView.getResources().getDimensionPixelSize(R.dimen.contact_photo_size_simple);
+                fontSize = itemView.getResources().getDimensionPixelSize(R.dimen.font_size_simple);
+            }
+
+            //adjust photo
+            ViewGroup.LayoutParams layoutParams = mPhoto.getLayoutParams();
+            layoutParams.height = size;
+            layoutParams.width = size;
+
+            //adjust displayName
+            mDisplayName.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
+        }
     }
 
     public void bind(Conversation conversation) {

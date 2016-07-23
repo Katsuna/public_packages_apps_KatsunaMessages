@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import com.katsuna.commons.entities.Profile;
 import com.katsuna.sms.R;
 import com.katsuna.sms.domain.Contact;
 import com.katsuna.sms.domain.Conversation;
@@ -22,11 +23,13 @@ public class ConversationsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     private final OnClickListener mOnClickListener;
     private final OnLongClickListener mOnLongClickListener;
+    private final Profile mProfile;
 
-    public ConversationsAdapter(List<Conversation> models, OnClickListener onClickListener, OnLongClickListener onLongClickListener) {
+    public ConversationsAdapter(List<Conversation> models, OnClickListener onClickListener, OnLongClickListener onLongClickListener, Profile profile) {
         mModels = models;
         mOnClickListener = onClickListener;
         mOnLongClickListener = onLongClickListener;
+        mProfile = profile;
     }
 
     @Override
@@ -34,7 +37,7 @@ public class ConversationsAdapter extends RecyclerView.Adapter<RecyclerView.View
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.conversation, parent, false);
         view.setOnClickListener(mOnClickListener);
         view.setOnLongClickListener(mOnLongClickListener);
-        return new ConversationViewHolder(view);
+        return new ConversationViewHolder(view, mProfile);
     }
 
     @Override
