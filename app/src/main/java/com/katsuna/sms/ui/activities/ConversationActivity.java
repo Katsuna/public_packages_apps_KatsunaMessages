@@ -27,6 +27,9 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.katsuna.commons.entities.Profile;
+import com.katsuna.commons.entities.ProfileType;
+import com.katsuna.commons.utils.ProfileReader;
 import com.rockerhieu.emojicon.EmojiconEditText;
 import com.rockerhieu.emojicon.EmojiconGridFragment;
 import com.rockerhieu.emojicon.EmojiconsFragment;
@@ -68,6 +71,7 @@ public class ConversationActivity extends BaseActivity implements EmojiconGridFr
         conversationId = getConversationIdFromIntent();
 
         if (conversationId != -1) {
+            setupProfile();
             loadMessages();
         } else {
             setTitle(conversationNumber);
@@ -78,6 +82,26 @@ public class ConversationActivity extends BaseActivity implements EmojiconGridFr
                 WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
         setEmojiconFragment(false);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setupProfile();
+    }
+
+    private void setupProfile() {
+        Profile freshProfileFromContentProvider = ProfileReader.getProfile(this);
+        Profile profileFromPreferences = getProfileFromPreferences();
+        if (freshProfileFromContentProvider == null) {
+            setSelectedProfile(profileFromPreferences);
+        } else {
+            if (profileFromPreferences.getType() == ProfileType.AUTO.getNumVal()) {
+                setSelectedProfile(freshProfileFromContentProvider);
+            } else {
+                setSelectedProfile(profileFromPreferences);
+            }
+        }
     }
 
     private void setEmojiconFragment(boolean useSystemDefault) {
@@ -151,7 +175,7 @@ public class ConversationActivity extends BaseActivity implements EmojiconGridFr
             conversationId = dao.getConversationId(conversationNumber);
         }
         List<Message> messages = dao.getConversationMessages(conversationId);
-        MessagesAdapter adapter = new MessagesAdapter(messages, null, null);
+        MessagesAdapter adapter = new MessagesAdapter(messages, null, null, mProfile);
         mRecyclerView.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
         linearLayoutManager.setReverseLayout(true);
@@ -165,7 +189,7 @@ public class ConversationActivity extends BaseActivity implements EmojiconGridFr
 
     private void markRead(List<Message> messages) {
         SmsProvider dao = new SmsProvider(this);
-        for (Message message: messages) {
+        for (Message message : messages) {
             dao.markRead(message.getId());
         }
     }

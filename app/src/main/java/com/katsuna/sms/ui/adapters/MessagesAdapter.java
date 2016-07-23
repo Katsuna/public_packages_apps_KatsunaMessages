@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import com.katsuna.commons.entities.Profile;
 import com.katsuna.sms.R;
 import com.katsuna.sms.providers.metadata.MessageType;
 import com.katsuna.sms.domain.Message;
@@ -20,11 +21,13 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private final View.OnClickListener mOnClickListener;
     private final View.OnLongClickListener mOnLongClickListener;
+    private final Profile mProfile;
 
-    public MessagesAdapter(List<Message> models, View.OnClickListener onClickListener, View.OnLongClickListener onLongClickListener) {
+    public MessagesAdapter(List<Message> models, View.OnClickListener onClickListener, View.OnLongClickListener onLongClickListener, Profile profile) {
         mModels = models;
         mOnClickListener = onClickListener;
         mOnLongClickListener = onLongClickListener;
+        mProfile = profile;
     }
 
     @Override
@@ -53,7 +56,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         view.setOnClickListener(mOnClickListener);
         view.setOnLongClickListener(mOnLongClickListener);
 
-        return new MessageViewHolder(view);
+        return new MessageViewHolder(view, mProfile);
     }
 
     @Override

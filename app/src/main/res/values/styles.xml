@@ -43,7 +43,7 @@
 
     <style name="RobotoMedium">
         <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textStyle">normal</item>
     </style>
 
 </resources>

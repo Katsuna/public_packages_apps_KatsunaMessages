@@ -4,17 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="10dp">
+    android:paddingEnd="16dp"
+    android:paddingStart="16dp"
+    android:paddingTop="16dp">
 
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/photo"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="@dimen/contact_photo_size_intemediate"
+        android:layout_height="@dimen/contact_photo_size_intemediate"
         android:layout_gravity="center"
         android:layout_margin="5dp"
         android:background="@drawable/ic_person_grey_50px"
-        app:riv_border_color="@color/pink"
-        app:riv_border_width="2dp"
         app:riv_corner_radius="50dp"
         app:riv_mutate_background="true"
         app:riv_oval="false"
@@ -22,25 +22,16 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/displayName"
-            style="@style/RobotoMedium"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:singleLine="true"
-            android:textColor="@color/black87"
-            android:textSize="20sp" />
+        android:layout_height="wrap_content"
+        android:background="@color/grey200">
 
         <TextView
             android:id="@+id/body"
+            style="@style/RobotoMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/displayName"
             android:padding="5dp"
-            android:textSize="18sp" />
+            android:textSize="@dimen/font_size_intemediate" />
 
         <TextView
             android:id="@+id/dateTime"
