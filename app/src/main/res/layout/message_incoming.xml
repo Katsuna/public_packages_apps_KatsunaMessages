@@ -21,31 +21,27 @@
         app:riv_oval="false"
         app:riv_tile_mode="repeat" />
 
-    <LinearLayout
+
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="20dp"
+        android:background="@drawable/dialog_left">
 
-        <RelativeLayout
+        <TextView
+            android:id="@+id/body"
+            style="@style/RobotoMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/dialog_left">
+            android:padding="5dp"
+            android:textSize="@dimen/font_size_intemediate" />
 
-            <TextView
-                android:id="@+id/body"
-                style="@style/RobotoMedium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:textSize="@dimen/font_size_intemediate" />
+        <TextView
+            android:id="@+id/dateTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/body" />
 
-            <TextView
-                android:id="@+id/dateTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/body" />
-
-        </RelativeLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="blue">#4253a1</color>
     <color name="dark_grey">#757575</color>
 
     <color name="grey50">#FAFAFA</color>
@@ -16,9 +15,6 @@
     <color name="pink">#FF4081</color>
     <color name="green">#1b9b8d</color>
     <color name="grey200">#E3E3DC</color>
-    <color name="grey600">#5C5856</color>
-    <color name="grey800">#292527</color>
-    <color name="red">#F44336</color>
     <color name="grey">#48484a</color>
 
 </resources>
