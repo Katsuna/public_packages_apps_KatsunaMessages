@@ -11,8 +11,8 @@
     <dimen name="contact_photo_size_intemediate">56dp</dimen>
     <dimen name="contact_photo_size_advanced">40dp</dimen>
     <dimen name="contact_photo_size_simple">80dp</dimen>
-    <dimen name="font_size_intemediate">22dp</dimen>
-    <dimen name="font_size_advanced">20dp</dimen>
-    <dimen name="font_size_simple">24dp</dimen>
+    <dimen name="font_size_intemediate">22sp</dimen>
+    <dimen name="font_size_advanced">20sp</dimen>
+    <dimen name="font_size_simple">24sp</dimen>
     <!-- eof profile dimens -->
 </resources>

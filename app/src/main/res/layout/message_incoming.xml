@@ -4,41 +4,48 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:paddingBottom="8dp"
     android:paddingEnd="16dp"
     android:paddingStart="16dp"
-    android:paddingTop="16dp">
+    android:paddingTop="8dp">
 
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/photo"
         android:layout_width="@dimen/contact_photo_size_intemediate"
         android:layout_height="@dimen/contact_photo_size_intemediate"
-        android:layout_gravity="center"
-        android:layout_margin="5dp"
+        android:layout_gravity="top|center"
+        android:layout_marginEnd="5dp"
         android:background="@drawable/ic_person_grey_50px"
         app:riv_corner_radius="50dp"
         app:riv_mutate_background="true"
         app:riv_oval="false"
         app:riv_tile_mode="repeat" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/grey200">
+        android:layout_marginTop="20dp">
 
-        <TextView
-            android:id="@+id/body"
-            style="@style/RobotoMedium"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:textSize="@dimen/font_size_intemediate" />
+            android:background="@drawable/dialog_left">
 
-        <TextView
-            android:id="@+id/dateTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/body" />
+            <TextView
+                android:id="@+id/body"
+                style="@style/RobotoMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:textSize="@dimen/font_size_intemediate" />
 
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/dateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/body" />
+
+        </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>
