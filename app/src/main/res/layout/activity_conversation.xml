@@ -9,7 +9,7 @@
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.katsuna.sms.ui.activities.ConversationActivity">
+        tools:context="com.katsuna.messages.ui.activities.ConversationActivity">
 
         <include layout="@layout/toolbar" />
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.katsuna.sms">
+    package="com.katsuna.messages">
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_SMS" />
@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.activities.MainActivity"
+            android:name="com.katsuna.messages.ui.activities.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -30,10 +30,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activities.ContactsActivity"
+            android:name="com.katsuna.messages.ui.activities.ContactsActivity"
             android:label="@string/select_contact"
             android:launchMode="singleTop"
-            android:parentActivityName=".ui.activities.MainActivity"
+            android:parentActivityName="com.katsuna.messages.ui.activities.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -45,7 +45,7 @@
         </activity>
 
         <receiver
-            android:name=".receivers.SmsReceiver"
+            android:name="com.katsuna.messages.receivers.SmsReceiver"
             android:permission="android.permission.BROADCAST_SMS">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_DELIVER" />
@@ -55,7 +55,7 @@
 
         <!-- BroadcastReceiver that listens for incoming MMS messages -->
         <receiver
-            android:name=".receivers.MmsReceiver"
+            android:name="com.katsuna.messages.receivers.MmsReceiver"
             android:permission="android.permission.BROADCAST_WAP_PUSH">
             <intent-filter>
                 <action android:name="android.provider.Telephony.WAP_PUSH_DELIVER" />
@@ -66,13 +66,13 @@
         </receiver>
 
         <activity
-            android:name=".ui.activities.ConversationActivity"
+            android:name="com.katsuna.messages.ui.activities.ConversationActivity"
             android:label="@string/title_activity_conversation"
-            android:parentActivityName=".ui.activities.MainActivity"
+            android:parentActivityName="com.katsuna.messages.ui.activities.MainActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.activities.MainActivity" />
+                android:value="com.katsuna.messages.ui.activities.MainActivity" />
 
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -110,7 +110,7 @@
 
         <!-- Service that delivers messages from the phone "quick response" -->
         <service
-            android:name=".services.HeadlessSmsSendService"
+            android:name="com.katsuna.messages.services.HeadlessSmsSendService"
             android:exported="true"
             android:permission="android.permission.SEND_RESPOND_VIA_MESSAGE">
             <intent-filter>
@@ -126,13 +126,13 @@
         </service>
 
         <activity
-            android:name=".ui.activities.SettingsActivity"
+            android:name="com.katsuna.messages.ui.activities.SettingsActivity"
             android:label="@string/settings"
-            android:parentActivityName=".ui.activities.MainActivity"
+            android:parentActivityName="com.katsuna.messages.ui.activities.MainActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.katsuna.sms.ui.activities.MainActivity" />
+                android:value="com.katsuna.messages.ui.activities.MainActivity" />
         </activity>
     </application>
 

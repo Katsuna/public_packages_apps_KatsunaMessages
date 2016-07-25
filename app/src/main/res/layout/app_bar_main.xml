@@ -28,6 +28,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_message_black87_24dp"
-        app:layout_behavior="com.katsuna.sms.ui.behaviors.ScrollingFABBehavior" />
+        app:layout_behavior="com.katsuna.messages.ui.behaviors.ScrollingFABBehavior" />
 
 </android.support.design.widget.CoordinatorLayout>
