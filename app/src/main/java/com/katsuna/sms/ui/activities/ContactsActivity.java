@@ -193,6 +193,7 @@ public class ContactsActivity extends BaseActivity {
         mModels = ContactArranger.getContactsProcessed(contactList);
         mAdapter = new ContactsRecyclerViewAdapter(getDeepCopy(mModels), mProfile);
         mRecyclerView.setAdapter(mAdapter);
+        showNoResultsView();
     }
 
     private List<ContactListItemModel> getDeepCopy(List<ContactListItemModel> contactListItemModels) {

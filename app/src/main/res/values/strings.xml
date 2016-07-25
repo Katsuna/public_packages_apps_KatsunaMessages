@@ -18,6 +18,7 @@
     <string name="cancel">Cancel</string>
 
     <string name="action_search">Search</string>
+    <string name="no_messages">No messages found.</string>
     <string name="no_contacts">No contacts found.</string>
     <string name="search_label">Search for contacts</string>
     <string name="search_hint">Search</string>

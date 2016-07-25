@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -34,6 +35,7 @@ public class MainActivity extends BaseActivity
     private final String[] permissions = new String[]{Manifest.permission.READ_SMS, Manifest.permission.READ_CONTACTS};
     private RecyclerView mRecyclerView;
     private ConversationsAdapter mAdapter;
+    private TextView mNoResultsView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +113,17 @@ public class MainActivity extends BaseActivity
 
     private void initControls() {
         mRecyclerView = (RecyclerView) findViewById(R.id.conversations_list);
+        mNoResultsView = (TextView) findViewById(R.id.no_results);
+    }
+
+    private void showNoResultsView() {
+        if (mAdapter.getItemCount() > 0) {
+            mNoResultsView.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.VISIBLE);
+        } else {
+            mNoResultsView.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.GONE);
+        }
     }
 
     private void loadConversations() {
@@ -138,6 +151,8 @@ public class MainActivity extends BaseActivity
                     }
                 }, mProfile);
         mRecyclerView.setAdapter(mAdapter);
+
+        showNoResultsView();
     }
 
     @Override
