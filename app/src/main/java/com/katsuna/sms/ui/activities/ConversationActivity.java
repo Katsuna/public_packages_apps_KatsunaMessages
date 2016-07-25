@@ -30,6 +30,12 @@ import android.widget.Toast;
 import com.katsuna.commons.entities.Profile;
 import com.katsuna.commons.entities.ProfileType;
 import com.katsuna.commons.utils.ProfileReader;
+import com.katsuna.sms.R;
+import com.katsuna.sms.domain.Message;
+import com.katsuna.sms.providers.SmsProvider;
+import com.katsuna.sms.receivers.BaseBroadcastReceiver;
+import com.katsuna.sms.ui.adapters.MessagesAdapter;
+import com.katsuna.sms.utils.Constants;
 import com.rockerhieu.emojicon.EmojiconEditText;
 import com.rockerhieu.emojicon.EmojiconGridFragment;
 import com.rockerhieu.emojicon.EmojiconsFragment;
@@ -37,13 +43,6 @@ import com.rockerhieu.emojicon.emoji.Emojicon;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.katsuna.sms.R;
-import com.katsuna.sms.providers.SmsProvider;
-import com.katsuna.sms.domain.Message;
-import com.katsuna.sms.receivers.BaseBroadcastReceiver;
-import com.katsuna.sms.ui.adapters.MessagesAdapter;
-import com.katsuna.sms.utils.Constants;
 
 public class ConversationActivity extends BaseActivity implements EmojiconGridFragment.OnEmojiconClickedListener, EmojiconsFragment.OnEmojiconBackspaceClickedListener {
 
@@ -85,9 +84,21 @@ public class ConversationActivity extends BaseActivity implements EmojiconGridFr
     }
 
     @Override
+    void initToolbar() {
+        super.initToolbar();
+        mToolbar.setTitleTextAppearance(this, R.style.RobotoBold);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
+        registerReceivers();
         setupProfile();
+    }
+
+    private void registerReceivers() {
+        deliveryBroadcastReceiver.register(this, new IntentFilter(DELIVERED));
+        sendBroadcastReceiver.register(this, new IntentFilter(SENT));
     }
 
     private void setupProfile() {
@@ -238,19 +249,19 @@ public class ConversationActivity extends BaseActivity implements EmojiconGridFr
                         loadMessages();
                         mNewMessage.setText(null);
                         mEmojiContainer.setVisibility(View.GONE);
-                        Toast.makeText(getBaseContext(), "SMS Sent", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(), R.string.message_sent, Toast.LENGTH_SHORT).show();
                         break;
                     case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
-                        Toast.makeText(getBaseContext(), "Generic failure", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(), R.string.generic_failure, Toast.LENGTH_SHORT).show();
                         break;
                     case SmsManager.RESULT_ERROR_NO_SERVICE:
-                        Toast.makeText(getBaseContext(), "No service", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(), R.string.no_service, Toast.LENGTH_SHORT).show();
                         break;
                     case SmsManager.RESULT_ERROR_NULL_PDU:
-                        Toast.makeText(getBaseContext(), "Null PDU", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(), R.string.null_PDU, Toast.LENGTH_SHORT).show();
                         break;
                     case SmsManager.RESULT_ERROR_RADIO_OFF:
-                        Toast.makeText(getBaseContext(), "Radio off", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(), R.string.radio_off, Toast.LENGTH_SHORT).show();
                         break;
                 }
             }
@@ -260,17 +271,14 @@ public class ConversationActivity extends BaseActivity implements EmojiconGridFr
             public void onReceive(Context arg0, Intent arg1) {
                 switch (getResultCode()) {
                     case Activity.RESULT_OK:
-                        Toast.makeText(getBaseContext(), "SMS Delivered", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(), R.string.delivered, Toast.LENGTH_SHORT).show();
                         break;
                     case Activity.RESULT_CANCELED:
-                        Toast.makeText(getBaseContext(), "SMS not delivered", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(), R.string.not_delivered, Toast.LENGTH_SHORT).show();
                         break;
                 }
             }
         };
-
-        deliveryBroadcastReceiver.register(this, new IntentFilter(DELIVERED));
-        sendBroadcastReceiver.register(this, new IntentFilter(SENT));
     }
 
     @Override

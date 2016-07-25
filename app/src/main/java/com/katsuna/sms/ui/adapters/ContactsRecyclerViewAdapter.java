@@ -9,28 +9,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.List;
-
+import com.katsuna.commons.entities.Profile;
 import com.katsuna.sms.R;
-import com.katsuna.sms.providers.ContactProvider;
 import com.katsuna.sms.domain.Contact;
 import com.katsuna.sms.domain.Phone;
+import com.katsuna.sms.providers.ContactProvider;
 import com.katsuna.sms.ui.activities.ConversationActivity;
 import com.katsuna.sms.ui.adapters.models.ContactListItemModel;
 import com.katsuna.sms.ui.viewholders.ContactViewHolder;
 
+import java.util.List;
+
 public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final List<ContactListItemModel> mModels;
+    private final Profile mProfile;
 
-    public ContactsRecyclerViewAdapter(List<ContactListItemModel> models) {
+    public ContactsRecyclerViewAdapter(List<ContactListItemModel> models, Profile profile) {
         mModels = models;
+        mProfile = profile;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact, parent, false);
-        return new ContactViewHolder(view);
+        return new ContactViewHolder(view, mProfile);
     }
 
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
@@ -120,7 +123,10 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 }
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                builder.setTitle(R.string.select_phone);
+                LayoutInflater inflater = (LayoutInflater) v.getContext()
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View view = inflater.inflate(R.layout.alert_title, null);
+                builder.setCustomTitle(view);
                 builder.setItems(phonesArray, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

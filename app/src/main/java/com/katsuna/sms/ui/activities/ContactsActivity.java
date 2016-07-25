@@ -4,8 +4,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -14,6 +12,7 @@ import android.support.v7.widget.SearchView;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -21,16 +20,19 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.katsuna.commons.entities.Profile;
+import com.katsuna.commons.entities.ProfileType;
+import com.katsuna.commons.utils.ProfileReader;
 import com.katsuna.sms.R;
-import com.katsuna.sms.providers.ContactProvider;
 import com.katsuna.sms.domain.Contact;
+import com.katsuna.sms.providers.ContactProvider;
 import com.katsuna.sms.ui.adapters.ContactsRecyclerViewAdapter;
 import com.katsuna.sms.ui.adapters.models.ContactListItemModel;
 import com.katsuna.sms.utils.ContactArranger;
 import com.katsuna.sms.utils.Separator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ContactsActivity extends BaseActivity {
 
@@ -47,7 +49,29 @@ public class ContactsActivity extends BaseActivity {
 
         initToolbar();
         initControls();
-        loadContacts();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        boolean reloadNeeded = setupProfile();
+        if (reloadNeeded) {
+            loadContacts();
+        }
+    }
+
+    private boolean setupProfile() {
+        Profile freshProfileFromContentProvider = ProfileReader.getProfile(this);
+        Profile profileFromPreferences = getProfileFromPreferences();
+        if (freshProfileFromContentProvider == null) {
+            return setSelectedProfile(profileFromPreferences);
+        } else {
+            if (profileFromPreferences.getType() == ProfileType.AUTO.getNumVal()) {
+                return setSelectedProfile(freshProfileFromContentProvider);
+            } else {
+                return setSelectedProfile(profileFromPreferences);
+            }
+        }
     }
 
     private void initControls() {
@@ -55,12 +79,14 @@ public class ContactsActivity extends BaseActivity {
         mNoResultsView = (TextView) findViewById(R.id.no_results);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(ContactsActivity.this);
-                alert.setTitle(R.string.select_phone);
+                LayoutInflater inflater = (LayoutInflater) view.getContext()
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View v = inflater.inflate(R.layout.alert_title, null);
+                alert.setCustomTitle(v);
                 final EditText input = new EditText(ContactsActivity.this);
                 input.setInputType(InputType.TYPE_CLASS_PHONE);
                 alert.setView(input);
@@ -165,7 +191,7 @@ public class ContactsActivity extends BaseActivity {
         ContactProvider dao = new ContactProvider(this);
         List<Contact> contactList = dao.getContacts();
         mModels = ContactArranger.getContactsProcessed(contactList);
-        mAdapter = new ContactsRecyclerViewAdapter(getDeepCopy(mModels));
+        mAdapter = new ContactsRecyclerViewAdapter(getDeepCopy(mModels), mProfile);
         mRecyclerView.setAdapter(mAdapter);
     }
 
