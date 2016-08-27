@@ -17,8 +17,6 @@ LOCAL_STATIC_JAVA_LIBRARIES := android-support-v4
 LOCAL_STATIC_JAVA_LIBRARIES += android-support-v7-appcompat
 LOCAL_STATIC_JAVA_LIBRARIES += android-support-v7-recyclerview
 LOCAL_STATIC_JAVA_LIBRARIES += android-support-design
-LOCAL_STATIC_JAVA_LIBRARIES += picasso
-LOCAL_STATIC_JAVA_LIBRARIES += jodatime
 LOCAL_STATIC_JAVA_AAR_LIBRARIES += roundedimageview
 LOCAL_STATIC_JAVA_AAR_LIBRARIES += emojiconlibrary
 
@@ -32,22 +30,16 @@ LOCAL_AAPT_FLAGS += --extra-packages jodatime
 LOCAL_AAPT_FLAGS += --extra-packages roundedimageview
 LOCAL_AAPT_FLAGS += --extra-packages emojiconlibrary
 
-LOCAL_PACKAGE_NAME := Messages
+LOCAL_PACKAGE_NAME := KatsunaMessages
 LOCAL_CERTIFICATE := platform
 #LOCAL_PROGUARD_FLAG_FILES := app/proguard-rules.pro
 
 LOCAL_PROGUARD_ENABLED := disabled
 
+include packages/apps/KatsunaCommon/common.mk
+
 include $(BUILD_PACKAGE)
 
 include $(CLEAR_VARS)
 
-LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := picasso:app/libs/picasso-2.5.2.jar
-LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES += jodatime:app/libs/jodatime-2.9.2.jar
-LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES += roundedimageview:app/libs/roundedimageview-2.2.1.aar 
-LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES += emojiconlibrary:app/libs/emojiconlibrary-1.3.3.aar 
-
-include $(BUILD_MULTI_PREBUILT)
-
 include $(call all-makefiles-under,$(LOCAL_PATH))
-
