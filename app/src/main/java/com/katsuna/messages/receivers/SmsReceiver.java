@@ -49,11 +49,10 @@ public class SmsReceiver extends BroadcastReceiver {
         }
     }
 
-    private long timeout = 30000;
-
     private void wakeUp(Context context) {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");
+        long timeout = 30000;
         wl.acquire(timeout);
     }
 
