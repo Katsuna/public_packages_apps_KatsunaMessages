@@ -42,4 +42,8 @@ include $(BUILD_PACKAGE)
 
 include $(CLEAR_VARS)
 
+LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES += emojiconlibrary:app/libs/emojiconlibrary-1.3.3.aar 
+
+include $(BUILD_MULTI_PREBUILT)
+
 include $(call all-makefiles-under,$(LOCAL_PATH))
