@@ -11,24 +11,34 @@ LOCAL_RESOURCE_DIR += frameworks/support/v7/appcompat/res
 LOCAL_RESOURCE_DIR += frameworks/support/v7/recyclerview/res
 LOCAL_RESOURCE_DIR += frameworks/support/design/res
 
-LOCAL_JAVA_LIBRARIES += telephony-common
+# Needed for SMS capabilities
+LOCAL_JAVA_LIBRARIES := telephony-common
 
-LOCAL_STATIC_JAVA_LIBRARIES := android-support-v4
+# Include KatsunaCommon into this app
+LOCAL_REQUIRED_MODULES := KatsunaCommon
+LOCAL_STATIC_JAVA_LIBRARIES := KatsunaCommon
+
+LOCAL_STATIC_JAVA_LIBRARIES += android-support-v4
 LOCAL_STATIC_JAVA_LIBRARIES += android-support-v7-appcompat
 LOCAL_STATIC_JAVA_LIBRARIES += android-support-v7-recyclerview
 LOCAL_STATIC_JAVA_LIBRARIES += android-support-design
-LOCAL_STATIC_JAVA_AAR_LIBRARIES += roundedimageview
+
+# Include the specified aar, DEFINED in KatsunaCommon's Android.mk!
+LOCAL_STATIC_JAVA_AAR_LIBRARIES := roundedimageview
 LOCAL_STATIC_JAVA_AAR_LIBRARIES += emojiconlibrary
 
 LOCAL_AAPT_INCLUDE_ALL_RESOURCES := true
 LOCAL_AAPT_FLAGS := --auto-add-overlay
+LOCAL_AAPT_FLAGS += --generate-dependencies
+# TODO: Don't know if actually needed
+LOCAL_AAPT_FLAGS += --extra-packages com.katsuna.common
 LOCAL_AAPT_FLAGS += --extra-packages android.support.v7.appcompat
 LOCAL_AAPT_FLAGS += --extra-packages android.support.v7.recyclerview
 LOCAL_AAPT_FLAGS += --extra-packages android.support.design
-LOCAL_AAPT_FLAGS += --extra-packages picasso
-LOCAL_AAPT_FLAGS += --extra-packages jodatime
-LOCAL_AAPT_FLAGS += --extra-packages roundedimageview
-LOCAL_AAPT_FLAGS += --extra-packages emojiconlibrary
+# This is to include the aar's RESOURCES into this app
+# Notice the full packagename
+LOCAL_AAPT_FLAGS += --extra-packages com.makeramen.roundedimageview
+LOCAL_AAPT_FLAGS += --extra-packages com.rockerhieu.emojicon
 
 LOCAL_PACKAGE_NAME := KatsunaMessages
 LOCAL_CERTIFICATE := platform
@@ -36,12 +46,13 @@ LOCAL_CERTIFICATE := platform
 
 LOCAL_PROGUARD_ENABLED := disabled
 
-include packages/apps/KatsunaCommon/common.mk
-
 include $(BUILD_PACKAGE)
 
 include $(CLEAR_VARS)
 
+# Define here, which extra jar/aar this app needs
+# These should NOT be included in KatsunaCommon
+# These should reside inside app/libs of this app
 LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES += emojiconlibrary:app/libs/emojiconlibrary-1.3.3.aar 
 
 include $(BUILD_MULTI_PREBUILT)
