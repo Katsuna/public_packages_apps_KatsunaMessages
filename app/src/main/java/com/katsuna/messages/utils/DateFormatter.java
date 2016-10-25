@@ -18,9 +18,9 @@ public class DateFormatter {
 
         String output;
         if (todayInterval.contains(dateTime)) {
-            output = dateTime.toString("HH:mm ") + context.getResources().getString(R.string.today);
+            output = dateTime.toString("HH:mm ") + context.getResources().getString(R.string.common_today);
         } else if (yesterdayInterval.contains(dateTime)) {
-            output = dateTime.toString("HH:mm ") + context.getResources().getString(R.string.yesterday);
+            output = dateTime.toString("HH:mm ") + context.getResources().getString(R.string.common_yesterday);
         } else {
             output = dateTime.toString("HH:mm EEEE d-M-yy");
         }

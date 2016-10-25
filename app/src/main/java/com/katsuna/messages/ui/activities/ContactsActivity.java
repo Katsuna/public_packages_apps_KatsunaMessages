@@ -90,14 +90,14 @@ public class ContactsActivity extends BaseActivity {
                 final EditText input = new EditText(ContactsActivity.this);
                 input.setInputType(InputType.TYPE_CLASS_PHONE);
                 alert.setView(input);
-                alert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                alert.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         Intent i = new Intent(view.getContext(), ConversationActivity.class);
                         i.putExtra("conversationNumber", input.getText().toString());
                         startActivity(i);
                     }
                 });
-                alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                alert.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         //Put actions for CANCEL button here, or leave in blank
                     }
