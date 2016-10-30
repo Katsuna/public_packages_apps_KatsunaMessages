@@ -10,9 +10,9 @@ import android.widget.TextView;
 
 import com.katsuna.commons.entities.Profile;
 import com.katsuna.commons.entities.ProfileType;
+import com.katsuna.commons.utils.DateFormatter;
 import com.katsuna.messages.R;
 import com.katsuna.messages.domain.Conversation;
-import com.katsuna.messages.utils.DateFormatter;
 import com.squareup.picasso.Picasso;
 
 public class ConversationViewHolder extends RecyclerView.ViewHolder {
@@ -72,7 +72,7 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
         }
         mDisplayName.setText(name);
 
-        mDateTime.setText(DateFormatter.format(itemView.getContext(), conversation.getDate()));
+        mDateTime.setText(DateFormatter.format(conversation.getDate()));
         mSnippet.setText(conversation.getSnippet());
 
         if (conversation.getRead() == 0) {

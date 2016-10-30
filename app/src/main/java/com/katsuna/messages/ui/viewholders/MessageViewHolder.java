@@ -9,12 +9,11 @@ import android.widget.TextView;
 
 import com.katsuna.commons.entities.Profile;
 import com.katsuna.commons.entities.ProfileType;
-import com.squareup.picasso.Picasso;
-
+import com.katsuna.commons.utils.DateFormatter;
 import com.katsuna.messages.R;
-import com.katsuna.messages.providers.metadata.MessageType;
 import com.katsuna.messages.domain.Message;
-import com.katsuna.messages.utils.DateFormatter;
+import com.katsuna.messages.providers.metadata.MessageType;
+import com.squareup.picasso.Picasso;
 
 public class MessageViewHolder extends RecyclerView.ViewHolder {
 
@@ -69,7 +68,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
             }
         }
 
-        mDateTime.setText(DateFormatter.format(itemView.getContext(), message.getDate()));
+        mDateTime.setText(DateFormatter.format(message.getDate()));
         mBody.setText(message.getBody());
     }
 }
