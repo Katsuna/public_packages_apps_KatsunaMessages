@@ -56,7 +56,7 @@ include $(CLEAR_VARS)
 # Define here, which extra jar/aar this app needs
 # These should NOT be included in KatsunaCommon
 # These should reside inside app/libs of this app
-LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES += emojiconlibrary:app/libs/emojiconlibrary-1.3.3.aar 
+LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES += emojiconlibrary:aosp/libs/emojiconlibrary-1.3.3.aar 
 
 include $(BUILD_MULTI_PREBUILT)
 
