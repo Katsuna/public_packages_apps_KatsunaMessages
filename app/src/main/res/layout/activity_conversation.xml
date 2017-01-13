@@ -44,11 +44,11 @@
                     android:hint="@string/type_message"
                     android:imeOptions="actionDone"
                     android:padding="10dp"
-                    android:singleLine="true"
                     android:textColor="@color/black"
                     android:textColorHint="@color/black"
                     android:textSize="20sp"
-                    emojicon:emojiconSize="20sp" />
+                    emojicon:emojiconSize="20sp"
+                    android:maxLines="1" />
             </RelativeLayout>
 
             <FrameLayout

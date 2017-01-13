@@ -1,5 +1,6 @@
 package com.katsuna.messages.ui.activities;
 
+import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -85,7 +86,7 @@ public class ContactsActivity extends BaseActivity {
                 AlertDialog.Builder alert = new AlertDialog.Builder(ContactsActivity.this);
                 LayoutInflater inflater = (LayoutInflater) view.getContext()
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View v = inflater.inflate(R.layout.alert_title, null);
+                @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.alert_title, null);
                 alert.setCustomTitle(v);
                 final EditText input = new EditText(ContactsActivity.this);
                 input.setInputType(InputType.TYPE_CLASS_PHONE);

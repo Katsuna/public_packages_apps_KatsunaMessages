@@ -1,5 +1,6 @@
 package com.katsuna.messages.ui.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -125,7 +126,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 LayoutInflater inflater = (LayoutInflater) v.getContext()
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View view = inflater.inflate(R.layout.alert_title, null);
+                @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.alert_title, null);
                 builder.setCustomTitle(view);
                 builder.setItems(phonesArray, new DialogInterface.OnClickListener() {
                     @Override
