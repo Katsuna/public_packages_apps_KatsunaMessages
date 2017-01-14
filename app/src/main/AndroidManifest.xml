@@ -12,8 +12,7 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-    <uses-permission android:name="com.katsuna.datastore.permission.errors" />
-    <uses-permission android:name="com.katsuna.datastore.permission.profiles" />
+    <uses-permission android:name="com.katsuna.services.datastore.permission.preferences" />
 
     <application
         android:allowBackup="false"

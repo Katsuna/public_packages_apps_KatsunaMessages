@@ -11,8 +11,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -27,9 +29,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.katsuna.commons.entities.Profile;
-import com.katsuna.commons.entities.ProfileType;
-import com.katsuna.commons.utils.ProfileReader;
+import com.katsuna.commons.ui.KatsunaActivity;
 import com.katsuna.messages.R;
 import com.katsuna.messages.domain.Message;
 import com.katsuna.messages.providers.SmsProvider;
@@ -44,7 +44,9 @@ import com.rockerhieu.emojicon.emoji.Emojicon;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConversationActivity extends BaseActivity implements EmojiconGridFragment.OnEmojiconClickedListener, EmojiconsFragment.OnEmojiconBackspaceClickedListener {
+public class ConversationActivity extends KatsunaActivity
+        implements EmojiconGridFragment.OnEmojiconClickedListener,
+        EmojiconsFragment.OnEmojiconBackspaceClickedListener {
 
     private static final String TAG = "ConversationActivity";
     private final String SENT = "SMS_SENT";
@@ -66,11 +68,26 @@ public class ConversationActivity extends BaseActivity implements EmojiconGridFr
 
         initToolbar();
         initControls();
+    }
+
+    private void initToolbar() {
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        final ActionBar actionBar = getSupportActionBar();
+
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+        mToolbar.setTitleTextAppearance(this, R.style.RobotoBold);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         conversationId = getConversationIdFromIntent();
 
         if (conversationId != -1) {
-            setupProfile();
             loadMessages();
         } else {
             setTitle(conversationNumber);
@@ -81,38 +98,13 @@ public class ConversationActivity extends BaseActivity implements EmojiconGridFr
                 WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
         setEmojiconFragment(false);
-    }
 
-    @Override
-    void initToolbar() {
-        super.initToolbar();
-        mToolbar.setTitleTextAppearance(this, R.style.RobotoBold);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         registerReceivers();
-        setupProfile();
     }
 
     private void registerReceivers() {
         deliveryBroadcastReceiver.register(this, new IntentFilter(DELIVERED));
         sendBroadcastReceiver.register(this, new IntentFilter(SENT));
-    }
-
-    private void setupProfile() {
-        Profile freshProfileFromContentProvider = ProfileReader.getProfile(this);
-        Profile profileFromPreferences = getProfileFromPreferences();
-        if (freshProfileFromContentProvider == null) {
-            setSelectedProfile(profileFromPreferences);
-        } else {
-            if (profileFromPreferences.getType() == ProfileType.AUTO.getNumVal()) {
-                setSelectedProfile(freshProfileFromContentProvider);
-            } else {
-                setSelectedProfile(profileFromPreferences);
-            }
-        }
     }
 
     private void setEmojiconFragment(boolean useSystemDefault) {
@@ -186,7 +178,7 @@ public class ConversationActivity extends BaseActivity implements EmojiconGridFr
             conversationId = dao.getConversationId(conversationNumber);
         }
         List<Message> messages = dao.getConversationMessages(conversationId);
-        MessagesAdapter adapter = new MessagesAdapter(messages, null, null, mProfile);
+        MessagesAdapter adapter = new MessagesAdapter(messages, null, null, mUserProfileContainer);
         mRecyclerView.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
         linearLayoutManager.setReverseLayout(true);

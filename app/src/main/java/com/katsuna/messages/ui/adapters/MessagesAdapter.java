@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import com.katsuna.commons.entities.Profile;
+import com.katsuna.commons.entities.UserProfileContainer;
 import com.katsuna.messages.R;
 import com.katsuna.messages.providers.metadata.MessageType;
 import com.katsuna.messages.domain.Message;
@@ -21,13 +21,15 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private final View.OnClickListener mOnClickListener;
     private final View.OnLongClickListener mOnLongClickListener;
-    private final Profile mProfile;
+    private final UserProfileContainer mUserProfileContainer;
 
-    public MessagesAdapter(List<Message> models, View.OnClickListener onClickListener, View.OnLongClickListener onLongClickListener, Profile profile) {
+    public MessagesAdapter(List<Message> models, View.OnClickListener onClickListener,
+                           View.OnLongClickListener onLongClickListener,
+                           UserProfileContainer userProfileContainer) {
         mModels = models;
         mOnClickListener = onClickListener;
         mOnLongClickListener = onLongClickListener;
-        mProfile = profile;
+        mUserProfileContainer = userProfileContainer;
     }
 
     @Override
@@ -56,7 +58,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         view.setOnClickListener(mOnClickListener);
         view.setOnLongClickListener(mOnLongClickListener);
 
-        return new MessageViewHolder(view, mProfile);
+        return new MessageViewHolder(view, mUserProfileContainer);
     }
 
     @Override

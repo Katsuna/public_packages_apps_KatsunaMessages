@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.katsuna.commons.entities.Profile;
+import com.katsuna.commons.entities.UserProfileContainer;
 import com.katsuna.messages.R;
 import com.katsuna.messages.domain.Contact;
 import com.katsuna.messages.domain.Phone;
@@ -24,17 +24,18 @@ import java.util.List;
 public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final List<ContactListItemModel> mModels;
-    private final Profile mProfile;
+    private final UserProfileContainer mUserProfileContainer;
 
-    public ContactsRecyclerViewAdapter(List<ContactListItemModel> models, Profile profile) {
+    public ContactsRecyclerViewAdapter(List<ContactListItemModel> models,
+                                       UserProfileContainer userProfileContainer) {
         mModels = models;
-        mProfile = profile;
+        mUserProfileContainer = userProfileContainer;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact, parent, false);
-        return new ContactViewHolder(view, mProfile);
+        return new ContactViewHolder(view, mUserProfileContainer);
     }
 
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {

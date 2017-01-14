@@ -2,20 +2,23 @@ package com.katsuna.messages.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.katsuna.commons.KatsunaConstants;
+import com.katsuna.commons.entities.PreferenceKey;
 import com.katsuna.commons.entities.ProfileType;
 import com.katsuna.commons.utils.SettingsManager;
 import com.katsuna.messages.R;
 import com.katsuna.messages.utils.Constants;
 import com.katsuna.messages.utils.Device;
 
-public class SettingsActivity extends BaseActivity {
+public class SettingsActivity extends AppCompatActivity {
 
     private TextView defaultSmsTextView;
     private Button defaultSmsButton;
@@ -27,6 +30,16 @@ public class SettingsActivity extends BaseActivity {
 
         initToolbar();
         initControls();
+    }
+
+    private void initToolbar() {
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        final ActionBar actionBar = getSupportActionBar();
+
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
@@ -46,12 +59,15 @@ public class SettingsActivity extends BaseActivity {
         });
 
         Spinner mProfileTypes = (Spinner) findViewById(R.id.profiles);
-        int profileSetting = SettingsManager.readSetting(this, KatsunaConstants.PROFILE_KEY, ProfileType.INTERMEDIATE.getNumVal());
-        mProfileTypes.setSelection(profileSetting);
+        String profileSetting = SettingsManager.readSetting(SettingsActivity.this,
+                PreferenceKey.OPTICAL_SIZE_PROFILE,
+                String.valueOf(ProfileType.INTERMEDIATE.getNumVal()));
+        mProfileTypes.setSelection(Integer.parseInt(profileSetting));
         mProfileTypes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                SettingsManager.setSetting(SettingsActivity.this, KatsunaConstants.PROFILE_KEY, i);
+                SettingsManager.setSetting(SettingsActivity.this,
+                        PreferenceKey.OPTICAL_SIZE_PROFILE, String.valueOf(i));
             }
 
             @Override

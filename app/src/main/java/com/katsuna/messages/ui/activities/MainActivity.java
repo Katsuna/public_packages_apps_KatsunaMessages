@@ -9,30 +9,31 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.List;
-
-import com.katsuna.commons.entities.Profile;
-import com.katsuna.commons.entities.ProfileType;
-import com.katsuna.commons.utils.ProfileReader;
+import com.katsuna.commons.ui.KatsunaActivity;
 import com.katsuna.messages.R;
-import com.katsuna.messages.providers.SmsProvider;
 import com.katsuna.messages.domain.Conversation;
+import com.katsuna.messages.providers.SmsProvider;
 import com.katsuna.messages.ui.adapters.ConversationsAdapter;
 import com.katsuna.messages.utils.Constants;
 import com.katsuna.messages.utils.Device;
 import com.katsuna.messages.utils.Settings;
 
-public class MainActivity extends BaseActivity
+import java.util.List;
+
+public class MainActivity extends KatsunaActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private final String[] permissions = new String[]{Manifest.permission.READ_SMS, Manifest.permission.READ_CONTACTS};
+    private Toolbar mToolbar;
     private RecyclerView mRecyclerView;
     private ConversationsAdapter mAdapter;
     private TextView mNoResultsView;
@@ -67,6 +68,16 @@ public class MainActivity extends BaseActivity
         checkIsDefaultSmsHandler();
     }
 
+    private void initToolbar() {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        final ActionBar actionBar = getSupportActionBar();
+
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
     private void checkIsDefaultSmsHandler() {
         String smsDefaultSetting = Settings.readSetting(this, Constants.DEFAULT_SMS_KEY, Constants.DEFAULT_SMS_NOT_SET);
         //check for for the first time only
@@ -93,22 +104,7 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onResume() {
         super.onResume();
-        setupProfile();
         loadConversations();
-    }
-
-    private void setupProfile() {
-        Profile freshProfileFromContentProvider = ProfileReader.getProfile(this);
-        Profile profileFromPreferences = getProfileFromPreferences();
-        if (freshProfileFromContentProvider == null) {
-            setSelectedProfile(profileFromPreferences);
-        } else {
-            if (profileFromPreferences.getType() == ProfileType.AUTO.getNumVal()) {
-                setSelectedProfile(freshProfileFromContentProvider);
-            } else {
-                setSelectedProfile(profileFromPreferences);
-            }
-        }
     }
 
     private void initControls() {
@@ -149,7 +145,7 @@ public class MainActivity extends BaseActivity
                     public boolean onLongClick(View v) {
                         return false;
                     }
-                }, mProfile);
+                }, mUserProfileContainer);
         mRecyclerView.setAdapter(mAdapter);
 
         showNoResultsView();

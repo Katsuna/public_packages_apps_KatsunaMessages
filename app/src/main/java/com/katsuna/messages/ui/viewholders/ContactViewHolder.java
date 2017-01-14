@@ -9,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.katsuna.commons.entities.Profile;
 import com.katsuna.commons.entities.ProfileType;
+import com.katsuna.commons.entities.UserProfileContainer;
 import com.katsuna.messages.R;
 import com.katsuna.messages.domain.Contact;
 import com.katsuna.messages.ui.adapters.models.ContactListItemModel;
@@ -23,9 +23,9 @@ public class ContactViewHolder extends RecyclerView.ViewHolder {
     private final ImageView mPhoto;
     private final ImageView mSeparatorImage;
     private final LinearLayout mSeparatorWrapper;
-    private final Profile mProfile;
+    private final UserProfileContainer mUserProfileContainer;
 
-    public ContactViewHolder(View view, Profile profile) {
+    public ContactViewHolder(View view, UserProfileContainer userProfileContainer) {
         super(view);
         mView = view;
         mSeparatorView = (TextView) view.findViewById(R.id.separator);
@@ -33,18 +33,20 @@ public class ContactViewHolder extends RecyclerView.ViewHolder {
         mDisplayName = (TextView) view.findViewById(R.id.contact_name);
         mSeparatorWrapper = (LinearLayout) itemView.findViewById(R.id.separator_wrapper);
         mPhoto = (ImageView) view.findViewById(R.id.photo);
-        mProfile = profile;
+        mUserProfileContainer = userProfileContainer;
         adjustProfile();
     }
 
     private void adjustProfile() {
-        if (mProfile != null) {
+        ProfileType opticalSizeProfile = mUserProfileContainer.getOpticalSizeProfile();
+
+        if (opticalSizeProfile != null) {
             int size = itemView.getResources().getDimensionPixelSize(R.dimen.contact_photo_size_intemediate);
             int fontSize = itemView.getResources().getDimensionPixelSize(R.dimen.font_size_intemediate);
-            if (mProfile.getType() == ProfileType.ADVANCED.getNumVal()) {
+            if (opticalSizeProfile == ProfileType.ADVANCED) {
                 size = itemView.getResources().getDimensionPixelSize(R.dimen.contact_photo_size_advanced);
                 fontSize = itemView.getResources().getDimensionPixelSize(R.dimen.font_size_advanced);
-            } else if (mProfile.getType() == ProfileType.SIMPLE.getNumVal()) {
+            } else if (opticalSizeProfile == ProfileType.SIMPLE) {
                 size = itemView.getResources().getDimensionPixelSize(R.dimen.contact_photo_size_simple);
                 fontSize = itemView.getResources().getDimensionPixelSize(R.dimen.font_size_simple);
             }

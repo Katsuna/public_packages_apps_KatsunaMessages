@@ -7,9 +7,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -21,9 +23,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.katsuna.commons.entities.Profile;
-import com.katsuna.commons.entities.ProfileType;
-import com.katsuna.commons.utils.ProfileReader;
+import com.katsuna.commons.ui.KatsunaActivity;
 import com.katsuna.messages.R;
 import com.katsuna.messages.domain.Contact;
 import com.katsuna.messages.providers.ContactProvider;
@@ -35,7 +35,7 @@ import com.katsuna.messages.utils.Separator;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContactsActivity extends BaseActivity {
+public class ContactsActivity extends KatsunaActivity {
 
     private RecyclerView mRecyclerView;
     private SearchView mSearchView;
@@ -52,26 +52,21 @@ public class ContactsActivity extends BaseActivity {
         initControls();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        boolean reloadNeeded = setupProfile();
-        if (reloadNeeded) {
-            loadContacts();
+    private void initToolbar() {
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        final ActionBar actionBar = getSupportActionBar();
+
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
 
-    private boolean setupProfile() {
-        Profile freshProfileFromContentProvider = ProfileReader.getProfile(this);
-        Profile profileFromPreferences = getProfileFromPreferences();
-        if (freshProfileFromContentProvider == null) {
-            return setSelectedProfile(profileFromPreferences);
-        } else {
-            if (profileFromPreferences.getType() == ProfileType.AUTO.getNumVal()) {
-                return setSelectedProfile(freshProfileFromContentProvider);
-            } else {
-                return setSelectedProfile(profileFromPreferences);
-            }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mUserProfileChanged) {
+            loadContacts();
         }
     }
 
@@ -110,7 +105,9 @@ public class ContactsActivity extends BaseActivity {
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
                         if (hasFocus) {
-                            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                            if (dialog.getWindow() != null) {
+                                dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                            }
                         }
                     }
                 });
@@ -192,7 +189,7 @@ public class ContactsActivity extends BaseActivity {
         ContactProvider dao = new ContactProvider(this);
         List<Contact> contactList = dao.getContacts();
         mModels = ContactArranger.getContactsProcessed(contactList);
-        mAdapter = new ContactsRecyclerViewAdapter(getDeepCopy(mModels), mProfile);
+        mAdapter = new ContactsRecyclerViewAdapter(getDeepCopy(mModels), mUserProfileContainer);
         mRecyclerView.setAdapter(mAdapter);
         showNoResultsView();
     }

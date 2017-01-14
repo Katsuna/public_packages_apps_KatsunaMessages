@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import com.katsuna.commons.entities.Profile;
+import com.katsuna.commons.entities.UserProfileContainer;
 import com.katsuna.messages.R;
 import com.katsuna.messages.domain.Contact;
 import com.katsuna.messages.domain.Conversation;
@@ -23,13 +23,15 @@ public class ConversationsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     private final OnClickListener mOnClickListener;
     private final OnLongClickListener mOnLongClickListener;
-    private final Profile mProfile;
+    private final UserProfileContainer mUserProfileContainer;
 
-    public ConversationsAdapter(List<Conversation> models, OnClickListener onClickListener, OnLongClickListener onLongClickListener, Profile profile) {
+    public ConversationsAdapter(List<Conversation> models, OnClickListener onClickListener,
+                                OnLongClickListener onLongClickListener,
+                                UserProfileContainer userProfileContainer) {
         mModels = models;
         mOnClickListener = onClickListener;
         mOnLongClickListener = onLongClickListener;
-        mProfile = profile;
+        mUserProfileContainer = userProfileContainer;
     }
 
     @Override
@@ -37,7 +39,7 @@ public class ConversationsAdapter extends RecyclerView.Adapter<RecyclerView.View
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.conversation, parent, false);
         view.setOnClickListener(mOnClickListener);
         view.setOnLongClickListener(mOnLongClickListener);
-        return new ConversationViewHolder(view, mProfile);
+        return new ConversationViewHolder(view, mUserProfileContainer);
     }
 
     @Override
