@@ -2,7 +2,6 @@ package com.katsuna.messages.ui.viewholders;
 
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -13,6 +12,7 @@ import com.katsuna.commons.entities.UserProfileContainer;
 import com.katsuna.commons.utils.DateFormatter;
 import com.katsuna.messages.R;
 import com.katsuna.messages.domain.Conversation;
+import com.katsuna.messages.ui.listeners.IConversationInteractionListener;
 import com.squareup.picasso.Picasso;
 
 public class ConversationViewHolder extends RecyclerView.ViewHolder {
@@ -20,43 +20,44 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
     private final TextView mDisplayName;
     private final TextView mDateTime;
     private final TextView mSnippet;
-    private final ImageView mPhoto;
-    private final UserProfileContainer mUserProfileContainer;
+    final ImageView mPhoto;
+    final UserProfileContainer mUserProfileContainer;
+    final IConversationInteractionListener mListener;
+    private final View mConversationContainer;
 
-    public ConversationViewHolder(View itemView, UserProfileContainer userProfileContainer) {
+    public ConversationViewHolder(View itemView, IConversationInteractionListener listener) {
         super(itemView);
+        mConversationContainer = itemView.findViewById(R.id.conversation_container);
         mDisplayName = (TextView) itemView.findViewById(R.id.displayName);
         mDateTime = (TextView) itemView.findViewById(R.id.dateTime);
         mSnippet = (TextView) itemView.findViewById(R.id.body);
         mPhoto = (ImageView) itemView.findViewById(R.id.photo);
-        mUserProfileContainer = userProfileContainer;
+        mListener = listener;
+        mUserProfileContainer = listener.getUserProfileContainer();
         adjustProfile();
     }
 
     private void adjustProfile() {
         ProfileType opticalSizeProfile = mUserProfileContainer.getOpticalSizeProfile();
         if (opticalSizeProfile != null) {
-            int size = itemView.getResources().getDimensionPixelSize(R.dimen.contact_photo_size_intemediate);
-            int fontSize = itemView.getResources().getDimensionPixelSize(R.dimen.font_size_intemediate);
+            int size = itemView.getResources()
+                    .getDimensionPixelSize(R.dimen.common_contact_photo_size_intemediate);
             if (opticalSizeProfile == ProfileType.ADVANCED) {
-                size = itemView.getResources().getDimensionPixelSize(R.dimen.contact_photo_size_advanced);
-                fontSize = itemView.getResources().getDimensionPixelSize(R.dimen.font_size_advanced);
+                size = itemView.getResources()
+                        .getDimensionPixelSize(R.dimen.common_contact_photo_size_advanced);
             } else if (opticalSizeProfile == ProfileType.SIMPLE) {
-                size = itemView.getResources().getDimensionPixelSize(R.dimen.contact_photo_size_simple);
-                fontSize = itemView.getResources().getDimensionPixelSize(R.dimen.font_size_simple);
+                size = itemView.getResources()
+                        .getDimensionPixelSize(R.dimen.common_contact_photo_size_simple);
             }
 
             //adjust photo
             ViewGroup.LayoutParams layoutParams = mPhoto.getLayoutParams();
             layoutParams.height = size;
             layoutParams.width = size;
-
-            //adjust displayName
-            mDisplayName.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
         }
     }
 
-    public void bind(Conversation conversation) {
+    public void bind(Conversation conversation, final int position) {
         String name;
         if (conversation.getContact().getId() > 0) {
             name = conversation.getContact().getName();
@@ -82,6 +83,15 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
             mDisplayName.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.pink));
         } else {
             mDisplayName.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.black87));
+        }
+
+        if (mConversationContainer != null) {
+            mConversationContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.selectConversation(position);
+                }
+            });
         }
     }
 }

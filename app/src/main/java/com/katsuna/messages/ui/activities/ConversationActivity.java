@@ -78,7 +78,7 @@ public class ConversationActivity extends KatsunaActivity
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        mToolbar.setTitleTextAppearance(this, R.style.RobotoBold);
+        mToolbar.setTitleTextAppearance(this, R.style.CommonRobotoBold);
     }
 
     @Override

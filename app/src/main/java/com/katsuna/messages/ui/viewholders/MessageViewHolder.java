@@ -35,13 +35,16 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         ProfileType opticalSizeProfile = mUserProfileContainer.getOpticalSizeProfile();
 
         if (opticalSizeProfile != null) {
-            int size = itemView.getResources().getDimensionPixelSize(R.dimen.contact_photo_size_intemediate);
+            int size = itemView.getResources()
+                    .getDimensionPixelSize(R.dimen.common_contact_photo_size_intemediate);
             int fontSize = itemView.getResources().getDimensionPixelSize(R.dimen.font_size_intemediate);
             if (opticalSizeProfile == ProfileType.ADVANCED) {
-                size = itemView.getResources().getDimensionPixelSize(R.dimen.contact_photo_size_advanced);
+                size = itemView.getResources()
+                        .getDimensionPixelSize(R.dimen.common_contact_photo_size_advanced);
                 fontSize = itemView.getResources().getDimensionPixelSize(R.dimen.font_size_advanced);
             } else if (opticalSizeProfile == ProfileType.SIMPLE) {
-                size = itemView.getResources().getDimensionPixelSize(R.dimen.contact_photo_size_simple);
+                size = itemView.getResources()
+                        .getDimensionPixelSize(R.dimen.common_contact_photo_size_simple);
                 fontSize = itemView.getResources().getDimensionPixelSize(R.dimen.font_size_simple);
             }
 

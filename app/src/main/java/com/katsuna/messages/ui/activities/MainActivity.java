@@ -3,10 +3,12 @@ package com.katsuna.messages.ui.activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -18,11 +20,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.katsuna.commons.entities.UserProfileContainer;
 import com.katsuna.commons.ui.KatsunaActivity;
 import com.katsuna.messages.R;
 import com.katsuna.messages.domain.Conversation;
 import com.katsuna.messages.providers.SmsProvider;
 import com.katsuna.messages.ui.adapters.ConversationsAdapter;
+import com.katsuna.messages.ui.listeners.IConversationInteractionListener;
 import com.katsuna.messages.utils.Constants;
 import com.katsuna.messages.utils.Device;
 import com.katsuna.messages.utils.Settings;
@@ -30,7 +34,8 @@ import com.katsuna.messages.utils.Settings;
 import java.util.List;
 
 public class MainActivity extends KatsunaActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        IConversationInteractionListener {
 
     private final String[] permissions = new String[]{Manifest.permission.READ_SMS, Manifest.permission.READ_CONTACTS};
     private Toolbar mToolbar;
@@ -131,21 +136,7 @@ public class MainActivity extends KatsunaActivity
 
         SmsProvider dao = new SmsProvider(this);
         List<Conversation> conversations = dao.getConversations();
-        mAdapter = new ConversationsAdapter(conversations,
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int position = mRecyclerView.getChildAdapterPosition(v);
-                        Conversation conversation = mAdapter.getItemAtPosition(position);
-                        showConversation(conversation.getId());
-                    }
-                },
-                new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        return false;
-                    }
-                }, mUserProfileContainer);
+        mAdapter = new ConversationsAdapter(conversations, this);
         mRecyclerView.setAdapter(mAdapter);
 
         showNoResultsView();
@@ -159,6 +150,11 @@ public class MainActivity extends KatsunaActivity
                     // Permission Granted
                     loadConversations();
                 } else {
+                    Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case Constants.REQUEST_CODE_ASK_CALL_PERMISSION:
+                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -203,5 +199,37 @@ public class MainActivity extends KatsunaActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void selectConversation(int position) {
+        mAdapter.setSelectedConversationAtPosition(position);
+    }
+
+    @Override
+    public void callContact(Conversation conversation) {
+        callNumber(conversation.getContact().getAddress());
+    }
+
+    private void callNumber(String number) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE},
+                    Constants.REQUEST_CODE_ASK_CALL_PERMISSION);
+            return;
+        }
+
+        Intent i = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number));
+        startActivity(i);
+    }
+
+    @Override
+    public void sendSMS(Conversation conversation) {
+        showConversation(conversation.getId());
+    }
+
+    @Override
+    public UserProfileContainer getUserProfileContainer() {
+        return mUserProfileContainer;
     }
 }

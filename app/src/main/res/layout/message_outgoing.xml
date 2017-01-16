@@ -11,8 +11,8 @@
 
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/photo"
-        android:layout_width="@dimen/contact_photo_size_intemediate"
-        android:layout_height="@dimen/contact_photo_size_intemediate"
+        android:layout_width="@dimen/common_contact_photo_size_intemediate"
+        android:layout_height="@dimen/common_contact_photo_size_intemediate"
         android:layout_alignParentEnd="true"
         android:background="@drawable/ic_person_grey_50px"
         app:riv_corner_radius="50dp"
@@ -29,7 +29,7 @@
 
         <TextView
             android:id="@+id/body"
-            style="@style/RobotoMedium"
+            style="@style/CommonRobotoMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black87"

@@ -26,7 +26,7 @@
             android:fontFamily="sans-serif-medium"
             android:textAppearance="?attr/textAppearanceListItem"
             android:textColor="@color/grey800"
-            android:textSize="20sp"
+            android:textSize="@dimen/common_text_size"
             android:visibility="gone" />
 
         <ImageView
@@ -46,8 +46,8 @@
 
         <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/photo"
-            android:layout_width="@dimen/contact_photo_size_intemediate"
-            android:layout_height="@dimen/contact_photo_size_intemediate"
+            android:layout_width="@dimen/common_contact_photo_size_intemediate"
+            android:layout_height="@dimen/common_contact_photo_size_intemediate"
             android:layout_gravity="center"
             android:layout_margin="5dp"
             android:background="@drawable/ic_person_grey_50px"
@@ -58,7 +58,7 @@
 
         <TextView
             android:id="@+id/contact_name"
-            style="@style/RobotoBold"
+            style="@style/CommonRobotoBold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -70,7 +70,7 @@
             android:layout_marginTop="@dimen/text_margin_top_bottom"
             android:fontFamily="sans-serif-medium"
             android:textColor="@color/black87"
-            android:textSize="20sp" />
+            android:textSize="@dimen/common_text_size" />
 
     </LinearLayout>
 </LinearLayout>

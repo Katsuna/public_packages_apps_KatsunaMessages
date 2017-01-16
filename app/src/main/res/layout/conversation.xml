@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/conversation_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/selector_row"
     android:orientation="horizontal"
     android:paddingBottom="4dp"
     android:paddingEnd="16dp"
@@ -12,8 +12,8 @@
 
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/photo"
-        android:layout_width="@dimen/contact_photo_size_intemediate"
-        android:layout_height="@dimen/contact_photo_size_intemediate"
+        android:layout_width="@dimen/common_contact_photo_size_intemediate"
+        android:layout_height="@dimen/common_contact_photo_size_intemediate"
         android:layout_gravity="center"
         android:layout_margin="5dp"
         android:background="@drawable/ic_person_grey_50px"
@@ -29,11 +29,11 @@
 
         <TextView
             android:id="@+id/displayName"
-            style="@style/RobotoBold"
+            style="@style/CommonRobotoMedium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black87"
-            android:textSize="@dimen/font_size_intemediate"
+            android:textSize="@dimen/common_text_size"
             android:maxLines="1" />
 
         <TextView

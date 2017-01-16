@@ -18,7 +18,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:text="@string/no_messages"
-        android:textSize="20sp"
+        android:textSize="@dimen/common_text_size"
         android:visibility="gone" />
 
     <android.support.design.widget.FloatingActionButton
@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_margin="@dimen/common_fab_margin"
         android:src="@drawable/ic_message_black87_24dp"
         app:layout_behavior="com.katsuna.messages.ui.behaviors.ScrollingFABBehavior" />
 

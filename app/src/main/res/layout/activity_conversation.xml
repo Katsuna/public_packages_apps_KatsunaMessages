@@ -46,7 +46,7 @@
                     android:padding="10dp"
                     android:textColor="@color/black"
                     android:textColorHint="@color/black"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/common_text_size"
                     emojicon:emojiconSize="20sp"
                     android:maxLines="1" />
             </RelativeLayout>
