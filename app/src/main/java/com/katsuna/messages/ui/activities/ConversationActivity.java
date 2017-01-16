@@ -18,15 +18,13 @@ import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.katsuna.commons.ui.KatsunaActivity;
@@ -60,6 +58,7 @@ public class ConversationActivity extends KatsunaActivity
     private String conversationNumber;
     private FrameLayout mEmojiContainer;
     private long savedMessageId = -1;
+    private Button mSendButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,16 +200,6 @@ public class ConversationActivity extends KatsunaActivity
         mRecyclerView = (RecyclerView) findViewById(R.id.messagesRecyclerView);
         mNewMessage = (EmojiconEditText) findViewById(R.id.new_message);
 
-        mNewMessage.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    sendSMS(mNewMessage.getText().toString());
-                }
-                return false;
-            }
-        });
-
         mEmojiContainer = (FrameLayout) findViewById(R.id.emojicons_container);
 
         Button mEmojiButton = (Button) findViewById(R.id.showEmojis);
@@ -250,7 +239,7 @@ public class ConversationActivity extends KatsunaActivity
                         Toast.makeText(getBaseContext(), R.string.no_service, Toast.LENGTH_SHORT).show();
                         break;
                     case SmsManager.RESULT_ERROR_NULL_PDU:
-                        Toast.makeText(getBaseContext(), R.string.null_PDU, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(), R.string.generic_failure, Toast.LENGTH_SHORT).show();
                         break;
                     case SmsManager.RESULT_ERROR_RADIO_OFF:
                         Toast.makeText(getBaseContext(), R.string.radio_off, Toast.LENGTH_SHORT).show();
@@ -271,6 +260,29 @@ public class ConversationActivity extends KatsunaActivity
                 }
             }
         };
+
+        mSendButton = (Button) findViewById(R.id.send_button);
+        mSendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String message = mNewMessage.getText().toString();
+                if (TextUtils.isEmpty(message)) {
+                    Toast.makeText(ConversationActivity.this, R.string.empty_message,
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                sendSMS(message);
+                hideKeyboard();
+            }
+        });
+    }
+
+    private void hideKeyboard() {
+        View view = getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     @Override
@@ -298,10 +310,6 @@ public class ConversationActivity extends KatsunaActivity
 
     //---sends an SMS message to another device---
     private void sendSMS(final String message) {
-        if (TextUtils.isEmpty(message)) {
-            Toast.makeText(this, R.string.empty_message, Toast.LENGTH_SHORT).show();
-            return;
-        }
         this.message = message;
 
         savedMessageId = -1;
