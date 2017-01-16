@@ -4,22 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/grey50"
-    android:orientation="vertical"
     android:elevation="@dimen/common_selection_elevation"
+    android:orientation="vertical"
     android:paddingBottom="4dp"
     android:paddingEnd="16dp"
     android:paddingStart="16dp"
     android:paddingTop="4dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
         <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/photo"
             android:layout_width="@dimen/common_contact_photo_size_intemediate"
             android:layout_height="@dimen/common_contact_photo_size_intemediate"
+            android:layout_alignParentStart="true"
             android:layout_gravity="center"
             android:layout_margin="5dp"
             android:background="@drawable/ic_person_grey_50px"
@@ -28,9 +28,18 @@
             app:riv_oval="false"
             app:riv_tile_mode="repeat" />
 
+        <ImageButton
+            android:id="@+id/delete_conversation_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/ic_delete_black_24dp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/photo"
+            android:layout_toStartOf="@id/delete_conversation_button"
             android:orientation="vertical">
 
             <TextView
@@ -38,9 +47,9 @@
                 style="@style/CommonRobotoBold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:maxLines="1"
                 android:textColor="@color/black87"
-                android:textSize="@dimen/common_text_size"
-                android:maxLines="1" />
+                android:textSize="@dimen/common_text_size" />
 
             <TextView
                 android:id="@+id/body"
@@ -58,8 +67,7 @@
 
         </LinearLayout>
 
-
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         style="?android:attr/buttonBarStyle"

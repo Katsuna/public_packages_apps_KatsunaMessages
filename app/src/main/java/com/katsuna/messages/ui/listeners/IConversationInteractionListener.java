@@ -11,6 +11,8 @@ public interface IConversationInteractionListener {
 
     void sendSMS(Conversation conversation);
 
+    void deleteConversation(Conversation conversation);
+
     UserProfileContainer getUserProfileContainer();
 
 }

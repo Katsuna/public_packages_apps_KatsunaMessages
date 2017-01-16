@@ -16,12 +16,14 @@
     <string name="set_as_default">Set as default</string>
     <string name="new_message">You have a new message.</string>
     <string name="select_profile">Select profile</string>
+    <string name="confirmation">Confirmation</string>
+    <string name="confirmation_delete_conversation">All messages in this conversation will be deleted.Are you sure?</string>
+    <string name="conversation_deleted">Conversation deleted.</string>
 
     <!-- Radio related -->
     <string name="message_sent">Message sent</string>
     <string name="generic_failure">Generic failure</string>
     <string name="no_service">No service</string>
-    <string name="null_PDU">Null PDU</string>
     <string name="radio_off">Radio off</string>
     <string name="delivered">Message delivered</string>
     <string name="not_delivered">Message not delivered</string>

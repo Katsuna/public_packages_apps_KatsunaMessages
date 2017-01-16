@@ -3,6 +3,7 @@ package com.katsuna.messages.ui.viewholders;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.katsuna.commons.entities.ProfileType;
 import com.katsuna.messages.R;
@@ -13,11 +14,13 @@ public class ConversationSelectedViewHolder extends ConversationViewHolder {
 
     private final Button mCallButton;
     private final Button mMessageButton;
+    private final ImageButton mDeleteConversationButton;
 
     public ConversationSelectedViewHolder(View itemView, IConversationInteractionListener listener) {
         super(itemView, listener);
         mCallButton = (Button) itemView.findViewById(R.id.call_button);
         mMessageButton = (Button) itemView.findViewById(R.id.message_button);
+        mDeleteConversationButton = (ImageButton) itemView.findViewById(R.id.delete_conversation_button);
         adjustProfile();
     }
 
@@ -72,6 +75,12 @@ public class ConversationSelectedViewHolder extends ConversationViewHolder {
             @Override
             public void onClick(View v) {
                 mListener.sendSMS(conversation);
+            }
+        });
+        mDeleteConversationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.deleteConversation(conversation);
             }
         });
     }

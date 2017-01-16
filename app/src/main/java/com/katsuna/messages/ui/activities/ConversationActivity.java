@@ -58,7 +58,6 @@ public class ConversationActivity extends KatsunaActivity
     private String conversationNumber;
     private FrameLayout mEmojiContainer;
     private long savedMessageId = -1;
-    private Button mSendButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -261,7 +260,7 @@ public class ConversationActivity extends KatsunaActivity
             }
         };
 
-        mSendButton = (Button) findViewById(R.id.send_button);
+        Button mSendButton = (Button) findViewById(R.id.send_button);
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

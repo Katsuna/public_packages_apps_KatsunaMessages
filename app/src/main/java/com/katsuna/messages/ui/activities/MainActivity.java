@@ -1,6 +1,7 @@
 package com.katsuna.messages.ui.activities;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -13,6 +14,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -226,6 +228,26 @@ public class MainActivity extends KatsunaActivity
     @Override
     public void sendSMS(Conversation conversation) {
         showConversation(conversation.getId());
+    }
+
+    @Override
+    public void deleteConversation(final Conversation conversation) {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.confirmation)
+                .setMessage(R.string.confirmation_delete_conversation)
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SmsProvider dao = new SmsProvider(MainActivity.this);
+                        int rowsDeleted = dao.deleteConversation(conversation);
+                        if (rowsDeleted > 0) {
+                            loadConversations();
+                            Toast.makeText(MainActivity.this, R.string.conversation_deleted,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }).show();
     }
 
     @Override

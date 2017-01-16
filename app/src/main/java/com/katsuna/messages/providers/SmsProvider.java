@@ -65,6 +65,13 @@ public class SmsProvider {
         return conversations;
     }
 
+    public int deleteConversation(Conversation conversation) {
+        String where = MessageColumns.THREAD_ID + " = ? ";
+        String[] params = new String[] {String.valueOf(conversation.getId())};
+
+        return cr.delete(Uris.THREADS_URI, where, params);
+    }
+
     private int getLastMessageType(long threadId) {
         String[] projection = new String[]{ThreadColumns.TYPE, ThreadColumns.DATE};
         Uri uri = Uri.withAppendedPath(Uris.THREADS_URI, String.valueOf(threadId));
