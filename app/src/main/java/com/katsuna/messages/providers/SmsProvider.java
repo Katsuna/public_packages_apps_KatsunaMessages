@@ -141,7 +141,7 @@ public class SmsProvider {
 
     public long getConversationId(String address) {
         String[] projection = new String[]{MessageColumns.THREAD_ID};
-        String filteredAddress = address.replaceAll("[-()/ ]", "");
+        String filteredAddress = address.replaceAll("[-()/]", "");
         String selection = MessageColumns.ADDRESS + " like '%" + filteredAddress + "'";
 
         long conversationId = -1;
@@ -218,8 +218,6 @@ public class SmsProvider {
             output = cursor.getLong(cursor.getColumnIndex(MessageColumns.THREAD_ID));
             cursor.close();
         }
-
-        Log.e(TAG, "conversationId: " + output);
         return output;
     }
 

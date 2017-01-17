@@ -11,6 +11,10 @@ public final class Constants {
     public static final String DEFAULT_SMS_OFF = "OFF";
     public static final int DEF_SMS_REQ_CODE = 20;
 
+    public static final String EXTRA_DISPLAY_NAME = "EXTRA_DISPLAY_NAME";
+    public static final String EXTRA_NUMBER = "EXTRA_NUMBER";
+    public static final String EXTRA_CONVERASTION_ID = "EXTRA_CONVERASTION_ID";
+
     private Constants() {
         // restrict instantiation
     }

@@ -88,7 +88,11 @@ public class ConversationActivity extends KatsunaActivity
         if (conversationId != -1) {
             loadMessages();
         } else {
-            setTitle(conversationNumber);
+            if (mDisplayName != null && mDisplayName.length() > 0) {
+                setTitle(mDisplayName);
+            } else {
+                setTitle(conversationNumber);
+            }
         }
 
         //this is needed to open will screen is locked
@@ -291,16 +295,20 @@ public class ConversationActivity extends KatsunaActivity
         super.onStop();
     }
 
+    private String mDisplayName;
+
     private long getConversationIdFromIntent() {
         Intent i = getIntent();
         if (i.getAction() != null && i.getAction().equals(Intent.ACTION_VIEW)) {
             conversationNumber = i.getData().getSchemeSpecificPart();
         } else {
-            conversationNumber = i.getExtras().getString("conversationNumber");
+            conversationNumber = i.getExtras().getString(Constants.EXTRA_NUMBER);
         }
 
+        mDisplayName = i.getExtras().getString(Constants.EXTRA_DISPLAY_NAME);
+
         if (conversationNumber == null) {
-            return i.getExtras().getLong("conversationId");
+            return i.getExtras().getLong(Constants.EXTRA_CONVERASTION_ID);
         } else {
             SmsProvider dao = new SmsProvider(this);
             return dao.getConversationId(conversationNumber);

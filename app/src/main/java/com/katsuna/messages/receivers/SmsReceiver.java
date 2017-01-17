@@ -16,14 +16,15 @@ import android.support.v4.app.TaskStackBuilder;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.katsuna.messages.R;
 import com.katsuna.messages.domain.Message;
 import com.katsuna.messages.providers.SmsProvider;
 import com.katsuna.messages.ui.activities.ConversationActivity;
+import com.katsuna.messages.utils.Constants;
 import com.katsuna.messages.utils.Device;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SmsReceiver extends BroadcastReceiver {
 
@@ -91,21 +92,12 @@ public class SmsReceiver extends BroadcastReceiver {
         return message;
     }
 
-    private void showConversation(Context context, long conversationId) {
-        playRingtone(context);
-
-        Intent i = new Intent(context, ConversationActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        i.putExtra("conversationId", conversationId);
-        context.startActivity(i);
-    }
-
-    protected void sendNotification(Context context, long conversationId, Message message) {
+    private void sendNotification(Context context, long conversationId, Message message) {
         playRingtone(context);
 
         //create a pending intent with stack
         Intent resultIntent = new Intent(context, ConversationActivity.class);
-        resultIntent.putExtra("conversationId", conversationId);
+        resultIntent.putExtra(Constants.EXTRA_CONVERASTION_ID, conversationId);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(ConversationActivity.class);

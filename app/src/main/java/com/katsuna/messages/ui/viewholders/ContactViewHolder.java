@@ -10,10 +10,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.katsuna.commons.entities.ProfileType;
-import com.katsuna.commons.entities.UserProfileContainer;
 import com.katsuna.messages.R;
 import com.katsuna.messages.domain.Contact;
 import com.katsuna.messages.ui.adapters.models.ContactListItemModel;
+import com.katsuna.messages.ui.listeners.IContactInteractionListener;
 import com.squareup.picasso.Picasso;
 
 public class ContactViewHolder extends RecyclerView.ViewHolder {
@@ -23,9 +23,10 @@ public class ContactViewHolder extends RecyclerView.ViewHolder {
     private final ImageView mPhoto;
     private final ImageView mSeparatorImage;
     private final LinearLayout mSeparatorWrapper;
-    private final UserProfileContainer mUserProfileContainer;
+    private final IContactInteractionListener mListener;
+    private final View mContactContainer;
 
-    public ContactViewHolder(View view, UserProfileContainer userProfileContainer) {
+    public ContactViewHolder(View view, IContactInteractionListener listener) {
         super(view);
         mView = view;
         mSeparatorView = (TextView) view.findViewById(R.id.separator);
@@ -33,12 +34,13 @@ public class ContactViewHolder extends RecyclerView.ViewHolder {
         mDisplayName = (TextView) view.findViewById(R.id.contact_name);
         mSeparatorWrapper = (LinearLayout) itemView.findViewById(R.id.separator_wrapper);
         mPhoto = (ImageView) view.findViewById(R.id.photo);
-        mUserProfileContainer = userProfileContainer;
+        mContactContainer = view.findViewById(R.id.contact_container);
+        mListener = listener;
         adjustProfile();
     }
 
     private void adjustProfile() {
-        ProfileType opticalSizeProfile = mUserProfileContainer.getOpticalSizeProfile();
+        ProfileType opticalSizeProfile = mListener.getUserProfileContainer().getOpticalSizeProfile();
 
         if (opticalSizeProfile != null) {
             int size = itemView.getResources()
@@ -92,6 +94,13 @@ public class ContactViewHolder extends RecyclerView.ViewHolder {
                 mSeparatorWrapper.setVisibility(View.GONE);
                 break;
         }
+
+        mContactContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.selectContact(contact);
+            }
+        });
     }
 
     private void initialize() {

@@ -23,19 +23,23 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.katsuna.commons.entities.UserProfileContainer;
 import com.katsuna.commons.ui.KatsunaActivity;
 import com.katsuna.messages.R;
 import com.katsuna.messages.domain.Contact;
+import com.katsuna.messages.domain.Phone;
 import com.katsuna.messages.providers.ContactProvider;
 import com.katsuna.messages.ui.adapters.ContactsRecyclerViewAdapter;
 import com.katsuna.messages.ui.adapters.models.ContactListItemModel;
+import com.katsuna.messages.ui.listeners.IContactInteractionListener;
+import com.katsuna.messages.utils.Constants;
 import com.katsuna.messages.utils.ContactArranger;
 import com.katsuna.messages.utils.Separator;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContactsActivity extends KatsunaActivity {
+public class ContactsActivity extends KatsunaActivity implements IContactInteractionListener {
 
     private RecyclerView mRecyclerView;
     private SearchView mSearchView;
@@ -88,9 +92,7 @@ public class ContactsActivity extends KatsunaActivity {
                 alert.setView(input);
                 alert.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        Intent i = new Intent(view.getContext(), ConversationActivity.class);
-                        i.putExtra("conversationNumber", input.getText().toString());
-                        startActivity(i);
+                        startActivity(null, input.getText().toString());
                     }
                 });
                 alert.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -189,7 +191,7 @@ public class ContactsActivity extends KatsunaActivity {
         ContactProvider dao = new ContactProvider(this);
         List<Contact> contactList = dao.getContacts();
         mModels = ContactArranger.getContactsProcessed(contactList);
-        mAdapter = new ContactsRecyclerViewAdapter(getDeepCopy(mModels), mUserProfileContainer);
+        mAdapter = new ContactsRecyclerViewAdapter(getDeepCopy(mModels), this);
         mRecyclerView.setAdapter(mAdapter);
         showNoResultsView();
     }
@@ -217,5 +219,46 @@ public class ContactsActivity extends KatsunaActivity {
             }
         }
         return filteredModelList;
+    }
+
+    @Override
+    public void selectContact(final Contact contact) {
+        ContactProvider dao = new ContactProvider(this);
+        List<Phone> phones = dao.getPhones(contact.getId());
+
+        if (phones.size() == 1) {
+            startActivity(contact.getDisplayName(), phones.get(0).getNumber());
+        } else {
+            final CharSequence phonesArray[] = new CharSequence[phones.size()];
+            int i = 0;
+            for (Phone phone : phones) {
+                phonesArray[i++] = phone.getNumber();
+            }
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.alert_title, null);
+            builder.setCustomTitle(view);
+            builder.setItems(phonesArray, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivity(contact.getDisplayName(), phonesArray[which].toString());
+                }
+            });
+            builder.show();
+        }
+    }
+
+    private void startActivity(String name, String number) {
+        Intent i = new Intent(this, ConversationActivity.class);
+        i.putExtra(Constants.EXTRA_DISPLAY_NAME, name);
+        i.putExtra(Constants.EXTRA_NUMBER, number);
+        startActivity(i);
+        finish();
+    }
+
+    @Override
+    public UserProfileContainer getUserProfileContainer() {
+        return mUserProfileContainer;
     }
 }

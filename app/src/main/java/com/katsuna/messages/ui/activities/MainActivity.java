@@ -167,7 +167,7 @@ public class MainActivity extends KatsunaActivity
 
     private void showConversation(long conversationId) {
         Intent intent = new Intent(getApplicationContext(), ConversationActivity.class);
-        intent.putExtra("conversationId", conversationId);
+        intent.putExtra(Constants.EXTRA_CONVERASTION_ID, conversationId);
         startActivity(intent);
     }
 
