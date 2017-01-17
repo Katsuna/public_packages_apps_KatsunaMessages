@@ -2,7 +2,6 @@ package com.katsuna.messages.ui.viewholders;
 
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -10,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.katsuna.commons.entities.ProfileType;
+import com.katsuna.commons.entities.UserProfileContainer;
 import com.katsuna.messages.R;
 import com.katsuna.messages.domain.Contact;
 import com.katsuna.messages.ui.adapters.models.ContactListItemModel;
@@ -17,6 +17,7 @@ import com.katsuna.messages.ui.listeners.IContactInteractionListener;
 import com.squareup.picasso.Picasso;
 
 public class ContactViewHolder extends RecyclerView.ViewHolder {
+    protected final UserProfileContainer mUserProfileContainer;
     private final View mView;
     private final TextView mSeparatorView;
     private final TextView mDisplayName;
@@ -36,33 +37,27 @@ public class ContactViewHolder extends RecyclerView.ViewHolder {
         mPhoto = (ImageView) view.findViewById(R.id.photo);
         mContactContainer = view.findViewById(R.id.contact_container);
         mListener = listener;
+        mUserProfileContainer = listener.getUserProfileContainer();
         adjustProfile();
     }
 
     private void adjustProfile() {
-        ProfileType opticalSizeProfile = mListener.getUserProfileContainer().getOpticalSizeProfile();
+        ProfileType opticalSizeProfile = mUserProfileContainer.getOpticalSizeProfile();
 
         if (opticalSizeProfile != null) {
             int size = itemView.getResources()
                     .getDimensionPixelSize(R.dimen.common_contact_photo_size_intemediate);
-            int fontSize = itemView.getResources().getDimensionPixelSize(R.dimen.font_size_intemediate);
             if (opticalSizeProfile == ProfileType.ADVANCED) {
                 size = itemView.getResources()
                         .getDimensionPixelSize(R.dimen.common_contact_photo_size_advanced);
-                fontSize = itemView.getResources().getDimensionPixelSize(R.dimen.font_size_advanced);
             } else if (opticalSizeProfile == ProfileType.SIMPLE) {
                 size = itemView.getResources()
                         .getDimensionPixelSize(R.dimen.common_contact_photo_size_simple);
-                fontSize = itemView.getResources().getDimensionPixelSize(R.dimen.font_size_simple);
             }
 
-            //adjust photo
-            ViewGroup.LayoutParams layoutParams = mPhoto.getLayoutParams();
-            layoutParams.height = size;
-            layoutParams.width = size;
-
-            //adjust displayName
-            mDisplayName.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
+            ViewGroup.LayoutParams lp = mPhoto.getLayoutParams();
+            lp.width = size;
+            lp.height = size;
         }
     }
 
@@ -91,7 +86,7 @@ public class ContactViewHolder extends RecyclerView.ViewHolder {
                 mSeparatorWrapper.setVisibility(View.VISIBLE);
                 break;
             case NONE:
-                mSeparatorWrapper.setVisibility(View.GONE);
+                mSeparatorView.setVisibility(View.GONE);
                 break;
         }
 
@@ -104,7 +99,7 @@ public class ContactViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void initialize() {
-        mSeparatorWrapper.setVisibility(View.GONE);
+        mSeparatorWrapper.setVisibility(View.INVISIBLE);
         mSeparatorView.setVisibility(View.GONE);
         mSeparatorImage.setVisibility(View.GONE);
     }
