@@ -27,7 +27,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/common_fab_margin"
-        android:src="@drawable/ic_message_black87_24dp"
+        android:src="@drawable/common_ic_message_grey50_24dp"
+        app:backgroundTint="@color/common_blue"
         app:layout_behavior="com.katsuna.messages.ui.behaviors.ScrollingFABBehavior" />
 
 </android.support.design.widget.CoordinatorLayout>
