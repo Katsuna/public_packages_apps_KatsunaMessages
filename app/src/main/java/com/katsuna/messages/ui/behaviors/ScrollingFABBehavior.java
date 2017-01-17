@@ -49,6 +49,6 @@ public class ScrollingFABBehavior extends FloatingActionButton.Behavior {
                 }
             }
         };
-        handler.postDelayed(runnable, 1001);
+        handler.postDelayed(runnable, 1100);
     }
 }
