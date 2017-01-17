@@ -14,7 +14,6 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,9 +33,7 @@ import com.katsuna.messages.ui.adapters.models.ContactListItemModel;
 import com.katsuna.messages.ui.listeners.IContactInteractionListener;
 import com.katsuna.messages.utils.Constants;
 import com.katsuna.messages.utils.ContactArranger;
-import com.katsuna.messages.utils.Separator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ContactsActivity extends KatsunaActivity implements IContactInteractionListener {
@@ -44,7 +41,6 @@ public class ContactsActivity extends KatsunaActivity implements IContactInterac
     private RecyclerView mRecyclerView;
     private SearchView mSearchView;
     private ContactsRecyclerViewAdapter mAdapter;
-    private List<ContactListItemModel> mModels;
     private TextView mNoResultsView;
 
     @Override
@@ -143,7 +139,7 @@ public class ContactsActivity extends KatsunaActivity implements IContactInterac
         mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                mAdapter.animateTo(getDeepCopy(mModels));
+                mAdapter.resetFilter();
                 showNoResultsView();
                 return false;
             }
@@ -153,15 +149,11 @@ public class ContactsActivity extends KatsunaActivity implements IContactInterac
     }
 
     private void search(String query) {
-        Log.e("TAG", "searching for: " + query);
         if (TextUtils.isEmpty(query)) {
-            mAdapter.animateTo(getDeepCopy(mModels));
+            mAdapter.resetFilter();
         } else {
-            final List<ContactListItemModel> filteredModelList = filter(getDeepCopy(mModels), query);
-            mAdapter.animateTo(filteredModelList);
-            mRecyclerView.scrollToPosition(0);
+            mAdapter.getFilter().filter(query);
         }
-        showNoResultsView();
     }
 
     private void showNoResultsView() {
@@ -190,35 +182,17 @@ public class ContactsActivity extends KatsunaActivity implements IContactInterac
     private void loadContacts() {
         ContactProvider dao = new ContactProvider(this);
         List<Contact> contactList = dao.getContacts();
-        mModels = ContactArranger.getContactsProcessed(contactList);
-        mAdapter = new ContactsRecyclerViewAdapter(getDeepCopy(mModels), this);
+        List<ContactListItemModel> mModels = ContactArranger.getContactsProcessed(contactList);
+        mAdapter = new ContactsRecyclerViewAdapter(mModels, this);
         mRecyclerView.setAdapter(mAdapter);
-        showNoResultsView();
-    }
-
-    private List<ContactListItemModel> getDeepCopy(List<ContactListItemModel> contactListItemModels) {
-        List<ContactListItemModel> output = new ArrayList<>();
-        for (ContactListItemModel model : contactListItemModels) {
-            output.add(new ContactListItemModel(model));
-        }
-        return output;
-    }
-
-    private List<ContactListItemModel> filter(List<ContactListItemModel> models, String query) {
-        query = query.toLowerCase();
-
-        final List<ContactListItemModel> filteredModelList = new ArrayList<>();
-        for (ContactListItemModel model : models) {
-            final String text = model.getContact().getDisplayName().toLowerCase();
-            if (text.contains(query)) {
-                //exclude premium contacts
-                if (!model.isPremium()) {
-                    model.setSeparator(Separator.NONE);
-                    filteredModelList.add(model);
-                }
+        mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                showNoResultsView();
             }
-        }
-        return filteredModelList;
+        });
+        showNoResultsView();
     }
 
     @Override
