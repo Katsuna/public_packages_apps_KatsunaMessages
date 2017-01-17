@@ -85,10 +85,6 @@ public class ConversationsAdapter extends RecyclerView.Adapter<RecyclerView.View
         return mModels.size();
     }
 
-    public Conversation getItemAtPosition(int position) {
-        return mModels.get(position);
-    }
-
     public void setSelectedConversationAtPosition(int position) {
         mSelectedConversationPosition = position;
         notifyItemChanged(position);

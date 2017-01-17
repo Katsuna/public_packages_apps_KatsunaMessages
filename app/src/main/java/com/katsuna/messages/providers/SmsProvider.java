@@ -236,6 +236,7 @@ public class SmsProvider {
         }
     }
 
+/*  use this for debug purposes
     private void showCursor(Cursor cursor) {
         int l = cursor.getColumnCount();
         StringBuilder buf = new StringBuilder();
@@ -249,5 +250,5 @@ public class SmsProvider {
             buf.append(" | ");
         }
         Log.e(TAG, buf.toString());
-    }
+    } */
 }
