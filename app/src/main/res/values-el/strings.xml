@@ -3,6 +3,7 @@
 <resources>
   <string name="app_name">Μηνύματα</string>
   <string name="title_activity_conversation">Συνομιλία</string>
+  <!-- AndroidManifest doesn't work with common_ strings, so use this workaround -->
   <string name="type_message">Type message &#8230;</string>
   <string name="empty_message">Παρακαλώ πληκτρολογήστε ένα μήνυμα.</string>
   <string name="permission_denied">Permission denied.</string>
@@ -12,6 +13,9 @@
   <string name="set_as_default">Ορισμός ως προεπιλεγμένου</string>
   <string name="new_message">Έχετε ένα νέο μήνυμα.</string>
   <string name="select_profile">Επιλέξτε το προφίλ</string>
+  <string name="confirmation">Confirmation</string>
+  <string name="confirmation_delete_conversation">All messages in this conversation will be deleted.Are you sure?</string>
+  <string name="conversation_deleted">Conversation deleted.</string>
   <!-- Radio related -->
   <string name="message_sent">Το μήνυμα εστάλη</string>
   <string name="generic_failure">Generic failure</string>
