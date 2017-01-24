@@ -64,11 +64,11 @@ public class ConversationActivity extends KatsunaActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversation);
 
-        initToolbar();
+        initToolbarLocal();
         initControls();
     }
 
-    private void initToolbar() {
+    private void initToolbarLocal() {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         final ActionBar actionBar = getSupportActionBar();

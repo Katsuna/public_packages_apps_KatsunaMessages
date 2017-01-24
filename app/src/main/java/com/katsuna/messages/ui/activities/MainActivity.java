@@ -50,7 +50,7 @@ public class MainActivity extends KatsunaActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initToolbar();
+        initToolbarLocal();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -75,7 +75,7 @@ public class MainActivity extends KatsunaActivity
         checkIsDefaultSmsHandler();
     }
 
-    private void initToolbar() {
+    private void initToolbarLocal() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         final ActionBar actionBar = getSupportActionBar();

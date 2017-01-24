@@ -48,11 +48,11 @@ public class ContactsActivity extends KatsunaActivity implements IContactInterac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
 
-        initToolbar();
+        initToolbarLocal();
         initControls();
     }
 
-    private void initToolbar() {
+    private void initToolbarLocal() {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         final ActionBar actionBar = getSupportActionBar();
