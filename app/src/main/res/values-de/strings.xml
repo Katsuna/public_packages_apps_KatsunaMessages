@@ -14,7 +14,6 @@
   <string name="app_is_not_the_default_sms_handler">Diese app ist nicht die Standard-Sms-Handler.</string>
   <string name="set_as_default">Als Standard festlegen</string>
   <string name="new_message">Sie haben eine neue Nachricht.</string>
-  <string name="select_profile">Profil wählen</string>
   <string name="confirmation">Confirmation</string>
   <string name="confirmation_delete_conversation">All messages in this conversation will be deleted. Are you sure?</string>
   <string name="conversation_deleted">Conversation deleted.</string>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/grey50"
     android:elevation="@dimen/common_selection_elevation"
     android:orientation="vertical"
     android:paddingBottom="4dp"
@@ -35,7 +35,8 @@
             android:layout_alignParentEnd="true"
             android:layout_marginStart="2dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/ic_delete_black_24dp" />
+            android:background="@drawable/ic_delete_black_24dp"
+            tools:ignore="ContentDescription" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -50,7 +51,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:textColor="@color/black87"
                 android:textSize="@dimen/common_text_size" />
 
             <TextView
@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:textColor="@color/grey"
+                android:textColor="@color/common_grey900"
                 android:textSize="18sp" />
 
             <TextView
@@ -89,14 +89,13 @@
             android:layout_gravity="start"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:background="@drawable/common_action_button_pink"
             android:drawablePadding="-30dp"
-            android:drawableStart="@drawable/common_ic_call_black87_24dp"
+            android:drawableStart="@drawable/common_ic_call_grey50_24dp"
             android:paddingEnd="0dp"
             android:paddingStart="30dp"
             android:text="@string/common_call"
             android:textAllCaps="true"
-            android:textColor="@color/black87"
+            android:textColor="@color/common_grey50"
             android:textSize="18sp" />
 
         <Button
@@ -106,14 +105,13 @@
             android:layout_height="40dp"
             android:layout_gravity="start"
             android:layout_weight="1"
-            android:background="@drawable/common_action_button_blue"
             android:drawablePadding="-16dp"
-            android:drawableStart="@drawable/common_ic_message_grey50_24dp"
+            android:drawableStart="@drawable/common_ic_message_black87_24dp"
             android:paddingEnd="0dp"
             android:paddingStart="16dp"
             android:text="@string/common_message"
+            android:textColor="@color/common_black87"
             android:textAllCaps="true"
-            android:textColor="@color/grey50"
             android:textSize="18sp" />
 
     </LinearLayout>

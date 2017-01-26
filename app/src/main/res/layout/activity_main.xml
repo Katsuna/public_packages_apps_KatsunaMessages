@@ -19,7 +19,7 @@
         android:layout_height="190dp"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        android:theme="@style/drawer"
+        android:theme="@style/CommonDrawer"
         app:menu="@menu/activity_main_drawer" />
 
 </android.support.v4.widget.DrawerLayout>

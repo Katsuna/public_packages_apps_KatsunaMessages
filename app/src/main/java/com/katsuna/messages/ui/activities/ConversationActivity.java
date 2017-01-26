@@ -11,10 +11,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -58,24 +56,18 @@ public class ConversationActivity extends KatsunaActivity
     private String conversationNumber;
     private FrameLayout mEmojiContainer;
     private long savedMessageId = -1;
+    private String mDisplayName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversation);
 
-        initToolbarLocal();
         initControls();
     }
 
     private void initToolbarLocal() {
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        final ActionBar actionBar = getSupportActionBar();
-
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        initToolbar();
         mToolbar.setTitleTextAppearance(this, R.style.CommonRobotoBold);
     }
 
@@ -200,6 +192,8 @@ public class ConversationActivity extends KatsunaActivity
     }
 
     private void initControls() {
+        initToolbarLocal();
+
         mRecyclerView = (RecyclerView) findViewById(R.id.messagesRecyclerView);
         mNewMessage = (EmojiconEditText) findViewById(R.id.new_message);
 
@@ -295,10 +289,14 @@ public class ConversationActivity extends KatsunaActivity
         super.onStop();
     }
 
-    private String mDisplayName;
-
     private long getConversationIdFromIntent() {
         Intent i = getIntent();
+
+        long convId = i.getExtras().getLong(Constants.EXTRA_CONVERASTION_ID);
+        if (convId != 0) {
+            return convId;
+        }
+
         if (i.getAction() != null && i.getAction().equals(Intent.ACTION_VIEW)) {
             conversationNumber = i.getData().getSchemeSpecificPart();
         } else {

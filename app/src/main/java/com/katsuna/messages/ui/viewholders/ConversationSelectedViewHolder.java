@@ -5,7 +5,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import com.katsuna.commons.entities.ColorProfile;
+import com.katsuna.commons.entities.ColorProfileKey;
 import com.katsuna.commons.entities.ProfileType;
+import com.katsuna.commons.utils.ColorCalc;
+import com.katsuna.commons.utils.Shape;
 import com.katsuna.messages.R;
 import com.katsuna.messages.domain.Conversation;
 import com.katsuna.messages.ui.listeners.IConversationInteractionListener;
@@ -60,6 +64,19 @@ public class ConversationSelectedViewHolder extends ConversationViewHolder {
             mMessageButton.setLayoutParams(messageButtonParams);
         }
 
+        adjustColorProfile();
+    }
+
+    private void adjustColorProfile() {
+        ColorProfile colorProfile = mUserProfileContainer.getColorProfile();
+        // set action buttons background color
+        int color1 = ColorCalc.getColor(itemView.getContext(),
+                ColorProfileKey.ACCENT1_COLOR, colorProfile);
+        Shape.setRoundedBackground(mMessageButton, color1);
+
+        int color2 = ColorCalc.getColor(itemView.getContext(), ColorProfileKey.ACCENT2_COLOR,
+                colorProfile);
+        Shape.setRoundedBackground(mCallButton, color2);
     }
 
     public void bind(final Conversation conversation, final int position) {

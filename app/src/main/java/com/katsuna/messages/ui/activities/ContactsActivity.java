@@ -7,11 +7,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -48,18 +46,7 @@ public class ContactsActivity extends KatsunaActivity implements IContactInterac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
 
-        initToolbarLocal();
         initControls();
-    }
-
-    private void initToolbarLocal() {
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        final ActionBar actionBar = getSupportActionBar();
-
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
     }
 
     @Override
@@ -71,6 +58,8 @@ public class ContactsActivity extends KatsunaActivity implements IContactInterac
     }
 
     private void initControls() {
+        initToolbar();
+
         mRecyclerView = (RecyclerView) findViewById(R.id.contacts_list);
         mNoResultsView = (TextView) findViewById(R.id.no_results);
 

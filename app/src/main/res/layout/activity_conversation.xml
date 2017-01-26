@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         tools:context="com.katsuna.messages.ui.activities.ConversationActivity">
 
-        <include layout="@layout/toolbar" />
+        <include layout="@layout/common_toolbar" />
 
         <include layout="@layout/content_conversation" />
 
@@ -24,9 +24,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:paddingStart="@dimen/common_activity_margin"
                 android:paddingEnd="@dimen/common_activity_margin"
-                android:background="@color/white">
+                android:paddingStart="@dimen/common_activity_margin">
 
                 <Button
                     android:id="@+id/send_button"
@@ -55,8 +54,6 @@
                     android:imeOptions="actionDone"
                     android:maxLines="1"
                     android:padding="10dp"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/black"
                     android:textSize="@dimen/common_text_size"
                     emojicon:emojiconSize="20sp" />
             </RelativeLayout>

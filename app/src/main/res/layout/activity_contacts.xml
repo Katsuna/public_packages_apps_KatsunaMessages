@@ -11,11 +11,10 @@
         android:layout_height="match_parent"
         tools:context="com.katsuna.messages.ui.activities.ContactsActivity">
 
-        <include layout="@layout/toolbar" />
+        <include layout="@layout/common_toolbar" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/contacts_list"
-            style="@style/ContentMainStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
@@ -41,7 +40,7 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/common_fab_margin"
             android:src="@drawable/ic_dialpad_grey50_24dp"
-            app:backgroundTint="@color/common_blue"
+            app:backgroundTint="@color/common_blue900"
             app:layout_behavior="com.katsuna.messages.ui.behaviors.ScrollingFABBehavior" />
 
     </android.support.design.widget.CoordinatorLayout>

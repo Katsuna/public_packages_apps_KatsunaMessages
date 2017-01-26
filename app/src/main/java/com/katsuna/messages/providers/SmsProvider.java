@@ -51,7 +51,6 @@ public class SmsProvider {
                 conversation.setSnippet(cursor.getString(cursor.getColumnIndex(ThreadColumns.SNIPPET)));
 
                 int messageType = getLastMessageType(conversation.getId());
-                Log.e(TAG, "messageType: " + messageType);
                 if (messageType == MessageType.INCOMING) {
                     conversation.setUnanswered(true);
                 }

@@ -34,37 +34,12 @@
         android:layout_height="1px"
         android:layout_marginBottom="16dp"
         android:layout_marginTop="16dp"
-        android:background="@color/grey" />
+        android:background="@color/common_black12"  />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:orientation="horizontal">
+    <include layout="@layout/common_size_profile_selector" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/select_profile"
-            android:textStyle="bold" />
+    <include layout="@layout/common_color_profile_selector" />
 
-        <Spinner
-            android:id="@+id/profiles"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="16dp"
-            android:entries="@array/common_array_profiles"
-            android:entryValues="@array/common_array_profiles_values" />
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@color/grey" />
+    <include layout="@layout/common_right_hand" />
 
 </LinearLayout>

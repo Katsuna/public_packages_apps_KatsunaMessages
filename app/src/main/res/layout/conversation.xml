@@ -32,7 +32,6 @@
             style="@style/CommonRobotoMedium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black87"
             android:textSize="@dimen/common_text_size"
             android:maxLines="1" />
 
@@ -42,7 +41,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
-            android:textColor="@color/grey"
+            android:textColor="@color/common_grey900"
             android:textSize="18sp" />
 
         <TextView

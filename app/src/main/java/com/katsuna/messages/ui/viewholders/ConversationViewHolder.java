@@ -78,11 +78,11 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
         mSnippet.setText(conversation.getSnippet());
 
         if (conversation.getRead() == 0) {
-            mDisplayName.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.dark_grey));
+            mDisplayName.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.common_grey600));
         } else if (conversation.isUnanswered()) {
             mDisplayName.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.pink));
         } else {
-            mDisplayName.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.black87));
+            mDisplayName.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.common_black87));
         }
 
         if (mConversationContainer != null) {
