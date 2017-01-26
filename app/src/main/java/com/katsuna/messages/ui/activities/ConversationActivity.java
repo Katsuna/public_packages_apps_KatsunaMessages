@@ -292,25 +292,39 @@ public class ConversationActivity extends KatsunaActivity
     private long getConversationIdFromIntent() {
         Intent i = getIntent();
 
-        long convId = i.getExtras().getLong(Constants.EXTRA_CONVERASTION_ID);
+        long convId = getConversationIdFromIntent(i);
         if (convId != 0) {
             return convId;
         }
 
+        // Find conversation number.
         if (i.getAction() != null && i.getAction().equals(Intent.ACTION_VIEW)) {
             conversationNumber = i.getData().getSchemeSpecificPart();
         } else {
-            conversationNumber = i.getExtras().getString(Constants.EXTRA_NUMBER);
+            if (i.getExtras() != null) {
+                conversationNumber = i.getExtras().getString(Constants.EXTRA_NUMBER);
+            }
         }
 
-        mDisplayName = i.getExtras().getString(Constants.EXTRA_DISPLAY_NAME);
+        if (i.getExtras() != null) {
+            mDisplayName = i.getExtras().getString(Constants.EXTRA_DISPLAY_NAME);
+        }
 
-        if (conversationNumber == null) {
-            return i.getExtras().getLong(Constants.EXTRA_CONVERASTION_ID);
-        } else {
+        // Try to find conversation id from conversation number.
+        if (conversationNumber != null) {
             SmsProvider dao = new SmsProvider(this);
-            return dao.getConversationId(conversationNumber);
+            convId = dao.getConversationId(conversationNumber);
         }
+
+        return convId;
+    }
+
+    private long getConversationIdFromIntent(Intent i) {
+        long convId = 0;
+        if (i != null && i.getExtras() != null) {
+            convId = i.getExtras().getLong(Constants.EXTRA_CONVERASTION_ID);
+        }
+        return convId;
     }
 
     //---sends an SMS message to another device---
