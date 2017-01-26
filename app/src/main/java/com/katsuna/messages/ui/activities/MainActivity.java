@@ -1,7 +1,6 @@
 package com.katsuna.messages.ui.activities;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -12,11 +11,8 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -24,6 +20,7 @@ import android.widget.Toast;
 
 import com.katsuna.commons.entities.UserProfileContainer;
 import com.katsuna.commons.ui.KatsunaActivity;
+import com.katsuna.commons.utils.KatsunaAlertBuilder;
 import com.katsuna.messages.R;
 import com.katsuna.messages.domain.Conversation;
 import com.katsuna.messages.providers.SmsProvider;
@@ -40,7 +37,6 @@ public class MainActivity extends KatsunaActivity
         IConversationInteractionListener {
 
     private final String[] permissions = new String[]{Manifest.permission.READ_SMS, Manifest.permission.READ_CONTACTS};
-    private Toolbar mToolbar;
     private RecyclerView mRecyclerView;
     private ConversationsAdapter mAdapter;
     private TextView mNoResultsView;
@@ -50,7 +46,7 @@ public class MainActivity extends KatsunaActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initToolbarLocal();
+        initControls();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -70,19 +66,7 @@ public class MainActivity extends KatsunaActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        initControls();
-
         checkIsDefaultSmsHandler();
-    }
-
-    private void initToolbarLocal() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        final ActionBar actionBar = getSupportActionBar();
-
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
     }
 
     private void checkIsDefaultSmsHandler() {
@@ -115,6 +99,7 @@ public class MainActivity extends KatsunaActivity
     }
 
     private void initControls() {
+        initToolbar(R.drawable.common_ic_menu_black_24dp);
         mRecyclerView = (RecyclerView) findViewById(R.id.conversations_list);
         mNoResultsView = (TextView) findViewById(R.id.no_results);
     }
@@ -232,22 +217,25 @@ public class MainActivity extends KatsunaActivity
 
     @Override
     public void deleteConversation(final Conversation conversation) {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.confirmation)
-                .setMessage(R.string.confirmation_delete_conversation)
-                .setNegativeButton(android.R.string.no, null)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        SmsProvider dao = new SmsProvider(MainActivity.this);
-                        int rowsDeleted = dao.deleteConversation(conversation);
-                        if (rowsDeleted > 0) {
-                            loadConversations();
-                            Toast.makeText(MainActivity.this, R.string.conversation_deleted,
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }).show();
+        KatsunaAlertBuilder builder = new KatsunaAlertBuilder(this);
+        builder.setTitle(R.string.confirmation);
+        builder.setMessage(R.string.confirmation_delete_conversation);
+        builder.setView(R.layout.common_katsuna_alert);
+        builder.setUserProfileContainer(mUserProfileContainer);
+        builder.setOkListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SmsProvider dao = new SmsProvider(MainActivity.this);
+                int rowsDeleted = dao.deleteConversation(conversation);
+                if (rowsDeleted > 0) {
+                    loadConversations();
+                    Toast.makeText(MainActivity.this, R.string.conversation_deleted,
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        builder.create().show();
     }
 
     @Override
