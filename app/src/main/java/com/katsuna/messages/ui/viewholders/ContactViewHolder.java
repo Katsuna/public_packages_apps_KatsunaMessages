@@ -17,7 +17,7 @@ import com.katsuna.messages.ui.listeners.IContactInteractionListener;
 import com.squareup.picasso.Picasso;
 
 public class ContactViewHolder extends RecyclerView.ViewHolder {
-    protected final UserProfileContainer mUserProfileContainer;
+    private final UserProfileContainer mUserProfileContainer;
     private final View mView;
     private final TextView mSeparatorView;
     private final TextView mDisplayName;

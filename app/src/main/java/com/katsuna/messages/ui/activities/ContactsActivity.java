@@ -57,6 +57,11 @@ public class ContactsActivity extends KatsunaActivity implements IContactInterac
         }
     }
 
+    @Override
+    protected void showPopup(boolean b) {
+        // no op here
+    }
+
     private void initControls() {
         initToolbar();
 

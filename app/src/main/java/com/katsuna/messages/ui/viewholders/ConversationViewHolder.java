@@ -17,13 +17,13 @@ import com.squareup.picasso.Picasso;
 
 public class ConversationViewHolder extends RecyclerView.ViewHolder {
 
-    private final TextView mDisplayName;
-    private final TextView mDateTime;
-    private final TextView mSnippet;
+    final View mConversationContainer;
     final ImageView mPhoto;
     final UserProfileContainer mUserProfileContainer;
     final IConversationInteractionListener mListener;
-    private final View mConversationContainer;
+    private final TextView mDisplayName;
+    private final TextView mDateTime;
+    private final TextView mSnippet;
 
     public ConversationViewHolder(View itemView, IConversationInteractionListener listener) {
         super(itemView);
@@ -93,5 +93,15 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
                 }
             });
         }
+
+        // direct focus on non selected contact if photo or name is clicked
+        View.OnClickListener focusListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.focusConversation(position);
+            }
+        };
+        mPhoto.setOnClickListener(focusListener);
+        mDisplayName.setOnClickListener(focusListener);
     }
 }

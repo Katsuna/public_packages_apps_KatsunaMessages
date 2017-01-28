@@ -12,9 +12,13 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +44,7 @@ public class MainActivity extends KatsunaActivity
     private RecyclerView mRecyclerView;
     private ConversationsAdapter mAdapter;
     private TextView mNoResultsView;
+    private View mPopupFrameOuter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +53,11 @@ public class MainActivity extends KatsunaActivity
 
         initControls();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mFab2 = (FloatingActionButton) findViewById(R.id.fab);
+        mFab2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, ContactsActivity.class);
-                startActivity(i);
+                selectContact();
             }
         });
 
@@ -79,6 +83,11 @@ public class MainActivity extends KatsunaActivity
         }
     }
 
+    private void selectContact() {
+        Intent i = new Intent(MainActivity.this, ContactsActivity.class);
+        startActivity(i);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -96,12 +105,64 @@ public class MainActivity extends KatsunaActivity
     protected void onResume() {
         super.onResume();
         loadConversations();
+
+        resetLayout();
     }
 
+    @Override
+    protected void showPopup(boolean show) {
+        if (show) {
+            //don't show popup if menu drawer is open or conversation is selected.
+            if (!mDrawer.isDrawerOpen(GravityCompat.START) && !mConversationSelected) {
+                mPopupFrame.setVisibility(View.VISIBLE);
+                mPopupButton2.setVisibility(View.VISIBLE);
+                mPopupVisible = true;
+            }
+        } else {
+            mPopupFrame.setVisibility(View.GONE);
+            mPopupButton2.setVisibility(View.GONE);
+            mPopupVisible = false;
+            mLastTouchTimestamp = System.currentTimeMillis();
+        }
+    }
+
+    private void resetLayout() {
+        mPopupFrameOuter.setVisibility(View.GONE);
+        showPopup(false);
+    }
+
+    private View mPopupFrame;
+
+    private DrawerLayout mDrawer;
     private void initControls() {
         initToolbar(R.drawable.common_ic_menu_black_24dp);
         mRecyclerView = (RecyclerView) findViewById(R.id.conversations_list);
         mNoResultsView = (TextView) findViewById(R.id.no_results);
+
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        mFabContainer = (LinearLayout) findViewById(R.id.fab_container);
+        mButtonsContainer2 = (LinearLayout) findViewById(R.id.message_buttons_container);
+        mPopupButton2 = (Button) findViewById(R.id.message_button);
+        mPopupButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectContact();
+            }
+        });
+
+        mPopupFrame = findViewById(R.id.popup_frame);
+        mPopupFrame.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                showPopup(false);
+                return true;
+            }
+        });
+        mPopupFrameOuter = findViewById(R.id.popup_frame_outer);
+
+        mLastTouchTimestamp = System.currentTimeMillis();
+        initPopupActionHandler();
     }
 
     private void showNoResultsView() {
@@ -158,9 +219,8 @@ public class MainActivity extends KatsunaActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+            mDrawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -186,11 +246,6 @@ public class MainActivity extends KatsunaActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    public void selectConversation(int position) {
-        mAdapter.setSelectedConversationAtPosition(position);
     }
 
     @Override
@@ -242,4 +297,37 @@ public class MainActivity extends KatsunaActivity
     public UserProfileContainer getUserProfileContainer() {
         return mUserProfileContainer;
     }
+
+    @Override
+    public void selectConversation(int position) {
+        if (mConversationSelected) {
+            deselectConversation();
+        } else {
+            focusConversation(position);
+        }
+    }
+
+    private void deselectConversation() {
+        mConversationSelected = false;
+        mAdapter.deselectConversation();
+        tintFabs(false);
+        adjustFabPosition(true);
+        mPopupFrameOuter.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void focusConversation(int position) {
+        mAdapter.setSelectedConversationAtPosition(position);
+        ((LinearLayoutManager) mRecyclerView.getLayoutManager())
+                .scrollToPositionWithOffset(position, (mRecyclerView.getHeight() / 2) - 170);
+
+        tintFabs(true);
+
+        adjustFabPosition(false);
+        mConversationSelected = true;
+        mPopupFrameOuter.setVisibility(View.VISIBLE);
+    }
+
+    private boolean mConversationSelected;
+
 }

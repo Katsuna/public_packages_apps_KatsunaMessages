@@ -15,4 +15,5 @@ public interface IConversationInteractionListener {
 
     UserProfileContainer getUserProfileContainer();
 
+    void focusConversation(int position);
 }

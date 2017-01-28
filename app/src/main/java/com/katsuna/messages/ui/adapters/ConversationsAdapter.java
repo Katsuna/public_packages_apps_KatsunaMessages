@@ -90,4 +90,8 @@ public class ConversationsAdapter extends RecyclerView.Adapter<RecyclerView.View
         notifyItemChanged(position);
     }
 
+    public void deselectConversation() {
+        setSelectedConversationAtPosition(NO_CONVERSATION_POSITION);
+    }
+
 }

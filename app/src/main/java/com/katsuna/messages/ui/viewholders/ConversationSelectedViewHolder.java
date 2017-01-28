@@ -77,6 +77,10 @@ public class ConversationSelectedViewHolder extends ConversationViewHolder {
         int color2 = ColorCalc.getColor(itemView.getContext(), ColorProfileKey.ACCENT2_COLOR,
                 colorProfile);
         Shape.setRoundedBackground(mCallButton, color2);
+
+        int bgColor = ColorCalc.getColor(itemView.getContext(), ColorProfileKey.POP_UP_COLOR,
+                colorProfile);
+        mConversationContainer.setBackgroundColor(bgColor);
     }
 
     public void bind(final Conversation conversation, final int position) {

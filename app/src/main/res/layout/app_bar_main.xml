@@ -21,14 +21,48 @@
         android:textSize="@dimen/common_text_size"
         android:visibility="gone" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/common_fab_margin"
-        android:src="@drawable/common_ic_message_grey50_24dp"
-        app:backgroundTint="@color/common_blue900"
-        app:layout_behavior="com.katsuna.messages.ui.behaviors.ScrollingFABBehavior" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="?actionBarSize">
+
+        <include layout="@layout/common_popup_frame" />
+
+        <LinearLayout
+            android:id="@+id/fab_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center|end"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/message_buttons_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/message_button"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/common_message"
+                    android:textAllCaps="false"
+                    android:textColor="@color/common_grey50"
+                    android:textSize="18sp"
+                    android:visibility="gone" />
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:layout_margin="@dimen/common_fab_margin"
+                    android:src="@drawable/common_ic_message_grey50_24dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>

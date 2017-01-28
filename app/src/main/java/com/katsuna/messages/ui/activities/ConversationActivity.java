@@ -96,6 +96,11 @@ public class ConversationActivity extends KatsunaActivity
         registerReceivers();
     }
 
+    @Override
+    protected void showPopup(boolean b) {
+        // no op here
+    }
+
     private void registerReceivers() {
         deliveryBroadcastReceiver.register(this, new IntentFilter(DELIVERED));
         sendBroadcastReceiver.register(this, new IntentFilter(SENT));
