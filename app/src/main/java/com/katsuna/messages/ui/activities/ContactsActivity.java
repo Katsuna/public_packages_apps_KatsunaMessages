@@ -68,8 +68,8 @@ public class ContactsActivity extends KatsunaActivity implements IContactInterac
         mRecyclerView = (RecyclerView) findViewById(R.id.contacts_list);
         mNoResultsView = (TextView) findViewById(R.id.no_results);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mFab2 = (FloatingActionButton) findViewById(R.id.fab);
+        mFab2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(ContactsActivity.this);
