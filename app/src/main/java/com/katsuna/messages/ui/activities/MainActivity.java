@@ -45,6 +45,9 @@ public class MainActivity extends KatsunaActivity
     private ConversationsAdapter mAdapter;
     private TextView mNoResultsView;
     private View mPopupFrameOuter;
+    private View mPopupFrame;
+    private DrawerLayout mDrawer;
+    private boolean mConversationSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,9 +134,6 @@ public class MainActivity extends KatsunaActivity
         showPopup(false);
     }
 
-    private View mPopupFrame;
-
-    private DrawerLayout mDrawer;
     private void initControls() {
         initToolbar(R.drawable.common_ic_menu_black_24dp);
         mRecyclerView = (RecyclerView) findViewById(R.id.conversations_list);
@@ -250,7 +250,7 @@ public class MainActivity extends KatsunaActivity
 
     @Override
     public void callContact(Conversation conversation) {
-        callNumber(conversation.getContact().getAddress());
+        callNumber(conversation.getContact().getMessageAddress());
     }
 
     private void callNumber(String number) {
@@ -327,7 +327,5 @@ public class MainActivity extends KatsunaActivity
         mConversationSelected = true;
         mPopupFrameOuter.setVisibility(View.VISIBLE);
     }
-
-    private boolean mConversationSelected;
 
 }

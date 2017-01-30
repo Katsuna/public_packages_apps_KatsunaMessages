@@ -8,11 +8,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.katsuna.commons.domain.Contact;
 import com.katsuna.commons.entities.ProfileType;
 import com.katsuna.commons.entities.UserProfileContainer;
+import com.katsuna.commons.ui.adapters.models.ContactListItemModel;
 import com.katsuna.messages.R;
-import com.katsuna.messages.domain.Contact;
-import com.katsuna.messages.ui.adapters.models.ContactListItemModel;
 import com.katsuna.messages.ui.listeners.IContactInteractionListener;
 import com.squareup.picasso.Picasso;
 

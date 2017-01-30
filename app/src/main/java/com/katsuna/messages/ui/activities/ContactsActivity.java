@@ -7,7 +7,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.InputType;
@@ -18,27 +20,31 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.katsuna.commons.domain.Contact;
+import com.katsuna.commons.domain.Phone;
 import com.katsuna.commons.entities.UserProfileContainer;
-import com.katsuna.commons.ui.KatsunaActivity;
+import com.katsuna.commons.providers.ContactProvider;
+import com.katsuna.commons.ui.SearchBarActivity;
+import com.katsuna.commons.ui.adapters.models.ContactListItemModel;
+import com.katsuna.commons.utils.ContactArranger;
 import com.katsuna.messages.R;
-import com.katsuna.messages.domain.Contact;
-import com.katsuna.messages.domain.Phone;
-import com.katsuna.messages.providers.ContactProvider;
-import com.katsuna.messages.ui.adapters.ContactsRecyclerViewAdapter;
-import com.katsuna.messages.ui.adapters.models.ContactListItemModel;
+import com.katsuna.messages.ui.adapters.ContactsAdapter;
 import com.katsuna.messages.ui.listeners.IContactInteractionListener;
 import com.katsuna.messages.utils.Constants;
-import com.katsuna.messages.utils.ContactArranger;
+import com.konifar.fab_transformation.FabTransformation;
 
 import java.util.List;
 
-public class ContactsActivity extends KatsunaActivity implements IContactInteractionListener {
+public class ContactsActivity extends SearchBarActivity implements IContactInteractionListener {
 
     private RecyclerView mRecyclerView;
     private SearchView mSearchView;
-    private ContactsRecyclerViewAdapter mAdapter;
+    private ContactsAdapter mAdapter;
     private TextView mNoResultsView;
 
     @Override
@@ -58,6 +64,15 @@ public class ContactsActivity extends KatsunaActivity implements IContactInterac
     }
 
     @Override
+    public void onBackPressed() {
+        if (mFabToolbarOn) {
+            showFabToolbar(false);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     protected void showPopup(boolean b) {
         // no op here
     }
@@ -68,7 +83,20 @@ public class ContactsActivity extends KatsunaActivity implements IContactInterac
         mRecyclerView = (RecyclerView) findViewById(R.id.contacts_list);
         mNoResultsView = (TextView) findViewById(R.id.no_results);
 
-        mFab2 = (FloatingActionButton) findViewById(R.id.fab);
+        setupFab();
+    }
+
+    private void setupFab() {
+        mFabContainer = (LinearLayout) findViewById(R.id.fab_container);
+        mFab1 = (FloatingActionButton) findViewById(R.id.search_fab);
+        mFab1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFabToolbar(true);
+            }
+        });
+
+        mFab2 = (FloatingActionButton) findViewById(R.id.dial_fab);
         mFab2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
@@ -106,6 +134,45 @@ public class ContactsActivity extends KatsunaActivity implements IContactInterac
             }
         });
 
+        mFabToolbarContainer = (FrameLayout) findViewById(R.id.fab_toolbar_container);
+        mFabToolbar = findViewById(R.id.fab_toolbar);
+        mViewPagerContainer = (LinearLayout) findViewById(R.id.viewpager_container);
+        mViewPager = (ViewPager) findViewById(R.id.viewpager);
+
+        mNextButton = (ImageButton) findViewById(R.id.next_page_button);
+        mNextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
+                adjustFabToolbarNavButtonsVisibility();
+            }
+        });
+
+        mPrevButton = (ImageButton) findViewById(R.id.prev_page_button);
+        mPrevButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
+                adjustFabToolbarNavButtonsVisibility();
+            }
+        });
+
+    }
+
+    private void showFabToolbar(boolean show) {
+        int duration = 400;
+        if (show) {
+            FabTransformation.with(mFab1).duration(duration)
+                    .transformTo(mFabToolbar);
+
+            if (mPopupVisible) {
+                showPopup(false);
+            }
+        } else {
+            FabTransformation.with(mFab1).duration(duration)
+                    .transformFrom(mFabToolbar);
+        }
+        mFabToolbarOn = show;
     }
 
     @Override
@@ -177,7 +244,7 @@ public class ContactsActivity extends KatsunaActivity implements IContactInterac
         ContactProvider dao = new ContactProvider(this);
         List<Contact> contactList = dao.getContacts();
         List<ContactListItemModel> mModels = ContactArranger.getContactsProcessed(contactList);
-        mAdapter = new ContactsRecyclerViewAdapter(mModels, this);
+        mAdapter = new ContactsAdapter(mModels, this);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
@@ -186,6 +253,9 @@ public class ContactsActivity extends KatsunaActivity implements IContactInterac
                 showNoResultsView();
             }
         });
+
+        initializeFabToolbar(mModels);
+
         showNoResultsView();
     }
 
@@ -223,6 +293,19 @@ public class ContactsActivity extends KatsunaActivity implements IContactInterac
         i.putExtra(Constants.EXTRA_NUMBER, number);
         startActivity(i);
         finish();
+    }
+
+    @Override
+    public void selectContactByStartingLetter(String letter) {
+        if (mAdapter != null) {
+            int position = mAdapter.getPositionByStartingLetter(letter);
+            scrollToPositionWithOffset(position, 0);
+        }
+    }
+
+    private void scrollToPositionWithOffset(int position, int offset) {
+        ((LinearLayoutManager) mRecyclerView.getLayoutManager())
+                .scrollToPositionWithOffset(position, offset);
     }
 
     @Override

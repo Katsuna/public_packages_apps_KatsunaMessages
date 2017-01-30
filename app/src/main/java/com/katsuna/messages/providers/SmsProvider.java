@@ -9,16 +9,16 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-
-import com.katsuna.messages.domain.Contact;
+import com.katsuna.commons.domain.Contact;
 import com.katsuna.messages.domain.Conversation;
 import com.katsuna.messages.domain.Message;
 import com.katsuna.messages.providers.metadata.MessageColumns;
 import com.katsuna.messages.providers.metadata.MessageType;
 import com.katsuna.messages.providers.metadata.ThreadColumns;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 public class SmsProvider {
 
@@ -66,7 +66,7 @@ public class SmsProvider {
 
     public int deleteConversation(Conversation conversation) {
         String where = MessageColumns.THREAD_ID + " = ? ";
-        String[] params = new String[] {String.valueOf(conversation.getId())};
+        String[] params = new String[]{String.valueOf(conversation.getId())};
 
         return cr.delete(Uris.THREADS_URI, where, params);
     }
@@ -154,7 +154,7 @@ public class SmsProvider {
 
     public Contact getContactByAddress(String address) {
         Contact contact = new Contact();
-        contact.setAddress(address);
+        contact.setMessageAddress(address);
 
         String[] projection = {
                 ContactsContract.PhoneLookup._ID,
@@ -167,8 +167,7 @@ public class SmsProvider {
         Cursor cursor = cr.query(uri, projection, null, null, null);
         if (cursor != null && cursor.moveToFirst()) {
             contact.setId(cursor.getLong(cursor.getColumnIndex(ContactsContract.PhoneLookup._ID)));
-            contact.setName(cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME)));
-            contact.setPhotoUri(cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.PHOTO_THUMBNAIL_URI)));
+            contact.setDisplayName(cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME)));
 
             cursor.close();
         }

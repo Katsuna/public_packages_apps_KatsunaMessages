@@ -60,7 +60,7 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
     public void bind(Conversation conversation, final int position) {
         String name;
         if (conversation.getContact().getId() > 0) {
-            name = conversation.getContact().getName();
+            name = conversation.getContact().getDisplayName();
 
             //load photo
             Picasso.with(itemView.getContext())
@@ -70,7 +70,7 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
 
         } else {
             mPhoto.setImageBitmap(null);
-            name = conversation.getContact().getAddress();
+            name = conversation.getContact().getMessageAddress();
         }
         mDisplayName.setText(name);
 

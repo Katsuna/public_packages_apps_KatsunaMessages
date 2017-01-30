@@ -1,8 +1,8 @@
 package com.katsuna.messages.utils;
 
-import java.util.HashMap;
+import com.katsuna.commons.domain.Contact;
 
-import com.katsuna.messages.domain.Contact;
+import java.util.HashMap;
 
 public class ContactsCache {
 

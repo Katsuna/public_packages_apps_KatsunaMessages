@@ -5,8 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.katsuna.commons.domain.Contact;
 import com.katsuna.messages.R;
-import com.katsuna.messages.domain.Contact;
 import com.katsuna.messages.domain.Conversation;
 import com.katsuna.messages.providers.SmsProvider;
 import com.katsuna.messages.ui.listeners.IConversationInteractionListener;

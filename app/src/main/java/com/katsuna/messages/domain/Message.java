@@ -1,5 +1,7 @@
 package com.katsuna.messages.domain;
 
+import com.katsuna.commons.domain.Contact;
+
 public class Message {
 
     private long id;
@@ -36,7 +38,7 @@ public class Message {
     public String getDisplayName() {
         String displayName;
         if (contact != null && contact.getId() > 0) {
-            displayName = contact.getName();
+            displayName = contact.getDisplayName();
         } else {
             displayName = address;
         }

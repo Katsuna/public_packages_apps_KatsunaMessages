@@ -1,5 +1,7 @@
 package com.katsuna.messages.domain;
 
+import com.katsuna.commons.domain.Contact;
+
 public class Conversation {
 
     private long id;
