@@ -48,13 +48,13 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/new_contact_buttons_container"
+                    android:id="@+id/dial_buttons_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="?attr/actionBarSize">
 
                     <Button
-                        android:id="@+id/new_contact_button"
+                        android:id="@+id/dial_button"
                         android:layout_width="140dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"

@@ -17,8 +17,10 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -46,6 +48,7 @@ public class ContactsActivity extends SearchBarActivity implements IContactInter
     private SearchView mSearchView;
     private ContactsAdapter mAdapter;
     private TextView mNoResultsView;
+    private View mPopupFrame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +76,19 @@ public class ContactsActivity extends SearchBarActivity implements IContactInter
     }
 
     @Override
-    protected void showPopup(boolean b) {
-        // no op here
+    protected void showPopup(boolean show) {
+        if (show) {
+            mPopupFrame.setVisibility(View.VISIBLE);
+            mPopupButton1.setVisibility(View.VISIBLE);
+            mPopupButton2.setVisibility(View.VISIBLE);
+            mPopupVisible = true;
+        } else {
+            mPopupFrame.setVisibility(View.GONE);
+            mPopupButton1.setVisibility(View.GONE);
+            mPopupButton2.setVisibility(View.GONE);
+            mPopupVisible = false;
+            mLastTouchTimestamp = System.currentTimeMillis();
+        }
     }
 
     private void initControls() {
@@ -100,37 +114,7 @@ public class ContactsActivity extends SearchBarActivity implements IContactInter
         mFab2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(ContactsActivity.this);
-                LayoutInflater inflater = (LayoutInflater) view.getContext()
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.alert_title, null);
-                alert.setCustomTitle(v);
-                final EditText input = new EditText(ContactsActivity.this);
-                input.setInputType(InputType.TYPE_CLASS_PHONE);
-                alert.setView(input);
-                alert.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        startActivity(null, input.getText().toString());
-                    }
-                });
-                alert.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        //Put actions for CANCEL button here, or leave in blank
-                    }
-                });
-                final AlertDialog dialog = alert.show();
-
-                //focus on input
-                input.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                    @Override
-                    public void onFocusChange(View v, boolean hasFocus) {
-                        if (hasFocus) {
-                            if (dialog.getWindow() != null) {
-                                dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-                            }
-                        }
-                    }
-                });
+                dialNumber();
             }
         });
 
@@ -157,6 +141,70 @@ public class ContactsActivity extends SearchBarActivity implements IContactInter
             }
         });
 
+
+        mButtonsContainer1 = (LinearLayout) findViewById(R.id.search_buttons_container);
+        mPopupButton1 = (Button) findViewById(R.id.search_button);
+        mPopupButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFabToolbar(true);
+            }
+        });
+
+        mButtonsContainer2 = (LinearLayout) findViewById(R.id.dial_buttons_container);
+        mPopupButton2 = (Button) findViewById(R.id.dial_button);
+        mPopupButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialNumber();
+            }
+        });
+
+        mPopupFrame = findViewById(R.id.popup_frame);
+        mPopupFrame.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                showPopup(false);
+                return true;
+            }
+        });
+
+        mLastTouchTimestamp = System.currentTimeMillis();
+        initPopupActionHandler();
+
+    }
+
+    private void dialNumber() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(ContactsActivity.this);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.alert_title, null);
+        alert.setCustomTitle(v);
+        final EditText input = new EditText(ContactsActivity.this);
+        input.setInputType(InputType.TYPE_CLASS_PHONE);
+        alert.setView(input);
+        alert.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                startActivity(null, input.getText().toString());
+            }
+        });
+        alert.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //Put actions for CANCEL button here, or leave in blank
+            }
+        });
+        final AlertDialog dialog = alert.show();
+
+        //focus on input
+        input.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    if (dialog.getWindow() != null) {
+                        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                    }
+                }
+            }
+        });
     }
 
     private void showFabToolbar(boolean show) {
