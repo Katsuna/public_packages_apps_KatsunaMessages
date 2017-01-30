@@ -29,6 +29,7 @@ LOCAL_STATIC_JAVA_LIBRARIES += android-support-design
 LOCAL_STATIC_JAVA_LIBRARIES += picasso
 LOCAL_STATIC_JAVA_AAR_LIBRARIES := roundedimageview
 LOCAL_STATIC_JAVA_AAR_LIBRARIES += emojiconlibrary
+LOCAL_STATIC_JAVA_AAR_LIBRARIES += fabtransformation
 
 LOCAL_AAPT_INCLUDE_ALL_RESOURCES := true
 LOCAL_AAPT_FLAGS := --auto-add-overlay
@@ -42,6 +43,7 @@ LOCAL_AAPT_FLAGS += --extra-packages android.support.design
 # Notice the full packagename
 LOCAL_AAPT_FLAGS += --extra-packages com.makeramen.roundedimageview
 LOCAL_AAPT_FLAGS += --extra-packages com.rockerhieu.emojicon
+LOCAL_AAPT_FLAGS += --extra-packages com.konifar.fab_transformation
 
 LOCAL_PACKAGE_NAME := KatsunaMessages
 LOCAL_CERTIFICATE := platform
