@@ -42,6 +42,8 @@ import com.konifar.fab_transformation.FabTransformation;
 
 import java.util.List;
 
+import static com.katsuna.commons.utils.Constants.FAB_TRANSFORMATION_DURATION;
+
 public class ContactsActivity extends SearchBarActivity implements IContactInteractionListener {
 
     private RecyclerView mRecyclerView;
@@ -208,16 +210,15 @@ public class ContactsActivity extends SearchBarActivity implements IContactInter
     }
 
     private void showFabToolbar(boolean show) {
-        int duration = 400;
         if (show) {
-            FabTransformation.with(mFab1).duration(duration)
+            FabTransformation.with(mFab1).duration(FAB_TRANSFORMATION_DURATION)
                     .transformTo(mFabToolbar);
 
             if (mPopupVisible) {
                 showPopup(false);
             }
         } else {
-            FabTransformation.with(mFab1).duration(duration)
+            FabTransformation.with(mFab1).duration(FAB_TRANSFORMATION_DURATION)
                     .transformFrom(mFabToolbar);
         }
         mFabToolbarOn = show;
