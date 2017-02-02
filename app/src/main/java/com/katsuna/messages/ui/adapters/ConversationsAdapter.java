@@ -21,6 +21,7 @@ public class ConversationsAdapter extends RecyclerView.Adapter<RecyclerView.View
     private static final int NO_CONVERSATION_POSITION = -1;
     private static final int CONVERSATION_NOT_SELECTED = 1;
     private static final int CONVERSATION_SELECTED = 2;
+    private static final int CONVERSATION_GREYED = 3;
     private final List<Conversation> mModels;
     private final IConversationInteractionListener mListener;
     private int mSelectedConversationPosition = NO_CONVERSATION_POSITION;
@@ -36,6 +37,8 @@ public class ConversationsAdapter extends RecyclerView.Adapter<RecyclerView.View
         int viewType = CONVERSATION_NOT_SELECTED;
         if (position == mSelectedConversationPosition) {
             viewType = CONVERSATION_SELECTED;
+        } else if (mSelectedConversationPosition != NO_CONVERSATION_POSITION) {
+            viewType = CONVERSATION_GREYED;
         }
         return viewType;
     }
@@ -47,6 +50,7 @@ public class ConversationsAdapter extends RecyclerView.Adapter<RecyclerView.View
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch (viewType) {
             case CONVERSATION_NOT_SELECTED:
+            case CONVERSATION_GREYED:
                 View view = inflater.inflate(R.layout.conversation, parent, false);
                 viewHolder = new ConversationViewHolder(view, mListener);
                 break;
@@ -77,7 +81,15 @@ public class ConversationsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         conversation.setContact(contact);
 
-        ((ConversationViewHolder) holder).bind(conversation, position);
+        switch (holder.getItemViewType()) {
+            case CONVERSATION_NOT_SELECTED:
+            case CONVERSATION_SELECTED:
+                ((ConversationViewHolder) holder).bind(conversation, position);
+                break;
+            case CONVERSATION_GREYED:
+                ((ConversationViewHolder) holder).bindGreyed(conversation, position);
+                break;
+        }
     }
 
     @Override

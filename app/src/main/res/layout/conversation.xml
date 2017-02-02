@@ -1,55 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/conversation_container"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:paddingBottom="4dp"
-    android:paddingEnd="16dp"
-    android:paddingStart="16dp"
-    android:paddingTop="4dp">
-
-    <com.makeramen.roundedimageview.RoundedImageView
-        android:id="@+id/photo"
-        android:layout_width="@dimen/common_contact_photo_size_intemediate"
-        android:layout_height="@dimen/common_contact_photo_size_intemediate"
-        android:layout_gravity="center"
-        android:layout_marginStart="56dp"
-        android:background="@drawable/ic_person_grey_50px"
-        app:riv_corner_radius="50dp"
-        app:riv_mutate_background="true"
-        app:riv_oval="false"
-        app:riv_tile_mode="repeat" />
+    android:layout_height="wrap_content">
 
     <LinearLayout
+        android:id="@+id/conversation_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/text_margin_left_right"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:paddingBottom="4dp"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:paddingTop="4dp">
 
-        <TextView
-            android:id="@+id/displayName"
-            style="@style/CommonRobotoMedium"
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/photo"
+            android:layout_width="@dimen/common_contact_photo_size_intemediate"
+            android:layout_height="@dimen/common_contact_photo_size_intemediate"
+            android:layout_gravity="center"
+            android:layout_marginStart="56dp"
+            android:background="@drawable/ic_person_grey_50px"
+            app:riv_corner_radius="50dp"
+            app:riv_mutate_background="true"
+            app:riv_oval="false"
+            app:riv_tile_mode="repeat" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:textSize="@dimen/common_text_size" />
+            android:layout_marginStart="@dimen/text_margin_left_right"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/body"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:textColor="@color/common_grey900"
-            android:textSize="18sp" />
+            <TextView
+                android:id="@+id/displayName"
+                style="@style/CommonRobotoMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textSize="@dimen/common_text_size" />
 
-        <TextView
-            android:id="@+id/dateTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@color/common_grey900"
+                android:textSize="18sp" />
 
+            <TextView
+                android:id="@+id/dateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
 
+    <FrameLayout
+        android:id="@+id/opacity_layer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/common_white38"
+        android:visibility="invisible" />
+
+</FrameLayout>

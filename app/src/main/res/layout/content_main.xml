@@ -1,26 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/conversations_list"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:paddingBottom="100dp"
 
-    <FrameLayout
-        android:id="@+id/popup_frame_outer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/common_black38"
-        android:visibility="invisible" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/conversations_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="100dp"
-        android:clipToPadding="false"
-        android:paddingTop="?attr/actionBarSize"
-        app:layoutManager="LinearLayoutManager"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:listitem="@layout/conversation" />
-
-</FrameLayout>
+    app:layoutManager="LinearLayoutManager"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:listitem="@layout/conversation" />

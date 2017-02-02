@@ -44,7 +44,6 @@ public class MainActivity extends KatsunaActivity
     private RecyclerView mRecyclerView;
     private ConversationsAdapter mAdapter;
     private TextView mNoResultsView;
-    private View mPopupFrameOuter;
     private View mPopupFrame;
     private DrawerLayout mDrawer;
     private boolean mConversationSelected;
@@ -109,7 +108,9 @@ public class MainActivity extends KatsunaActivity
         super.onResume();
         loadConversations();
 
-        resetLayout();
+        if (mConversationSelected) {
+            deselectConversation();
+        }
     }
 
     @Override
@@ -129,14 +130,10 @@ public class MainActivity extends KatsunaActivity
         }
     }
 
-    private void resetLayout() {
-        mPopupFrameOuter.setVisibility(View.GONE);
-        showPopup(false);
-    }
-
     private void initControls() {
         initToolbar(R.drawable.common_ic_menu_black_24dp);
         mRecyclerView = (RecyclerView) findViewById(R.id.conversations_list);
+        mRecyclerView.setItemAnimator(null);
         mNoResultsView = (TextView) findViewById(R.id.no_results);
 
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -159,7 +156,6 @@ public class MainActivity extends KatsunaActivity
                 return true;
             }
         });
-        mPopupFrameOuter = findViewById(R.id.popup_frame_outer);
 
         mLastTouchTimestamp = System.currentTimeMillis();
         initPopupActionHandler();
@@ -312,7 +308,6 @@ public class MainActivity extends KatsunaActivity
         mAdapter.deselectConversation();
         tintFabs(false);
         adjustFabPosition(true);
-        mPopupFrameOuter.setVisibility(View.GONE);
     }
 
     @Override
@@ -325,7 +320,6 @@ public class MainActivity extends KatsunaActivity
 
         adjustFabPosition(false);
         mConversationSelected = true;
-        mPopupFrameOuter.setVisibility(View.VISIBLE);
     }
 
 }

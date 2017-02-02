@@ -24,6 +24,7 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
     private final TextView mDisplayName;
     private final TextView mDateTime;
     private final TextView mSnippet;
+    private final View mOpacityLayer;
 
     public ConversationViewHolder(View itemView, IConversationInteractionListener listener) {
         super(itemView);
@@ -32,6 +33,7 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
         mDateTime = (TextView) itemView.findViewById(R.id.dateTime);
         mSnippet = (TextView) itemView.findViewById(R.id.body);
         mPhoto = (ImageView) itemView.findViewById(R.id.photo);
+        mOpacityLayer = itemView.findViewById(R.id.opacity_layer);
         mListener = listener;
         mUserProfileContainer = listener.getUserProfileContainer();
         adjustProfile();
@@ -54,6 +56,13 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
             ViewGroup.LayoutParams layoutParams = mPhoto.getLayoutParams();
             layoutParams.height = size;
             layoutParams.width = size;
+        }
+    }
+
+    public void bindGreyed(Conversation conversation, final int position) {
+        bind(conversation, position);
+        if (mOpacityLayer != null) {
+            mOpacityLayer.setVisibility(View.VISIBLE);
         }
     }
 
@@ -103,5 +112,9 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
         };
         mPhoto.setOnClickListener(focusListener);
         mDisplayName.setOnClickListener(focusListener);
+
+        if (mOpacityLayer != null) {
+            mOpacityLayer.setVisibility(View.INVISIBLE);
+        }
     }
 }
