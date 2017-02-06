@@ -3,22 +3,33 @@
 <resources>
   <!-- Name of the app -->
   <string name="app_name">Nachrichten</string>
+  <!-- Title of the main conversation screen -->
   <string name="title_activity_conversation">Gespräch</string>
   <!-- AndroidManifest doesn't work with common_ strings, so use this workaround -->
   <skip></skip>
+  <!-- Message input prompt -->
   <string name="type_message">Nachricht eingeben...</string>
+  <!-- Warning shown when the message is empty -->
   <string name="empty_message">Bitte geben Sie eine Nachricht ein.</string>
+  <!-- Error shown when the user hasn't granted the needed permission for an action -->
   <string name="permission_denied">Berechtigung verweigert.</string>
+  <!-- Message shown in the main application background when the user has no messages -->
   <string name="no_messages">Keine Einträge gefunden.</string>
+  <!-- Information message shown in app's settings -->
   <string name="app_is_default_sms_handler">Diese app ist die Standard-Sms-Handler.</string>
+  <!-- Information message shown in app's settings -->
   <string name="app_is_not_the_default_sms_handler">Diese app ist nicht die Standard-Sms-Handler.</string>
+  <!-- Action button to set the app as the default sms app -->
   <string name="set_as_default">Als Standard festlegen</string>
+  <!-- Information message shown when the user gets a new message -->
   <string name="new_message">Sie haben eine neue Nachricht.</string>
-  <string name="confirmation">Confirmation</string>
-  <string name="confirmation_delete_conversation">All messages in this conversation will be deleted. Are you sure?</string>
-  <string name="conversation_deleted">Conversation deleted.</string>
-  <!-- Radio related -->
-  <skip></skip>
+  <!-- Dialog title shown when the user tries to delete a conversation -->
+  <string name="confirmation">Bestätigung</string>
+  <!--- Dialog message shown when the user tries to delete a conversation -->
+  <string name="confirmation_delete_conversation">Alle Nachrichten in diesem Gespräch werden gelöscht. Sind Sie sicher?</string>
+  <!-- Result message after a successful conversation deletion -->
+  <string name="conversation_deleted">Konversation gelöscht.</string>
+  <!-- Generic successful message about the state of the sent sms -->
   <string name="message_sent">Nachricht gesendet</string>
   <!-- Error message shown when there was a generic problem (no specific info) sending the SMS -->
   <string name="generic_failure">Allgemeiner Fehler</string>
