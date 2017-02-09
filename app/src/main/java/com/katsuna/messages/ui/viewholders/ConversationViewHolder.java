@@ -7,8 +7,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.katsuna.commons.entities.ColorProfileKey;
 import com.katsuna.commons.entities.ProfileType;
 import com.katsuna.commons.entities.UserProfileContainer;
+import com.katsuna.commons.utils.ColorCalc;
 import com.katsuna.commons.utils.DateFormatter;
 import com.katsuna.messages.R;
 import com.katsuna.messages.domain.Conversation;
@@ -89,7 +91,9 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
         if (conversation.getRead() == 0) {
             mDisplayName.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.common_grey600));
         } else if (conversation.isUnanswered()) {
-            mDisplayName.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.pink));
+            int color = ColorCalc.getColor(itemView.getContext(), ColorProfileKey.ACCENT1_COLOR,
+                    mUserProfileContainer.getColorProfile());
+            mDisplayName.setTextColor(color);
         } else {
             mDisplayName.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.common_black87));
         }
