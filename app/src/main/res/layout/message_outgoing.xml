@@ -21,6 +21,7 @@
         app:riv_tile_mode="repeat" />
 
     <RelativeLayout
+        android:id="@+id/message_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -32,6 +33,7 @@
             style="@style/CommonRobotoMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="5dp"
             android:textIsSelectable="true"
             android:textSize="@dimen/font_size_intemediate" />
 
@@ -39,7 +41,8 @@
             android:id="@+id/dateTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/body" />
+            android:layout_below="@id/body"
+            android:padding="5dp" />
 
     </RelativeLayout>
 
