@@ -34,7 +34,6 @@
 
             <TextView
                 android:id="@+id/displayName"
-                style="@style/CommonRobotoMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
