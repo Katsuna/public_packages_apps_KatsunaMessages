@@ -51,6 +51,7 @@ public class ContactsActivity extends SearchBarActivity implements IContactInter
     private ContactsAdapter mAdapter;
     private TextView mNoResultsView;
     private View mPopupFrame;
+    private boolean mSearchMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +71,7 @@ public class ContactsActivity extends SearchBarActivity implements IContactInter
 
     @Override
     public void onBackPressed() {
+        refreshLastTouchTimestamp();
         if (mFabToolbarOn) {
             showFabToolbar(false);
         } else {
@@ -80,10 +82,13 @@ public class ContactsActivity extends SearchBarActivity implements IContactInter
     @Override
     protected void showPopup(boolean show) {
         if (show) {
-            mPopupFrame.setVisibility(View.VISIBLE);
-            mPopupButton1.setVisibility(View.VISIBLE);
-            mPopupButton2.setVisibility(View.VISIBLE);
-            mPopupVisible = true;
+            //don't show popup if toolbar search is enabled or search with letters is shown.
+            if (!mSearchMode && !mFabToolbarOn) {
+                mPopupFrame.setVisibility(View.VISIBLE);
+                mPopupButton1.setVisibility(View.VISIBLE);
+                mPopupButton2.setVisibility(View.VISIBLE);
+                mPopupVisible = true;
+            }
         } else {
             mPopupFrame.setVisibility(View.GONE);
             mPopupButton1.setVisibility(View.GONE);
@@ -249,9 +254,17 @@ public class ContactsActivity extends SearchBarActivity implements IContactInter
         mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
+                mSearchMode = false;
                 mAdapter.resetFilter();
-                showNoResultsView();
                 return false;
+            }
+        });
+
+        mSearchView.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSearchMode = true;
+                showPopup(false);
             }
         });
 
