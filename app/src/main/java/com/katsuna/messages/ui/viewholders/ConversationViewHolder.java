@@ -1,5 +1,6 @@
 package com.katsuna.messages.ui.viewholders;
 
+import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -88,10 +89,15 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
         mDateTime.setText(DateFormatter.format(conversation.getDate()));
         mSnippet.setText(conversation.getSnippet());
 
+
+        mDisplayName.setTypeface(null, Typeface.NORMAL);
+        mSnippet.setTypeface(null, Typeface.NORMAL);
         if (conversation.getRead() == 0) {
             int color = ColorCalc.getColor(itemView.getContext(), ColorProfileKey.ACCENT1_COLOR,
                     mUserProfileContainer.getColorProfile());
             mDisplayName.setTextColor(color);
+            mDisplayName.setTypeface(null, Typeface.BOLD);
+            mSnippet.setTypeface(null, Typeface.BOLD);
         } else if (conversation.isUnanswered()) {
             mDisplayName.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.common_grey600));
         } else {
