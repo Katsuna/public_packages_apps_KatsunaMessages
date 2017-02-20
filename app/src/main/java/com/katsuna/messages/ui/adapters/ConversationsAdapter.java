@@ -18,7 +18,7 @@ import java.util.List;
 
 public class ConversationsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final int NO_CONVERSATION_POSITION = -1;
+    public static final int NO_CONVERSATION_POSITION = -1;
     private static final int CONVERSATION_NOT_SELECTED = 1;
     private static final int CONVERSATION_SELECTED = 2;
     private static final int CONVERSATION_GREYED = 3;

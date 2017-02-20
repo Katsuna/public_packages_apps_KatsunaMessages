@@ -108,8 +108,17 @@ public class MainActivity extends KatsunaActivity
         super.onResume();
         loadConversations();
 
+        scrollToPosition(mSelectedConversationPosition);
+
         if (mConversationSelected) {
             deselectConversation();
+        }
+    }
+
+    private void scrollToPosition(int position) {
+        if (position != ConversationsAdapter.NO_CONVERSATION_POSITION) {
+            ((LinearLayoutManager) mRecyclerView.getLayoutManager())
+                    .scrollToPositionWithOffset(position, (mRecyclerView.getHeight() / 2) - 170);
         }
     }
 
@@ -303,7 +312,10 @@ public class MainActivity extends KatsunaActivity
         }
     }
 
+    private int mSelectedConversationPosition = ConversationsAdapter.NO_CONVERSATION_POSITION;
+
     private void deselectConversation() {
+        mSelectedConversationPosition = ConversationsAdapter.NO_CONVERSATION_POSITION;
         mConversationSelected = false;
         mAdapter.deselectConversation();
         tintFabs(false);
@@ -312,9 +324,10 @@ public class MainActivity extends KatsunaActivity
 
     @Override
     public void focusConversation(int position) {
+        mSelectedConversationPosition = position;
+
         mAdapter.setSelectedConversationAtPosition(position);
-        ((LinearLayoutManager) mRecyclerView.getLayoutManager())
-                .scrollToPositionWithOffset(position, (mRecyclerView.getHeight() / 2) - 170);
+        scrollToPosition(position);
 
         tintFabs(true);
 
