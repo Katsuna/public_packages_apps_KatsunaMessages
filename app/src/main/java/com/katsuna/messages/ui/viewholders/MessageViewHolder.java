@@ -73,7 +73,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
 
             // adjust dialog background
             int bgColor = ColorCalc.getColor(itemView.getContext(),
-                    ColorProfileKey.MAIN_COLOR_LIGHT, mUserProfileContainer.getColorProfile());
+                    ColorProfileKey.MAIN_COLOR_MEDIUM, mUserProfileContainer.getColorProfile());
 
             Drawable drawable = ContextCompat.getDrawable(itemView.getContext(),
                     R.drawable.dialog_right);
