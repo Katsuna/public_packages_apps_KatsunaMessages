@@ -22,7 +22,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.FrameLayout;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.katsuna.commons.ui.KatsunaActivity;
@@ -32,29 +32,22 @@ import com.katsuna.messages.providers.SmsProvider;
 import com.katsuna.messages.receivers.BaseBroadcastReceiver;
 import com.katsuna.messages.ui.adapters.MessagesAdapter;
 import com.katsuna.messages.utils.Constants;
-import com.rockerhieu.emojicon.EmojiconEditText;
-import com.rockerhieu.emojicon.EmojiconGridFragment;
-import com.rockerhieu.emojicon.EmojiconsFragment;
-import com.rockerhieu.emojicon.emoji.Emojicon;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConversationActivity extends KatsunaActivity
-        implements EmojiconGridFragment.OnEmojiconClickedListener,
-        EmojiconsFragment.OnEmojiconBackspaceClickedListener {
+public class ConversationActivity extends KatsunaActivity {
 
     private static final String TAG = "ConversationActivity";
     private final String SENT = "SMS_SENT";
     private final String DELIVERED = "SMS_DELIVERED";
     private RecyclerView mRecyclerView;
-    private EmojiconEditText mNewMessage;
+    private EditText mNewMessage;
     private BaseBroadcastReceiver sendBroadcastReceiver;
     private BaseBroadcastReceiver deliveryBroadcastReceiver;
     private String message;
     private long conversationId;
     private String conversationNumber;
-    private FrameLayout mEmojiContainer;
     private long savedMessageId = -1;
     private String mDisplayName;
 
@@ -91,8 +84,6 @@ public class ConversationActivity extends KatsunaActivity
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
                 WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
-        setEmojiconFragment(false);
-
         registerReceivers();
     }
 
@@ -104,13 +95,6 @@ public class ConversationActivity extends KatsunaActivity
     private void registerReceivers() {
         deliveryBroadcastReceiver.register(this, new IntentFilter(DELIVERED));
         sendBroadcastReceiver.register(this, new IntentFilter(SENT));
-    }
-
-    private void setEmojiconFragment(boolean useSystemDefault) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.emojicons_container, EmojiconsFragment.newInstance(useSystemDefault))
-                .commit();
     }
 
     @Override
@@ -200,21 +184,7 @@ public class ConversationActivity extends KatsunaActivity
         initToolbarLocal();
 
         mRecyclerView = (RecyclerView) findViewById(R.id.messagesRecyclerView);
-        mNewMessage = (EmojiconEditText) findViewById(R.id.new_message);
-
-        mEmojiContainer = (FrameLayout) findViewById(R.id.emojicons_container);
-
-        Button mEmojiButton = (Button) findViewById(R.id.showEmojis);
-        mEmojiButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mEmojiContainer.getVisibility() == View.VISIBLE) {
-                    mEmojiContainer.setVisibility(View.GONE);
-                } else {
-                    mEmojiContainer.setVisibility(View.VISIBLE);
-                }
-            }
-        });
+        mNewMessage = (EditText) findViewById(R.id.new_message);
 
         sendBroadcastReceiver = new BaseBroadcastReceiver() {
 
@@ -231,7 +201,6 @@ public class ConversationActivity extends KatsunaActivity
 
                         loadMessages();
                         mNewMessage.setText(null);
-                        mEmojiContainer.setVisibility(View.GONE);
                         Toast.makeText(getBaseContext(), R.string.message_sent, Toast.LENGTH_SHORT).show();
                         break;
                     case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
@@ -357,13 +326,4 @@ public class ConversationActivity extends KatsunaActivity
         smsManager.sendMultipartTextMessage(conversationNumber, null, smsBodyParts, sentPendingIntents, deliveredPendingIntents);
     }
 
-    @Override
-    public void onEmojiconClicked(Emojicon emojicon) {
-        EmojiconsFragment.input(mNewMessage, emojicon);
-    }
-
-    @Override
-    public void onEmojiconBackspaceClicked(View v) {
-        EmojiconsFragment.backspace(mNewMessage);
-    }
 }

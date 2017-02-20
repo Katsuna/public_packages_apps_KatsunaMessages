@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -19,50 +18,32 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:orientation="vertical">
+            android:layout_margin="@dimen/common_activity_margin"
+            android:background="@color/common_grey50"
+            android:orientation="horizontal">
 
-            <RelativeLayout
+            <EditText
+                android:id="@+id/new_message"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:paddingEnd="@dimen/common_activity_margin"
-                android:paddingStart="@dimen/common_activity_margin">
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@android:color/black"
+                android:gravity="center_vertical"
+                android:hint="@string/type_message"
+                android:imeOptions="actionDone"
+                android:maxLines="10"
+                android:padding="10dp"
+                android:textSize="@dimen/common_text_size" />
 
-                <Button
-                    android:id="@+id/send_button"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/send_button" />
+            <Button
+                android:id="@+id/send_button"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="bottom"
+                android:layout_margin="5dp"
+                android:layout_weight="0"
+                android:background="@drawable/send_button" />
 
-                <Button
-                    android:id="@+id/showEmojis"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_centerVertical="true"
-                    android:layout_margin="10dp"
-                    android:layout_toStartOf="@id/send_button"
-                    android:background="@drawable/emoji_button" />
-
-                <com.rockerhieu.emojicon.EmojiconEditText
-                    android:id="@+id/new_message"
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:layout_toStartOf="@id/showEmojis"
-                    android:gravity="center_vertical"
-                    android:hint="@string/type_message"
-                    android:imeOptions="actionDone"
-                    android:maxLines="1"
-                    android:padding="10dp"
-                    android:textSize="@dimen/common_text_size"
-                    emojicon:emojiconSize="20sp" />
-            </RelativeLayout>
-
-            <FrameLayout
-                android:id="@+id/emojicons_container"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:visibility="gone" />
         </LinearLayout>
 
     </android.support.design.widget.CoordinatorLayout>
