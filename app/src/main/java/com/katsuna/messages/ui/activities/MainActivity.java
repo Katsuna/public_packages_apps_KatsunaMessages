@@ -23,7 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.katsuna.commons.entities.UserProfileContainer;
-import com.katsuna.commons.ui.KatsunaActivity;
+import com.katsuna.commons.ui.SearchBarActivity;
 import com.katsuna.commons.utils.KatsunaAlertBuilder;
 import com.katsuna.messages.R;
 import com.katsuna.messages.domain.Conversation;
@@ -36,7 +36,7 @@ import com.katsuna.messages.utils.Settings;
 
 import java.util.List;
 
-public class MainActivity extends KatsunaActivity
+public class MainActivity extends SearchBarActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         IConversationInteractionListener {
 
@@ -46,7 +46,6 @@ public class MainActivity extends KatsunaActivity
     private TextView mNoResultsView;
     private View mPopupFrame;
     private DrawerLayout mDrawer;
-    private boolean mConversationSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,8 +109,8 @@ public class MainActivity extends KatsunaActivity
 
         scrollToPosition(mSelectedConversationPosition);
 
-        if (mConversationSelected) {
-            deselectConversation();
+        if (mItemSelected) {
+            deselectItem();
         }
     }
 
@@ -126,7 +125,7 @@ public class MainActivity extends KatsunaActivity
     protected void showPopup(boolean show) {
         if (show) {
             //don't show popup if menu drawer is open or conversation is selected.
-            if (!mDrawer.isDrawerOpen(GravityCompat.START) && !mConversationSelected) {
+            if (!mDrawer.isDrawerOpen(GravityCompat.START) && !mItemSelected) {
                 mPopupFrame.setVisibility(View.VISIBLE);
                 mPopupButton2.setVisibility(View.VISIBLE);
                 mPopupVisible = true;
@@ -168,6 +167,7 @@ public class MainActivity extends KatsunaActivity
 
         mLastTouchTimestamp = System.currentTimeMillis();
         initPopupActionHandler();
+        initDeselectionActionHandler();
     }
 
     private void showNoResultsView() {
@@ -299,14 +299,19 @@ public class MainActivity extends KatsunaActivity
     }
 
     @Override
+    public void selectItemByStartingLetter(String s) {
+        // No search bar here so nothing to be done.
+    }
+
+    @Override
     public UserProfileContainer getUserProfileContainer() {
         return mUserProfileContainer;
     }
 
     @Override
     public void selectConversation(int position) {
-        if (mConversationSelected) {
-            deselectConversation();
+        if (mItemSelected) {
+            deselectItem();
         } else {
             focusConversation(position);
         }
@@ -314,12 +319,14 @@ public class MainActivity extends KatsunaActivity
 
     private int mSelectedConversationPosition = ConversationsAdapter.NO_CONVERSATION_POSITION;
 
-    private void deselectConversation() {
+    @Override
+    protected void deselectItem() {
         mSelectedConversationPosition = ConversationsAdapter.NO_CONVERSATION_POSITION;
-        mConversationSelected = false;
+        mItemSelected = false;
         mAdapter.deselectConversation();
         tintFabs(false);
         adjustFabPosition(true);
+        refreshLastTouchTimestamp();
     }
 
     @Override
@@ -332,7 +339,8 @@ public class MainActivity extends KatsunaActivity
         tintFabs(true);
 
         adjustFabPosition(false);
-        mConversationSelected = true;
+        mItemSelected = true;
+        refreshLastSelectionTimestamp();
     }
 
 }

@@ -70,6 +70,11 @@ public class ContactsActivity extends SearchBarActivity implements IContactInter
     }
 
     @Override
+    protected void deselectItem() {
+        // do nothing.
+    }
+
+    @Override
     public void onBackPressed() {
         refreshLastTouchTimestamp();
         if (mFabToolbarOn) {
@@ -358,7 +363,7 @@ public class ContactsActivity extends SearchBarActivity implements IContactInter
     }
 
     @Override
-    public void selectContactByStartingLetter(String letter) {
+    public void selectItemByStartingLetter(String letter) {
         if (mAdapter != null) {
             int position = mAdapter.getPositionByStartingLetter(letter);
             scrollToPositionWithOffset(position, 0);
