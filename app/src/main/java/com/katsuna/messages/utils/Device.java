@@ -20,9 +20,6 @@ public class Device {
 
     public static boolean isDefaultApp(final Context context) {
         // there is no default messages app before android 4.4
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-            return true;
-        }
 
         try {
             // check if this is the default messages app.
