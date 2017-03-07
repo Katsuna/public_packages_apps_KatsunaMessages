@@ -54,8 +54,8 @@ public class MainActivity extends SearchBarActivity
 
         initControls();
 
-        mFab2 = (FloatingActionButton) findViewById(R.id.fab);
-        mFab2.setOnClickListener(new View.OnClickListener() {
+        mFab1 = (FloatingActionButton) findViewById(R.id.fab);
+        mFab1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 selectContact();
@@ -127,12 +127,12 @@ public class MainActivity extends SearchBarActivity
             //don't show popup if menu drawer is open or conversation is selected.
             if (!mDrawer.isDrawerOpen(GravityCompat.START) && !mItemSelected) {
                 mPopupFrame.setVisibility(View.VISIBLE);
-                mPopupButton2.setVisibility(View.VISIBLE);
+                mPopupButton1.setVisibility(View.VISIBLE);
                 mPopupVisible = true;
             }
         } else {
             mPopupFrame.setVisibility(View.GONE);
-            mPopupButton2.setVisibility(View.GONE);
+            mPopupButton1.setVisibility(View.GONE);
             mPopupVisible = false;
             mLastTouchTimestamp = System.currentTimeMillis();
         }
@@ -147,9 +147,9 @@ public class MainActivity extends SearchBarActivity
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         mFabContainer = (LinearLayout) findViewById(R.id.fab_container);
-        mButtonsContainer2 = (LinearLayout) findViewById(R.id.message_buttons_container);
-        mPopupButton2 = (Button) findViewById(R.id.message_button);
-        mPopupButton2.setOnClickListener(new View.OnClickListener() {
+        mButtonsContainer1 = (LinearLayout) findViewById(R.id.message_buttons_container);
+        mPopupButton1 = (Button) findViewById(R.id.message_button);
+        mPopupButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectContact();

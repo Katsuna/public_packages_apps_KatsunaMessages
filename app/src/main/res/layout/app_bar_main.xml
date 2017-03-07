@@ -46,7 +46,7 @@
                     android:layout_gravity="center"
                     android:text="@string/common_message"
                     android:textAllCaps="false"
-                    android:textColor="@color/common_grey50"
+                    android:textColor="@color/common_black87"
                     android:textSize="18sp"
                     android:visibility="gone" />
 
@@ -56,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|end"
                     android:layout_margin="@dimen/common_fab_margin"
-                    android:src="@drawable/common_ic_message_grey50_24dp" />
+                    android:src="@drawable/common_ic_message_black87_24dp" />
 
             </LinearLayout>
 
