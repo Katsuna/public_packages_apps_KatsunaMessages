@@ -43,16 +43,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <com.makeramen.roundedimageview.RoundedImageView
-            android:id="@+id/photo"
-            android:layout_width="@dimen/common_contact_photo_size_intemediate"
-            android:layout_height="@dimen/common_contact_photo_size_intemediate"
-            android:layout_gravity="center"
-            android:background="@drawable/ic_person_grey_50px"
-            app:riv_corner_radius="50dp"
-            app:riv_mutate_background="true"
-            app:riv_oval="false"
-            app:riv_tile_mode="repeat" />
+        <include layout="@layout/common_photo" />
 
         <TextView
             android:id="@+id/contact_name"
