@@ -230,6 +230,7 @@ public class ContactsActivity extends SearchBarActivity implements IContactInter
         } else {
             FabTransformation.with(mFab1).duration(FAB_TRANSFORMATION_DURATION)
                     .transformFrom(mFabToolbar);
+            mAdapter.unfocusFromSearch();
         }
         mFabToolbarOn = show;
     }
@@ -367,6 +368,7 @@ public class ContactsActivity extends SearchBarActivity implements IContactInter
         if (mAdapter != null) {
             int position = mAdapter.getPositionByStartingLetter(letter);
             scrollToPositionWithOffset(position, 0);
+            mAdapter.focusFromSearch(position);
         }
     }
 

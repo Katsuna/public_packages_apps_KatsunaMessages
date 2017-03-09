@@ -33,6 +33,10 @@ public class ContactsAdapter extends ContactsAdapterBase {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final ContactListItemModel model = mFilteredContacts.get(position);
-        ((ContactViewHolder) holder).bind(model);
+
+        boolean focused = position == mSelectedFromSearchPosition;
+        ContactViewHolder viewHolder = (ContactViewHolder) holder;
+        viewHolder.bind(model);
+        viewHolder.searchFocus(focused);
     }
 }
