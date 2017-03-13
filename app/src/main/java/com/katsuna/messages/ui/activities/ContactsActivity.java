@@ -271,6 +271,7 @@ public class ContactsActivity extends SearchBarActivity implements IContactInter
             public void onClick(View v) {
                 mSearchMode = true;
                 showPopup(false);
+                showFabToolbar(false);
             }
         });
 
