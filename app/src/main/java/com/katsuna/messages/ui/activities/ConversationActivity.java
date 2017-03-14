@@ -80,10 +80,6 @@ public class ConversationActivity extends KatsunaActivity {
             }
         }
 
-        //this is needed to open will screen is locked
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-
         registerReceivers();
     }
 
