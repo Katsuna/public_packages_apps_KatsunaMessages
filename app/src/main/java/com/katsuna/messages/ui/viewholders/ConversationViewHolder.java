@@ -95,8 +95,6 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
                     R.color.common_black87));
             mDisplayName.setTypeface(null, Typeface.BOLD);
             mSnippet.setTypeface(null, Typeface.BOLD);
-        } else if (conversation.isUnanswered()) {
-            mDisplayName.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.common_grey600));
         } else {
             mDisplayName.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.common_black87));
         }
