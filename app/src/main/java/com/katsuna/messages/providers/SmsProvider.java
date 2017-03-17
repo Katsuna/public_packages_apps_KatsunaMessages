@@ -36,9 +36,10 @@ public class SmsProvider {
         String[] projection = new String[]{ThreadColumns._ID, ThreadColumns.DATE,
                 ThreadColumns.READ, ThreadColumns.RECIPIENT_IDS, ThreadColumns.SNIPPET};
 
+        String where = ThreadColumns.MESSAGE_COUNT + " > 0 ";
         String orderBy = ThreadColumns.DATE + " DESC";
 
-        Cursor cursor = cr.query(Uris.THREADS_URI_SIMPLE, projection, null, null, orderBy);
+        Cursor cursor = cr.query(Uris.THREADS_URI_SIMPLE, projection, where, null, orderBy);
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 //showCursor(cursor);
