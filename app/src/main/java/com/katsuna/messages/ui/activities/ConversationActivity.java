@@ -68,9 +68,25 @@ public class ConversationActivity extends KatsunaActivity {
     protected void onResume() {
         super.onResume();
 
-        conversationId = getConversationIdFromIntent();
+        ConversationIntentData intentData = getConversationIntentData(getIntent());
 
-        if (conversationId != -1) {
+        // set value from intent data to member variables.
+        if (intentData.conversationId == Constants.NOT_FOUND_CONVERSATION_ID) {
+            // Try to find conversation id from conversation number.
+            if (intentData.conversationNumber != null) {
+                SmsProvider dao = new SmsProvider(this);
+                conversationId = dao.getConversationId(intentData.conversationNumber);
+            } else {
+                conversationId = Constants.NOT_FOUND_CONVERSATION_ID;
+            }
+        } else {
+            conversationId = intentData.conversationId;
+        }
+
+        mDisplayName = intentData.conversationDisplayName;
+        conversationNumber = intentData.conversationNumber;
+
+        if (conversationId != Constants.NOT_FOUND_CONVERSATION_ID) {
             loadMessages();
         } else {
             if (mDisplayName != null && mDisplayName.length() > 0) {
@@ -153,7 +169,7 @@ public class ConversationActivity extends KatsunaActivity {
 
         SmsProvider dao = new SmsProvider(this);
         //dao.showRows(Uris.PHONES);
-        if (conversationId == -1) {
+        if (conversationId == Constants.NOT_FOUND_CONVERSATION_ID) {
             conversationId = dao.getConversationId(conversationNumber);
         }
         List<Message> messages = dao.getConversationMessages(conversationId);
@@ -259,16 +275,18 @@ public class ConversationActivity extends KatsunaActivity {
         super.onStop();
     }
 
-    private long getConversationIdFromIntent() {
-        Intent i = getIntent();
-
-        long convId = getConversationIdFromIntent(i);
-        if (convId != 0) {
-            return convId;
+    private ConversationIntentData getConversationIntentData(Intent i) {
+        // Find conversationId
+        long convId = Constants.NOT_FOUND_CONVERSATION_ID;
+        if (i != null && i.getExtras() != null) {
+            convId = i.getExtras().getLong(Constants.EXTRA_CONVERASTION_ID);
         }
 
         // Find conversation number.
-        if (i.getAction() != null && i.getAction().equals(Intent.ACTION_VIEW)) {
+        String conversationNumber = null;
+        if (i.getAction() != null &&
+                (i.getAction().equals(Intent.ACTION_VIEW) ||
+                        i.getAction().equals(Intent.ACTION_SENDTO))) {
             conversationNumber = i.getData().getSchemeSpecificPart();
         } else {
             if (i.getExtras() != null) {
@@ -276,25 +294,26 @@ public class ConversationActivity extends KatsunaActivity {
             }
         }
 
+        // Find display name.
+        String conversationDisplayName = null;
         if (i.getExtras() != null) {
-            mDisplayName = i.getExtras().getString(Constants.EXTRA_DISPLAY_NAME);
+            conversationDisplayName = i.getExtras().getString(Constants.EXTRA_DISPLAY_NAME);
         }
 
-        // Try to find conversation id from conversation number.
-        if (conversationNumber != null) {
-            SmsProvider dao = new SmsProvider(this);
-            convId = dao.getConversationId(conversationNumber);
-        }
-
-        return convId;
+        return new ConversationIntentData(convId, conversationNumber, conversationDisplayName);
     }
 
-    private long getConversationIdFromIntent(Intent i) {
-        long convId = 0;
-        if (i != null && i.getExtras() != null) {
-            convId = i.getExtras().getLong(Constants.EXTRA_CONVERASTION_ID);
+    private class ConversationIntentData {
+        long conversationId;
+        String conversationNumber;
+        String conversationDisplayName;
+
+        ConversationIntentData(long conversationId, String conversationNumber,
+                               String conversationDisplayName) {
+            this.conversationId = conversationId;
+            this.conversationNumber = conversationNumber;
+            this.conversationDisplayName = conversationDisplayName;
         }
-        return convId;
     }
 
     //---sends an SMS message to another device---

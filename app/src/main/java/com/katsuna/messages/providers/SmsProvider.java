@@ -15,6 +15,7 @@ import com.katsuna.messages.domain.Message;
 import com.katsuna.messages.providers.metadata.MessageColumns;
 import com.katsuna.messages.providers.metadata.MessageType;
 import com.katsuna.messages.providers.metadata.ThreadColumns;
+import com.katsuna.messages.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -141,10 +142,9 @@ public class SmsProvider {
 
     public long getConversationId(String address) {
         String[] projection = new String[]{MessageColumns.THREAD_ID};
-        String filteredAddress = address.replaceAll("[-()/]", "");
-        String selection = MessageColumns.ADDRESS + " like '%" + filteredAddress + "'";
+        String selection = MessageColumns.ADDRESS + " like '%" + address + "'";
 
-        long conversationId = -1;
+        long conversationId = Constants.NOT_FOUND_CONVERSATION_ID;
         Cursor cursor = cr.query(Uris.URI_SMS, projection, selection, null, null);
         if (cursor != null && cursor.moveToFirst()) {
             conversationId = cursor.getLong(cursor.getColumnIndex(MessageColumns.THREAD_ID));
