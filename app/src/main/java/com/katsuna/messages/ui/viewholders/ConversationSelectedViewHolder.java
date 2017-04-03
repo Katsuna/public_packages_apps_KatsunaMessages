@@ -7,7 +7,7 @@ import android.widget.ImageButton;
 
 import com.katsuna.commons.entities.ColorProfile;
 import com.katsuna.commons.entities.ColorProfileKey;
-import com.katsuna.commons.entities.ProfileType;
+import com.katsuna.commons.entities.SizeProfile;
 import com.katsuna.commons.utils.ColorCalc;
 import com.katsuna.commons.utils.Shape;
 import com.katsuna.messages.R;
@@ -30,7 +30,7 @@ public class ConversationSelectedViewHolder extends ConversationViewHolder {
 
     private void adjustProfile() {
 
-        ProfileType opticalSizeProfile = mUserProfileContainer.getOpticalSizeProfile();
+        SizeProfile opticalSizeProfile = mUserProfileContainer.getOpticalSizeProfile();
 
         if (opticalSizeProfile != null) {
             int photoSize = itemView.getResources()
@@ -38,12 +38,12 @@ public class ConversationSelectedViewHolder extends ConversationViewHolder {
             int actionButtonHeight = itemView.getResources()
                     .getDimensionPixelSize(R.dimen.common_action_button_height_intemediate);
 
-            if (opticalSizeProfile == ProfileType.ADVANCED) {
+            if (opticalSizeProfile == SizeProfile.ADVANCED) {
                 photoSize = itemView.getResources()
                         .getDimensionPixelSize(R.dimen.common_contact_photo_size_advanced);
                 actionButtonHeight = itemView.getResources()
                         .getDimensionPixelSize(R.dimen.common_action_button_height_advanced);
-            } else if (opticalSizeProfile == ProfileType.SIMPLE) {
+            } else if (opticalSizeProfile == SizeProfile.SIMPLE) {
                 photoSize = itemView.getResources()
                         .getDimensionPixelSize(R.dimen.common_contact_photo_size_simple);
                 actionButtonHeight = itemView.getResources()

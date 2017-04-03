@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.katsuna.commons.entities.ColorProfileKey;
-import com.katsuna.commons.entities.ProfileType;
+import com.katsuna.commons.entities.SizeProfile;
 import com.katsuna.commons.entities.UserProfileContainer;
 import com.katsuna.commons.utils.ColorCalc;
 import com.katsuna.commons.utils.DateFormatter;
@@ -40,17 +40,17 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void adjustProfile() {
-        ProfileType opticalSizeProfile = mUserProfileContainer.getOpticalSizeProfile();
+        SizeProfile opticalSizeProfile = mUserProfileContainer.getOpticalSizeProfile();
 
         if (opticalSizeProfile != null) {
             int size = itemView.getResources()
                     .getDimensionPixelSize(R.dimen.common_contact_photo_size_intemediate);
             int fontSize = itemView.getResources().getDimensionPixelSize(R.dimen.font_size_intemediate);
-            if (opticalSizeProfile == ProfileType.ADVANCED) {
+            if (opticalSizeProfile == SizeProfile.ADVANCED) {
                 size = itemView.getResources()
                         .getDimensionPixelSize(R.dimen.common_contact_photo_size_advanced);
                 fontSize = itemView.getResources().getDimensionPixelSize(R.dimen.font_size_advanced);
-            } else if (opticalSizeProfile == ProfileType.SIMPLE) {
+            } else if (opticalSizeProfile == SizeProfile.SIMPLE) {
                 size = itemView.getResources()
                         .getDimensionPixelSize(R.dimen.common_contact_photo_size_simple);
                 fontSize = itemView.getResources().getDimensionPixelSize(R.dimen.font_size_simple);
