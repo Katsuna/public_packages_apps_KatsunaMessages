@@ -8,9 +8,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.katsuna.commons.entities.OpticalParams;
 import com.katsuna.commons.entities.SizeProfile;
+import com.katsuna.commons.entities.SizeProfileKey;
 import com.katsuna.commons.entities.UserProfileContainer;
 import com.katsuna.commons.utils.DateFormatter;
+import com.katsuna.commons.utils.SizeAdjuster;
+import com.katsuna.commons.utils.SizeCalc;
 import com.katsuna.messages.R;
 import com.katsuna.messages.domain.Conversation;
 import com.katsuna.messages.ui.listeners.IConversationInteractionListener;
@@ -37,10 +41,9 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
         mOpacityLayer = itemView.findViewById(R.id.opacity_layer);
         mListener = listener;
         mUserProfileContainer = listener.getUserProfileContainer();
-        adjustProfile();
     }
 
-    private void adjustProfile() {
+    protected void adjustProfile() {
         SizeProfile opticalSizeProfile = mUserProfileContainer.getOpticalSizeProfile();
         if (opticalSizeProfile != null) {
             int size = itemView.getResources()
@@ -57,6 +60,21 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
             ViewGroup.LayoutParams layoutParams = mPhoto.getLayoutParams();
             layoutParams.height = size;
             layoutParams.width = size;
+
+            // display name
+            OpticalParams nameOpticalParams = SizeCalc.getOpticalParams(SizeProfileKey.TITLE,
+                    opticalSizeProfile);
+            SizeAdjuster.adjustText(itemView.getContext(), mDisplayName, nameOpticalParams);
+
+            // snippet
+            OpticalParams snippetOpticalParams = SizeCalc.getOpticalParams(SizeProfileKey.SUBHEADER,
+                    opticalSizeProfile);
+            SizeAdjuster.adjustText(itemView.getContext(), mSnippet, snippetOpticalParams);
+
+            // snippet
+            OpticalParams dateOpticalParams = SizeCalc.getOpticalParams(SizeProfileKey.BODY_1,
+                    opticalSizeProfile);
+            SizeAdjuster.adjustText(itemView.getContext(), mDateTime, dateOpticalParams);
         }
     }
 
@@ -87,18 +105,6 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
         mDateTime.setText(DateFormatter.format(conversation.getDate()));
         mSnippet.setText(conversation.getSnippet());
 
-
-        mDisplayName.setTypeface(null, Typeface.NORMAL);
-        mSnippet.setTypeface(null, Typeface.NORMAL);
-        if (conversation.getRead() == 0) {
-            mDisplayName.setTextColor(ContextCompat.getColor(itemView.getContext(),
-                    R.color.common_black87));
-            mDisplayName.setTypeface(null, Typeface.BOLD);
-            mSnippet.setTypeface(null, Typeface.BOLD);
-        } else {
-            mDisplayName.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.common_black87));
-        }
-
         if (mConversationContainer != null) {
             mConversationContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -120,6 +126,22 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
 
         if (mOpacityLayer != null) {
             mOpacityLayer.setVisibility(View.INVISIBLE);
+        }
+
+        adjustProfile();
+        adjustmentsByConversation(conversation);
+    }
+
+    protected void adjustmentsByConversation(Conversation conversation) {
+        if (conversation.getRead() == 0) {
+            mDisplayName.setTextColor(ContextCompat.getColor(itemView.getContext(),
+                    R.color.common_black87));
+            mDisplayName.setTypeface(mDisplayName.getTypeface(), Typeface.BOLD);
+            mSnippet.setTypeface(mSnippet.getTypeface(), Typeface.BOLD);
+        } else {
+            mDisplayName.setTypeface(mDisplayName.getTypeface(), Typeface.NORMAL);
+            mSnippet.setTypeface(mSnippet.getTypeface(), Typeface.NORMAL);
+            mDisplayName.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.common_black87));
         }
     }
 }
