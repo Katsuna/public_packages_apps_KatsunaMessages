@@ -21,6 +21,8 @@ public class ConversationSelectedViewHolder extends ConversationViewHolder {
 
     private final Button mCallButton;
     private final Button mMessageButton;
+    private final View mMessageButtonContainer;
+    private final View mCallButtonContainer;
     private final ImageButton mDeleteConversationButton;
 
     public ConversationSelectedViewHolder(View itemView, IConversationInteractionListener listener) {
@@ -28,6 +30,8 @@ public class ConversationSelectedViewHolder extends ConversationViewHolder {
         mCallButton = (Button) itemView.findViewById(R.id.call_button);
         mMessageButton = (Button) itemView.findViewById(R.id.message_button);
         mDeleteConversationButton = (ImageButton) itemView.findViewById(R.id.delete_conversation_button);
+        mMessageButtonContainer = itemView.findViewById(R.id.message_button_container);
+        mCallButtonContainer = itemView.findViewById(R.id.call_button_container);
     }
 
     protected void adjustProfile() {
@@ -41,8 +45,10 @@ public class ConversationSelectedViewHolder extends ConversationViewHolder {
             SizeAdjuster.adjustText(itemView.getContext(), mCallButton, opticalParams);
             SizeAdjuster.adjustText(itemView.getContext(), mMessageButton, opticalParams);
 
-            SizeAdjuster.adjustButton(itemView.getContext(), mCallButton, opticalParams);
-            SizeAdjuster.adjustButton(itemView.getContext(), mMessageButton, opticalParams);
+            SizeAdjuster.adjustButtonContainer(itemView.getContext(), mCallButtonContainer,
+                    opticalParams);
+            SizeAdjuster.adjustButtonContainer(itemView.getContext(), mMessageButtonContainer,
+                    opticalParams);
         }
 
         adjustColorProfile();
@@ -53,11 +59,11 @@ public class ConversationSelectedViewHolder extends ConversationViewHolder {
         // set action buttons background color
         int color1 = ColorCalc.getColor(itemView.getContext(),
                 ColorProfileKey.ACCENT1_COLOR, colorProfile);
-        Shape.setRoundedBackground(mMessageButton, color1);
+        Shape.setRoundedBackground(mMessageButtonContainer, color1);
 
         int color2 = ColorCalc.getColor(itemView.getContext(), ColorProfileKey.ACCENT2_COLOR,
                 colorProfile);
-        Shape.setRoundedBackground(mCallButton, color2);
+        Shape.setRoundedBackground(mCallButtonContainer, color2);
 
         int bgColor = ColorCalc.getColor(itemView.getContext(), ColorProfileKey.POP_UP_COLOR,
                 colorProfile);
@@ -73,7 +79,19 @@ public class ConversationSelectedViewHolder extends ConversationViewHolder {
                 mListener.callContact(conversation);
             }
         });
+        mCallButtonContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.callContact(conversation);
+            }
+        });
         mMessageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.sendSMS(conversation);
+            }
+        });
+        mMessageButtonContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener.sendSMS(conversation);
