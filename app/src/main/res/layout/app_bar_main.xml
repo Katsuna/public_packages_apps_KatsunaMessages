@@ -56,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|end"
                     android:layout_margin="@dimen/common_fab_margin"
-                    android:src="@drawable/common_ic_message_black87_24dp" />
+                    android:src="@drawable/common_ic_message_black_24dp" />
 
             </LinearLayout>
 

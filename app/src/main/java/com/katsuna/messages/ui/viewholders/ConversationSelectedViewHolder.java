@@ -2,7 +2,7 @@ package com.katsuna.messages.ui.viewholders;
 
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.katsuna.commons.entities.ColorProfile;
 import com.katsuna.commons.entities.ColorProfileKey;
@@ -23,13 +23,13 @@ public class ConversationSelectedViewHolder extends ConversationViewHolder {
     private final Button mMessageButton;
     private final View mMessageButtonContainer;
     private final View mCallButtonContainer;
-    private final ImageButton mDeleteConversationButton;
+    private final ImageView mDeleteConversationButton;
 
     public ConversationSelectedViewHolder(View itemView, IConversationInteractionListener listener) {
         super(itemView, listener);
         mCallButton = (Button) itemView.findViewById(R.id.call_button);
         mMessageButton = (Button) itemView.findViewById(R.id.message_button);
-        mDeleteConversationButton = (ImageButton) itemView.findViewById(R.id.delete_conversation_button);
+        mDeleteConversationButton = (ImageView) itemView.findViewById(R.id.delete_conversation_button);
         mMessageButtonContainer = itemView.findViewById(R.id.message_button_container);
         mCallButtonContainer = itemView.findViewById(R.id.call_button_container);
     }
@@ -40,6 +40,19 @@ public class ConversationSelectedViewHolder extends ConversationViewHolder {
         SizeProfile opticalSizeProfile = mUserProfileContainer.getOpticalSizeProfile();
 
         if (opticalSizeProfile != null) {
+            int messageButtonDrawable = R.drawable.common_ic_message_black_24dp;
+            int callButtonDrawable = R.drawable.common_ic_call_white_24dp;
+            int deleteButtonDrawable = R.drawable.common_ic_delete_black54_24dp;
+
+            if (opticalSizeProfile == SizeProfile.SIMPLE) {
+                messageButtonDrawable = R.drawable.common_ic_message_black_28dp;
+                callButtonDrawable = R.drawable.common_ic_call_white_28dp;
+                deleteButtonDrawable = R.drawable.common_ic_delete_black54_28dp;
+            }
+            mMessageButton.setCompoundDrawablesWithIntrinsicBounds(messageButtonDrawable, 0, 0,0);
+            mCallButton.setCompoundDrawablesWithIntrinsicBounds(callButtonDrawable, 0, 0,0);
+            mDeleteConversationButton.setImageResource(deleteButtonDrawable);
+
             OpticalParams opticalParams = SizeCalc.getOpticalParams(SizeProfileKey.ACTION_BUTTON,
                     opticalSizeProfile);
             SizeAdjuster.adjustText(itemView.getContext(), mCallButton, opticalParams);
