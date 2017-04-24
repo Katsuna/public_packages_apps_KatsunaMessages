@@ -12,10 +12,14 @@ import android.widget.TextView;
 import com.katsuna.commons.domain.Contact;
 import com.katsuna.commons.entities.ColorProfile;
 import com.katsuna.commons.entities.ColorProfileKey;
+import com.katsuna.commons.entities.OpticalParams;
 import com.katsuna.commons.entities.SizeProfile;
+import com.katsuna.commons.entities.SizeProfileKey;
 import com.katsuna.commons.entities.UserProfileContainer;
 import com.katsuna.commons.ui.adapters.models.ContactListItemModel;
 import com.katsuna.commons.utils.ColorCalc;
+import com.katsuna.commons.utils.SizeAdjuster;
+import com.katsuna.commons.utils.SizeCalc;
 import com.katsuna.messages.R;
 import com.katsuna.messages.ui.listeners.IContactInteractionListener;
 import com.squareup.picasso.Picasso;
@@ -62,6 +66,12 @@ public class ContactViewHolder extends RecyclerView.ViewHolder {
             ViewGroup.LayoutParams lp = mPhoto.getLayoutParams();
             lp.width = size;
             lp.height = size;
+
+
+            // display name
+            OpticalParams nameOpticalParams = SizeCalc.getOpticalParams(SizeProfileKey.TITLE,
+                    opticalSizeProfile);
+            SizeAdjuster.adjustText(itemView.getContext(), mDisplayName, nameOpticalParams);
         }
     }
 
