@@ -134,7 +134,6 @@ public class MainActivity extends SearchBarActivity
             mPopupFrame.setVisibility(View.GONE);
             mPopupButton1.setVisibility(View.GONE);
             mPopupVisible = false;
-            mLastTouchTimestamp = System.currentTimeMillis();
         }
     }
 

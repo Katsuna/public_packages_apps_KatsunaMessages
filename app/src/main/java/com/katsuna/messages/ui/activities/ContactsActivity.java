@@ -99,7 +99,6 @@ public class ContactsActivity extends SearchBarActivity implements IContactInter
             mPopupButton1.setVisibility(View.GONE);
             mPopupButton2.setVisibility(View.GONE);
             mPopupVisible = false;
-            mLastTouchTimestamp = System.currentTimeMillis();
         }
     }
 
