@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -62,10 +63,9 @@ public class MainActivity extends SearchBarActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, mToolbar, R.string.common_navigation_drawer_open, R.string.common_navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
+                this, mDrawer, mToolbar, R.string.common_navigation_drawer_open, R.string.common_navigation_drawer_close);
+        mDrawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -320,6 +320,7 @@ public class MainActivity extends SearchBarActivity
 
     @Override
     protected void deselectItem() {
+        mDrawer.setBackgroundColor(ContextCompat.getColor(this, R.color.common_grey50));
         mSelectedConversationPosition = ConversationsAdapter.NO_CONVERSATION_POSITION;
         mItemSelected = false;
         mAdapter.deselectConversation();
@@ -330,6 +331,7 @@ public class MainActivity extends SearchBarActivity
 
     @Override
     public void focusConversation(int position) {
+        mDrawer.setBackgroundColor(ContextCompat.getColor(this, R.color.common_black07));
         mSelectedConversationPosition = position;
 
         mAdapter.setSelectedConversationAtPosition(position);
