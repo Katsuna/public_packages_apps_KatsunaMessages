@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.katsuna.commons.entities.UserProfile;
 import com.katsuna.commons.ui.adapters.ContactsAdapterBase;
 import com.katsuna.commons.ui.adapters.models.ContactListItemModel;
 import com.katsuna.messages.R;
@@ -26,7 +27,15 @@ public class ContactsAdapter extends ContactsAdapterBase {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact, parent, false);
+        View view;
+
+        boolean isRightHanded = mListener.getUserProfileContainer().isRightHanded();
+        if (isRightHanded) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact, parent, false);
+        } else {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_lh, parent, false);
+        }
+
         return new ContactViewHolder(view, mListener);
     }
 

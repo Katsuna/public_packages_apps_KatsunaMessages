@@ -45,12 +45,22 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
+        boolean isRightHanded = mUserProfileContainer.isRightHanded();
+
         switch (viewType) {
             case INCOMING_MESSAGE:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_incoming, parent, false);
+                if (isRightHanded) {
+                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_incoming, parent, false);
+                } else {
+                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_outgoing, parent, false);
+                }
                 break;
             case OUTGOING_MESSAGE:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_outgoing, parent, false);
+                if (isRightHanded) {
+                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_outgoing, parent, false);
+                } else {
+                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_incoming, parent, false);
+                }
                 break;
             default:
                 throw new RuntimeException("Unrecognized message type");

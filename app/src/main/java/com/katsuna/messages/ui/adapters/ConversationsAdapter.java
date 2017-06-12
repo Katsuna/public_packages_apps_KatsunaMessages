@@ -47,15 +47,26 @@ public class ConversationsAdapter extends RecyclerView.Adapter<RecyclerView.View
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewHolder = null;
 
+        boolean isRightHanded = mListener.getUserProfileContainer().isRightHanded();
+        View view;
+
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch (viewType) {
             case CONVERSATION_NOT_SELECTED:
             case CONVERSATION_GREYED:
-                View view = inflater.inflate(R.layout.conversation, parent, false);
+                if (isRightHanded) {
+                    view = inflater.inflate(R.layout.conversation, parent, false);
+                } else {
+                    view = inflater.inflate(R.layout.conversation_lh, parent, false);
+                }
                 viewHolder = new ConversationViewHolder(view, mListener);
                 break;
             case CONVERSATION_SELECTED:
-                view = inflater.inflate(R.layout.conversation_selected, parent, false);
+                if (isRightHanded) {
+                    view = inflater.inflate(R.layout.conversation_selected, parent, false);
+                } else {
+                    view = inflater.inflate(R.layout.conversation_selected_lh, parent, false);
+                }
                 viewHolder = new ConversationSelectedViewHolder(view, mListener);
                 break;
         }

@@ -19,9 +19,9 @@
             android:id="@+id/delete_conversation_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
             android:layout_marginTop="10dp"
             android:src="@drawable/common_ic_delete_black54_24dp"
             tools:ignore="ContentDescription" />
@@ -31,21 +31,21 @@
             layout="@layout/common_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginStart="56dp"
-            android:layout_toEndOf="@id/delete_conversation_button" />
+            android:layout_marginEnd="56dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/text_margin_left_right"
-            android:layout_toEndOf="@id/photo"
+            android:layout_marginEnd="@dimen/text_margin_left_right"
+            android:layout_toStartOf="@id/photo"
+            android:gravity="end"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/displayName"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:textSize="@dimen/common_text_size" />
@@ -73,43 +73,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
-        android:layout_marginStart="56dp"
+        android:layout_marginEnd="56dp"
         android:layout_marginTop="8dp"
         android:gravity="center"
         android:orientation="horizontal">
 
         <FrameLayout
-            android:id="@+id/message_button_container"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1">
-
-            <Button
-                android:id="@+id/message_button"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@android:color/transparent"
-                android:drawablePadding="@dimen/common_drawable_padding"
-                android:drawableStart="@drawable/common_ic_message_black_24dp"
-                android:ellipsize="end"
-                android:gravity="start|center"
-                android:lines="1"
-                android:paddingEnd="@dimen/common_button_padding"
-                android:paddingStart="@dimen/common_button_padding"
-                android:text="@string/common_message"
-                android:textAllCaps="false"
-                android:textColor="@color/common_black"
-                android:textSize="20sp" />
-
-        </FrameLayout>
-
-        <FrameLayout
             android:id="@+id/call_button_container"
             android:layout_width="0dp"
             android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
             android:layout_weight="1">
 
             <Button
@@ -130,6 +103,33 @@
                 android:text="@string/common_call"
                 android:textAllCaps="false"
                 android:textColor="@color/common_white"
+                android:textSize="20sp" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/message_button_container"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/message_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:drawablePadding="@dimen/common_drawable_padding"
+                android:drawableStart="@drawable/common_ic_message_black_24dp"
+                android:ellipsize="end"
+                android:gravity="start|center"
+                android:lines="1"
+                android:paddingEnd="@dimen/common_button_padding"
+                android:paddingStart="@dimen/common_button_padding"
+                android:text="@string/common_message"
+                android:textAllCaps="false"
+                android:textColor="@color/common_black"
                 android:textSize="20sp" />
 
         </FrameLayout>

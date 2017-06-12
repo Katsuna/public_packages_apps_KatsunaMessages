@@ -75,8 +75,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
             int bgColor = ColorCalc.getColor(itemView.getContext(),
                     ColorProfileKey.MAIN_COLOR_MEDIUM, mUserProfileContainer.getColorProfile());
 
-            Drawable drawable = ContextCompat.getDrawable(itemView.getContext(),
-                    R.drawable.dialog_right);
+            Drawable drawable = getDialogDrawable(message.getType());
             drawable.setColorFilter(new PorterDuffColorFilter(bgColor, PorterDuff.Mode.SRC_ATOP));
 
             mMessageContainer.setBackground(drawable);
@@ -93,8 +92,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
             int bgColor = ColorCalc.getColor(itemView.getContext(),
                     ColorProfileKey.ACCENT1_COLOR, mUserProfileContainer.getColorProfile());
 
-            Drawable drawable = ContextCompat.getDrawable(itemView.getContext(),
-                    R.drawable.dialog_left);
+            Drawable drawable = getDialogDrawable(message.getType());
             drawable.setColorFilter(new PorterDuffColorFilter(bgColor, PorterDuff.Mode.SRC_ATOP));
 
             mMessageContainer.setBackground(drawable);
@@ -102,5 +100,29 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
 
         mDateTime.setText(DateFormatter.format(message.getDate()));
         mBody.setText(message.getBody());
+    }
+
+    private Drawable getDialogDrawable(int messageType) {
+        Drawable output;
+
+        if (messageType == MessageType.OUTGOING) {
+            if(mUserProfileContainer.isRightHanded()) {
+                output = ContextCompat.getDrawable(itemView.getContext(),
+                        R.drawable.dialog_right);
+            } else {
+                output = ContextCompat.getDrawable(itemView.getContext(),
+                        R.drawable.dialog_left);
+            }
+        } else {
+            if(mUserProfileContainer.isRightHanded()) {
+                output = ContextCompat.getDrawable(itemView.getContext(),
+                        R.drawable.dialog_left);
+            } else {
+                output = ContextCompat.getDrawable(itemView.getContext(),
+                        R.drawable.dialog_right);
+            }
+        }
+
+        return output;
     }
 }
