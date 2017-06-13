@@ -38,8 +38,7 @@ import com.katsuna.messages.utils.Settings;
 import java.util.List;
 
 public class MainActivity extends SearchBarActivity
-        implements NavigationView.OnNavigationItemSelectedListener,
-        IConversationInteractionListener {
+        implements IConversationInteractionListener {
 
     private final String[] permissions = new String[]{Manifest.permission.READ_SMS, Manifest.permission.READ_CONTACTS};
     private RecyclerView mRecyclerView;
@@ -63,15 +62,40 @@ public class MainActivity extends SearchBarActivity
             }
         });
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawer, mToolbar, R.string.common_navigation_drawer_open, R.string.common_navigation_drawer_close);
-        mDrawer.addDrawerListener(toggle);
-        toggle.syncState();
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                mDrawer.closeDrawers();
+
+                switch (item.getItemId()) {
+                    case R.id.drawer_settings:
+                        startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                        break;
+                    case R.id.drawer_help:
+                        break;
+                    case R.id.drawer_info:
+                        break;
+                }
+
+                return true;
+            }
+        });
 
         checkIsDefaultSmsHandler();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawer.openDrawer(GravityCompat.START);
+                showPopup(false);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void checkIsDefaultSmsHandler() {
@@ -228,28 +252,6 @@ public class MainActivity extends SearchBarActivity
         } else {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.drawer_settings) {
-            Intent i = new Intent(this, SettingsActivity.class);
-            startActivity(i);
-        }
-/*
-        else if (id == R.id.drawer_help) {
-
-        } else if (id == R.id.drawer_info) {
-
-        }
-*/
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 
     @Override
