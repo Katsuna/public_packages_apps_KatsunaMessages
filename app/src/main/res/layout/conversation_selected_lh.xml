@@ -47,6 +47,8 @@
                 android:id="@+id/displayName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="end"
                 android:maxLines="1"
                 android:textSize="@dimen/common_text_size" />
 
@@ -55,6 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
+                android:gravity="end"
                 android:maxLines="2"
                 android:textColor="@color/common_grey900"
                 android:textSize="18sp" />
