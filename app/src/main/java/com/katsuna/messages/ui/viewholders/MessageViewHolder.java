@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.katsuna.commons.entities.ColorProfile;
 import com.katsuna.commons.entities.ColorProfileKey;
 import com.katsuna.commons.entities.SizeProfile;
 import com.katsuna.commons.entities.UserProfileContainer;
@@ -68,6 +69,8 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(Message message) {
 
+        ColorProfile colorProfile = mUserProfileContainer.getColorProfile();
+
         if (message.getType() == MessageType.OUTGOING) {
             mPhoto.setImageBitmap(null);
 
@@ -75,7 +78,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
             int bgColor = ColorCalc.getColor(itemView.getContext(),
                     ColorProfileKey.MAIN_COLOR_MEDIUM, mUserProfileContainer.getColorProfile());
 
-            Drawable drawable = getDialogDrawable(message.getType());
+            Drawable drawable = getDialogDrawable(message.getType(), colorProfile);
             drawable.setColorFilter(new PorterDuffColorFilter(bgColor, PorterDuff.Mode.SRC_ATOP));
 
             mMessageContainer.setBackground(drawable);
@@ -89,11 +92,13 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
             }
 
             // adjust dialog background
-            int bgColor = ColorCalc.getColor(itemView.getContext(),
-                    ColorProfileKey.ACCENT1_COLOR, mUserProfileContainer.getColorProfile());
-
-            Drawable drawable = getDialogDrawable(message.getType());
-            drawable.setColorFilter(new PorterDuffColorFilter(bgColor, PorterDuff.Mode.SRC_ATOP));
+            int bgColor;
+            Drawable drawable = getDialogDrawable(message.getType(), colorProfile);
+            if (!(colorProfile == ColorProfile.CONTRAST)) {
+                bgColor = ColorCalc.getColor(itemView.getContext(),
+                        ColorProfileKey.ACCENT3_COLOR, mUserProfileContainer.getColorProfile());
+                drawable.setColorFilter(new PorterDuffColorFilter(bgColor, PorterDuff.Mode.SRC_ATOP));
+            }
 
             mMessageContainer.setBackground(drawable);
         }
@@ -102,7 +107,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         mBody.setText(message.getBody());
     }
 
-    private Drawable getDialogDrawable(int messageType) {
+    private Drawable getDialogDrawable(int messageType, ColorProfile profile) {
         Drawable output;
 
         if (messageType == MessageType.OUTGOING) {
@@ -114,12 +119,22 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
                         R.drawable.dialog_left);
             }
         } else {
-            if(mUserProfileContainer.isRightHanded()) {
-                output = ContextCompat.getDrawable(itemView.getContext(),
-                        R.drawable.dialog_left);
+            if (mUserProfileContainer.isRightHanded()) {
+                if (profile == ColorProfile.CONTRAST) {
+                    output = ContextCompat.getDrawable(itemView.getContext(),
+                            R.drawable.dialog_left_border);
+                } else {
+                    output = ContextCompat.getDrawable(itemView.getContext(),
+                            R.drawable.dialog_left);
+                }
             } else {
-                output = ContextCompat.getDrawable(itemView.getContext(),
-                        R.drawable.dialog_right);
+                if (profile == ColorProfile.CONTRAST) {
+                    output = ContextCompat.getDrawable(itemView.getContext(),
+                            R.drawable.dialog_right_border);
+                } else {
+                    output = ContextCompat.getDrawable(itemView.getContext(),
+                            R.drawable.dialog_right);
+                }
             }
         }
 

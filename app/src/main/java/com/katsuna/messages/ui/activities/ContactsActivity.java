@@ -113,19 +113,19 @@ public class ContactsActivity extends SearchBarActivity implements IContactInter
 
     private void setupFab() {
         mFabContainer = (LinearLayout) findViewById(R.id.fab_container);
-        mFab1 = (FloatingActionButton) findViewById(R.id.search_fab);
+        mFab1 = (FloatingActionButton) findViewById(R.id.dial_fab);
         mFab1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFabToolbar(true);
-            }
-        });
-
-        mFab2 = (FloatingActionButton) findViewById(R.id.dial_fab);
-        mFab2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
                 dialNumber();
+            }
+        });
+
+        mFab2 = (FloatingActionButton) findViewById(R.id.search_fab);
+        mFab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFabToolbar(true);
             }
         });
 
@@ -153,18 +153,18 @@ public class ContactsActivity extends SearchBarActivity implements IContactInter
         });
 
 
-        mButtonsContainer1 = (LinearLayout) findViewById(R.id.search_buttons_container);
-        mPopupButton1 = (Button) findViewById(R.id.search_button);
-        mPopupButton1.setOnClickListener(new View.OnClickListener() {
+        mButtonsContainer2 = (LinearLayout) findViewById(R.id.search_buttons_container);
+        mPopupButton2 = (Button) findViewById(R.id.search_button);
+        mPopupButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showFabToolbar(true);
             }
         });
 
-        mButtonsContainer2 = (LinearLayout) findViewById(R.id.dial_buttons_container);
-        mPopupButton2 = (Button) findViewById(R.id.dial_button);
-        mPopupButton2.setOnClickListener(new View.OnClickListener() {
+        mButtonsContainer1 = (LinearLayout) findViewById(R.id.dial_buttons_container);
+        mPopupButton1 = (Button) findViewById(R.id.dial_button);
+        mPopupButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialNumber();
@@ -220,14 +220,14 @@ public class ContactsActivity extends SearchBarActivity implements IContactInter
 
     private void showFabToolbar(boolean show) {
         if (show) {
-            FabTransformation.with(mFab1).duration(FAB_TRANSFORMATION_DURATION)
+            FabTransformation.with(mFab2).duration(FAB_TRANSFORMATION_DURATION)
                     .transformTo(mFabToolbar);
 
             if (mPopupVisible) {
                 showPopup(false);
             }
         } else {
-            FabTransformation.with(mFab1).duration(FAB_TRANSFORMATION_DURATION)
+            FabTransformation.with(mFab2).duration(FAB_TRANSFORMATION_DURATION)
                     .transformFrom(mFabToolbar);
             mAdapter.unfocusFromSearch();
         }

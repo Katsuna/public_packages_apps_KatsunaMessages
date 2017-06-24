@@ -10,6 +10,7 @@ import com.katsuna.commons.entities.ColorProfileKey;
 import com.katsuna.commons.entities.OpticalParams;
 import com.katsuna.commons.entities.SizeProfile;
 import com.katsuna.commons.entities.SizeProfileKey;
+import com.katsuna.commons.utils.ColorAdjuster;
 import com.katsuna.commons.utils.ColorCalc;
 import com.katsuna.commons.utils.DrawUtils;
 import com.katsuna.commons.utils.Shape;
@@ -71,17 +72,10 @@ public class ConversationSelectedViewHolder extends ConversationViewHolder {
 
     private void adjustColorProfile() {
         ColorProfile colorProfile = mUserProfileContainer.getColorProfile();
-        // set action buttons background color
-        int color1 = ColorCalc.getColor(itemView.getContext(),
-                ColorProfileKey.ACCENT1_COLOR, colorProfile);
-        Shape.setRoundedBackground(mMessageButtonContainer, color1);
 
-        int color2 = ColorCalc.getColor(itemView.getContext(), ColorProfileKey.ACCENT2_COLOR,
-                colorProfile);
-        Shape.setRoundedBorder(mCallButtonContainer, color2);
-        Drawable[] drawables = mCallButton.getCompoundDrawables();
-        DrawUtils.setColor(drawables[0], color2);
-        mCallButton.setTextColor(color2);
+        // set action buttons background color
+        ColorAdjuster.adjustButtons(itemView.getContext(), colorProfile,
+                mMessageButtonContainer, mMessageButton, mCallButtonContainer, mCallButton);
 
         int bgColor = ColorCalc.getColor(itemView.getContext(), ColorProfileKey.POP_UP_COLOR,
                 colorProfile);

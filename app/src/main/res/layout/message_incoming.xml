@@ -8,15 +8,19 @@
     android:paddingStart="16dp"
     android:paddingTop="8dp">
 
-    <include layout="@layout/common_photo" />
+    <include
+        layout="@layout/common_photo"
+        android:layout_width="@dimen/common_contact_photo_size_intemediate"
+        android:layout_height="@dimen/common_contact_photo_size_intemediate"
+        android:layout_gravity="top"
+        android:layout_marginTop="30dp" />
 
     <RelativeLayout
         android:id="@+id/message_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/dialog_left">
+        android:layout_marginTop="50dp">
 
         <TextView
             android:id="@+id/body"
