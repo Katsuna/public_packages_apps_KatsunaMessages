@@ -86,6 +86,10 @@ public class ConversationActivity extends KatsunaActivity {
         mDisplayName = intentData.conversationDisplayName;
         conversationNumber = intentData.conversationNumber;
 
+        if (intentData.message != null) {
+            mNewMessage.setText(intentData.message);
+        }
+
         if (conversationId != Constants.NOT_FOUND_CONVERSATION_ID) {
             loadMessages();
         } else {
@@ -284,6 +288,7 @@ public class ConversationActivity extends KatsunaActivity {
 
         // Find conversation number.
         String conversationNumber = null;
+        String message = null;
         if (i.getAction() != null &&
                 (i.getAction().equals(Intent.ACTION_VIEW) ||
                         i.getAction().equals(Intent.ACTION_SENDTO))) {
@@ -291,6 +296,7 @@ public class ConversationActivity extends KatsunaActivity {
         } else {
             if (i.getExtras() != null) {
                 conversationNumber = i.getExtras().getString(Constants.EXTRA_NUMBER);
+                message = i.getExtras().getString(Constants.MESSAGE);
             }
         }
 
@@ -300,19 +306,22 @@ public class ConversationActivity extends KatsunaActivity {
             conversationDisplayName = i.getExtras().getString(Constants.EXTRA_DISPLAY_NAME);
         }
 
-        return new ConversationIntentData(convId, conversationNumber, conversationDisplayName);
+        return new ConversationIntentData(convId, conversationNumber, conversationDisplayName,
+                message);
     }
 
     private class ConversationIntentData {
         long conversationId;
         String conversationNumber;
         String conversationDisplayName;
+        String message;
 
         ConversationIntentData(long conversationId, String conversationNumber,
-                               String conversationDisplayName) {
+                               String conversationDisplayName, String message) {
             this.conversationId = conversationId;
             this.conversationNumber = conversationNumber;
             this.conversationDisplayName = conversationDisplayName;
+            this.message = message;
         }
     }
 

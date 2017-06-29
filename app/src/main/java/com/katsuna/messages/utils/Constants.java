@@ -13,6 +13,7 @@ public final class Constants {
 
     public static final String EXTRA_DISPLAY_NAME = "EXTRA_DISPLAY_NAME";
     public static final String EXTRA_NUMBER = "EXTRA_NUMBER";
+    public static final String MESSAGE = "MESSAGE";
     public static final String EXTRA_CONVERASTION_ID = "EXTRA_CONVERASTION_ID";
 
     public static final long NOT_FOUND_CONVERSATION_ID = 0;
