@@ -1,45 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scroll_view_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.katsuna.messages.ui.activities.SettingsActivity"
-    tools:showIn="@layout/activity_settings">
+    android:paddingTop="?attr/actionBarSize">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/default_sms_button"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/set_as_default"
-            android:visibility="gone" />
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
+            android:padding="16dp">
 
-        <TextView
-            android:id="@+id/default_sms_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <com.katsuna.commons.controls.KatsunaButton
+                android:id="@+id/default_sms_button"
+                android:layout_width="@dimen/common_settings_button_width"
+                android:ellipsize="end"
+                android:lines="1"
+                android:paddingEnd="8dp"
+                android:paddingStart="8dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="8dp"
+                android:text="@string/set_as_default"
+                android:textAllCaps="false"
+                android:visibility="gone"
+                app:sizeProfileKey="SUBHEADER" />
+
+            <com.katsuna.commons.controls.KatsunaTextView
+                android:id="@+id/default_sms_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/default_sms_button"
+                app:sizeProfileKey="SUBHEADER" />
+
+        </RelativeLayout>
+
+        <include layout="@layout/common_app_settings" />
 
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@color/common_black12"  />
-
-    <include layout="@layout/common_size_profile_selector" />
-
-    <include layout="@layout/common_color_profile_selector" />
-
-    <include layout="@layout/common_right_hand" />
-
-</LinearLayout>
+</ScrollView>
