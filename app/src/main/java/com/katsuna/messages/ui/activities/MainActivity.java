@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.katsuna.commons.entities.UserProfile;
 import com.katsuna.commons.entities.UserProfileContainer;
 import com.katsuna.commons.ui.SearchBarActivity;
 import com.katsuna.commons.utils.KatsunaAlertBuilder;
@@ -342,6 +343,11 @@ public class MainActivity extends SearchBarActivity
         adjustFabPosition(false);
         mItemSelected = true;
         refreshLastSelectionTimestamp();
+    }
+
+    @Override
+    public UserProfile getUserProfile() {
+        return mUserProfileContainer.getActiveUserProfile();
     }
 
 }
