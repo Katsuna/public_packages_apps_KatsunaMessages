@@ -136,6 +136,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.katsuna.messages.ui.activities.MainActivity" />
         </activity>
+
+        <activity
+            android:name=".ui.activities.InfoActivity"
+            android:label="@string/common_app_info"
+            android:parentActivityName=".ui.activities.MainActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

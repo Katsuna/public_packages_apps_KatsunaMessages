@@ -75,6 +75,7 @@ public class MainActivity extends SearchBarActivity
                         startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                         break;
                     case R.id.drawer_info:
+                        startActivity(new Intent(MainActivity.this, InfoActivity.class));
                         break;
                 }
 
