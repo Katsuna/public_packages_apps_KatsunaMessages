@@ -101,6 +101,9 @@ public class ConversationActivity extends KatsunaActivity {
         }
 
         registerReceivers();
+
+        // open keyboard
+        mNewMessage.requestFocus();
     }
 
     @Override
