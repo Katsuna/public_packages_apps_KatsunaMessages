@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -330,6 +331,12 @@ public class ConversationActivity extends KatsunaActivity {
 
     //---sends an SMS message to another device---
     private void sendSMS(final String message) {
+        if (!simIsReady()) {
+            Toast.makeText(ConversationActivity.this, R.string.not_active_sim,
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         this.message = message;
 
         savedMessageId = -1;
@@ -351,6 +358,12 @@ public class ConversationActivity extends KatsunaActivity {
 
         // Send a text based SMS
         smsManager.sendMultipartTextMessage(conversationNumber, null, smsBodyParts, sentPendingIntents, deliveredPendingIntents);
+    }
+
+    private boolean simIsReady() {
+        TelephonyManager telMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        int simState = telMgr.getSimState();
+        return simState == TelephonyManager.SIM_STATE_READY;
     }
 
 }
