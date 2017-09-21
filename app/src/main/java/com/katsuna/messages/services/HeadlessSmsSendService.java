@@ -10,8 +10,8 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.katsuna.commons.entities.KatsunaConstants;
 import com.katsuna.messages.ui.activities.ConversationActivity;
-import com.katsuna.messages.utils.Constants;
 
 public class HeadlessSmsSendService extends IntentService {
 
@@ -58,8 +58,8 @@ public class HeadlessSmsSendService extends IntentService {
 
         Log.d(TAG, "recipients: " + recipients);
         Intent i = new Intent(this, ConversationActivity.class);
-        i.putExtra(Constants.EXTRA_NUMBER, recipients);
-        i.putExtra(Constants.MESSAGE, message);
+        i.putExtra(KatsunaConstants.EXTRA_NUMBER, recipients);
+        i.putExtra(KatsunaConstants.MESSAGE, message);
         startActivity(i);
     }
 

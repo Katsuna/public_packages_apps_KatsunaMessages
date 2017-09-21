@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.katsuna.commons.entities.KatsunaConstants;
 import com.katsuna.commons.ui.KatsunaActivity;
 import com.katsuna.messages.R;
 import com.katsuna.messages.domain.Message;
@@ -299,15 +300,15 @@ public class ConversationActivity extends KatsunaActivity {
             conversationNumber = i.getData().getSchemeSpecificPart();
         } else {
             if (i.getExtras() != null) {
-                conversationNumber = i.getExtras().getString(Constants.EXTRA_NUMBER);
-                message = i.getExtras().getString(Constants.MESSAGE);
+                conversationNumber = i.getExtras().getString(KatsunaConstants.EXTRA_NUMBER);
+                message = i.getExtras().getString(KatsunaConstants.MESSAGE);
             }
         }
 
         // Find display name.
         String conversationDisplayName = null;
         if (i.getExtras() != null) {
-            conversationDisplayName = i.getExtras().getString(Constants.EXTRA_DISPLAY_NAME);
+            conversationDisplayName = i.getExtras().getString(KatsunaConstants.EXTRA_DISPLAY_NAME);
         }
 
         return new ConversationIntentData(convId, conversationNumber, conversationDisplayName,

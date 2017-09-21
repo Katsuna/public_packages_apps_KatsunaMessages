@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.katsuna.commons.domain.Contact;
 import com.katsuna.commons.domain.Phone;
+import com.katsuna.commons.entities.KatsunaConstants;
 import com.katsuna.commons.entities.UserProfile;
 import com.katsuna.commons.entities.UserProfileContainer;
 import com.katsuna.commons.providers.ContactProvider;
@@ -388,8 +389,8 @@ public class ContactsActivity extends SearchBarActivity implements IContactInter
 
     private void startActivity(String name, String number) {
         Intent i = new Intent(this, ConversationActivity.class);
-        i.putExtra(Constants.EXTRA_DISPLAY_NAME, name);
-        i.putExtra(Constants.EXTRA_NUMBER, number);
+        i.putExtra(KatsunaConstants.EXTRA_DISPLAY_NAME, name);
+        i.putExtra(KatsunaConstants.EXTRA_NUMBER, number);
         startActivity(i);
         finish();
     }
