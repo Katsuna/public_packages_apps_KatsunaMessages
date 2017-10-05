@@ -41,6 +41,7 @@ LOCAL_AAPT_FLAGS += --extra-packages com.makeramen.roundedimageview
 LOCAL_AAPT_FLAGS += --extra-packages com.konifar.fab_transformation
 
 LOCAL_PACKAGE_NAME := KatsunaMessages
+LOCAL_CERTIFICATE := platform
 
 LOCAL_PROGUARD_FLAG_FILES := app/proguard-rules.pro
 LOCAL_PROGUARD_FLAGS := -ignorewarnings -include build/core/proguard_basic_keeps.flags
