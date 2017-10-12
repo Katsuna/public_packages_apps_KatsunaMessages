@@ -38,6 +38,8 @@ import com.katsuna.messages.utils.Settings;
 
 import java.util.List;
 
+import static com.katsuna.commons.utils.Constants.KATSUNA_PRIVACY_URL;
+
 public class MainActivity extends SearchBarActivity
         implements IConversationInteractionListener {
 
@@ -76,6 +78,10 @@ public class MainActivity extends SearchBarActivity
                         break;
                     case R.id.drawer_info:
                         startActivity(new Intent(MainActivity.this, InfoActivity.class));
+                        break;
+                    case R.id.drawer_privacy:
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(KATSUNA_PRIVACY_URL));
+                        startActivity(browserIntent);
                         break;
                 }
 
