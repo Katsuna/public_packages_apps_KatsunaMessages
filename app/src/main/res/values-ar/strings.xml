@@ -12,7 +12,7 @@
   <!-- Warning shown when the message is empty -->
   <string name="empty_message">الرجاء ادخال رسالة.</string>
   <!-- Warning for non active sim -->
-  <string name="not_active_sim">Your sim is not present or active.</string>
+  <string name="not_active_sim">بطاقة ال SIM غير موجودة أو لا تعمل.</string>
   <!-- Error shown when the user hasn't granted the needed permission for an action -->
   <string name="permission_denied">غير مسموح.</string>
   <!-- Message shown in the main application background when the user has no messages -->

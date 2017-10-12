@@ -12,7 +12,7 @@
   <!-- Warning shown when the message is empty -->
   <string name="empty_message">Por favor escriba un mensaje.</string>
   <!-- Warning for non active sim -->
-  <string name="not_active_sim">Your sim is not present or active.</string>
+  <string name="not_active_sim">No se encuentra o no esta activada la tarjeta SIM.</string>
   <!-- Error shown when the user hasn't granted the needed permission for an action -->
   <string name="permission_denied">Permiso denegado.</string>
   <!-- Message shown in the main application background when the user has no messages -->
