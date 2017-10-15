@@ -34,6 +34,7 @@ import com.katsuna.messages.providers.SmsProvider;
 import com.katsuna.messages.receivers.BaseBroadcastReceiver;
 import com.katsuna.messages.ui.adapters.MessagesAdapter;
 import com.katsuna.messages.utils.Constants;
+import com.katsuna.messages.utils.Device;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -335,6 +336,12 @@ public class ConversationActivity extends KatsunaActivity {
         if (!simIsReady()) {
             Toast.makeText(ConversationActivity.this, R.string.not_active_sim,
                     Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!Device.isDefaultApp(this)) {
+            Toast.makeText(this, R.string.app_is_not_the_default_sms_handler, Toast.LENGTH_SHORT)
+                    .show();
             return;
         }
 
