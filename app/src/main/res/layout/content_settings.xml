@@ -22,7 +22,7 @@
                 android:id="@+id/default_sms_button"
                 android:layout_width="@dimen/common_settings_button_width"
                 android:ellipsize="end"
-                android:lines="1"
+                android:lines="2"
                 android:paddingEnd="8dp"
                 android:paddingStart="8dp"
                 android:layout_height="wrap_content"
