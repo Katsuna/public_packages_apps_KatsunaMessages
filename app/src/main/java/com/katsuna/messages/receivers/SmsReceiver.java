@@ -20,6 +20,7 @@ import com.katsuna.messages.R;
 import com.katsuna.messages.domain.Message;
 import com.katsuna.messages.providers.SmsProvider;
 import com.katsuna.messages.ui.activities.ConversationActivity;
+import com.katsuna.messages.utils.ActivityVisibility;
 import com.katsuna.messages.utils.Constants;
 import com.katsuna.messages.utils.Device;
 
@@ -44,8 +45,18 @@ public class SmsReceiver extends BroadcastReceiver {
             SmsProvider dao = new SmsProvider(context);
             dao.receiveMessage(message);
             long conversationId = dao.getConversationId(message);
-            //showConversation(context, conversationId);
-            sendNotification(context, conversationId, message);
+            if (ActivityVisibility.isConversationActivityVisible &&
+                    message.getAddress().equals(ConversationActivity.conversationNumberActive)) {
+                // refresh conversation activity
+                Intent i = new Intent(context, ConversationActivity.class);
+                i.putExtra("reload", true);
+                i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                context.startActivity(i);
+
+                playRingtone(context);
+            } else {
+                sendNotification(context, conversationId, message);
+            }
             wakeUp(context);
         }
     }

@@ -20,7 +20,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -66,6 +65,8 @@ public class ConversationActivity extends KatsunaActivity {
         initToolbar();
         mToolbar.setTitleTextAppearance(this, R.style.CommonRobotoBold);
     }
+
+    public static String conversationNumberActive = "";
 
     @Override
     protected void onResume() {
@@ -190,6 +191,7 @@ public class ConversationActivity extends KatsunaActivity {
 
         if (messages.size() > 0) {
             conversationNumber = messages.get(0).getAddress();
+            conversationNumberActive = conversationNumber;
             setTitle(messages.get(0).getDisplayName());
             markRead(messages);
         }
@@ -372,6 +374,16 @@ public class ConversationActivity extends KatsunaActivity {
         TelephonyManager telMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         int simState = telMgr.getSimState();
         return simState == TelephonyManager.SIM_STATE_READY;
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        if (intent != null) {
+            boolean reload = intent.getBooleanExtra("reload", false);
+            if (reload) {
+                loadMessages();
+            }
+        }
     }
 
 }
