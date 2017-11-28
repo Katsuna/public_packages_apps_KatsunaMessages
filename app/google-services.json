@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "360475593728",
+    "firebase_url": "https://katsuna-messages.firebaseio.com",
+    "project_id": "katsuna-messages",
+    "storage_bucket": "katsuna-messages.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:360475593728:android:c3efea39ca2c72b1",
+        "android_client_info": {
+          "package_name": "com.katsuna.messages"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "360475593728-v8qtg43bd8kmtktnj3ca6mlclh86f747.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.katsuna.messages",
+            "certificate_hash": "a4b16c796eb20f609379f32a8ae7a9b74a7f9947"
+          }
+        },
+        {
+          "client_id": "360475593728-m69nd4bm7fqfqvh8trq2s07eqnd4orls.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9Mi70clY1uoKJNbf1r4emLyhKkHQiJYU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "360475593728-m69nd4bm7fqfqvh8trq2s07eqnd4orls.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
