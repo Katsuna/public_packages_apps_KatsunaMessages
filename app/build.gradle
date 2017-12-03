@@ -7,14 +7,14 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "26.0.2"
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId "com.katsuna.messages"
         minSdkVersion 23
         targetSdkVersion 25
-        versionCode 4
-        versionName "1.1.2"
+        versionCode 5
+        versionName "1.2.0"
         project.ext.set("archivesBaseName", "Messages-" + defaultConfig.versionName);
     }
 

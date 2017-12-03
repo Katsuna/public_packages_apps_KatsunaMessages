@@ -39,3 +39,4 @@
 -keep class com.makeramen.** { *; }
 -keep class com.squareup.** { *; }
 -keep class com.konifar.** { *; }
+-keep class com.google.** { *; }
