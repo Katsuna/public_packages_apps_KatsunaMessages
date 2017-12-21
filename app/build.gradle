@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 // Load keystore
-def keystorePropertiesFile = rootProject.file("../../../vendor/keys/keystore.properties");
+def keystorePropertiesFile = rootProject.file("../../../vendor/keys/keystore.properties")
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
@@ -15,12 +15,12 @@ android {
         targetSdkVersion rootProject.targetSdkVersion
         versionCode 5
         versionName "1.2.0"
-        project.ext.set("archivesBaseName", "Messages-" + defaultConfig.versionName);
+        project.ext.set("archivesBaseName", "Messages-" + defaultConfig.versionName)
     }
 
     signingConfigs {
         katsunaConfig {
-            storeFile rootProject.file("../../../vendor/keys/katsuna.keystore");
+            storeFile rootProject.file("../../../vendor/keys/katsuna.keystore")
             storePassword keystoreProperties['storePassword']
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
@@ -41,17 +41,17 @@ android {
 }
 
 dependencies {
-    compile 'com.google.firebase:firebase-crash:11.6.2'
-    compile 'com.google.firebase:firebase-core:11.6.2'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile "com.android.support:appcompat-v7:$supportLibraryVersion"
     compile "com.android.support:design:$supportLibraryVersion"
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.makeramen:roundedimageview:2.2.1'
-    compile 'joda-time:joda-time:2.9.2'
+    compile 'joda-time:joda-time:2.9.4'
     compile 'konifar:fab-transformation:1.0.0'
-    compile 'com.google.firebase:firebase-perf:11.6.2'
+    compile "com.google.firebase:firebase-core:$firebaseVersion"
+    compile "com.google.firebase:firebase-crash:$firebaseVersion"
+    compile "com.google.firebase:firebase-perf:$firebaseVersion"
     compile project(':commons')
 }
 
