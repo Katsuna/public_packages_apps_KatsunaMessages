@@ -1,61 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/common_grey50">
+    android:layout_height="wrap_content">
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
         android:id="@+id/conversation_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingBottom="4dp"
-        android:paddingEnd="16dp"
-        android:paddingStart="16dp"
-        android:paddingTop="4dp">
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:clipToPadding="false"
+        android:gravity="center"
+        card_view:cardBackgroundColor="@color/priority_one"
+        card_view:cardCornerRadius="8dp"
+        card_view:cardElevation="2dp">
 
-        <include
-            layout="@layout/common_photo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="56dp" />
-
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/conversation_container_inner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/text_margin_left_right"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:background="@color/common_grey50">
 
-            <TextView
-                android:id="@+id/displayName"
+            <ImageView
+                android:id="@+id/item_type_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:textSize="@dimen/common_text_size" />
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="6dp"
+                android:gravity="top" />
 
-            <TextView
-                android:id="@+id/body"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/conversation_details_container"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="2"
-                android:textColor="@color/common_grey900"
-                android:textSize="18sp" />
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_toEndOf="@id/item_type_image"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/dateTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/dateTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:minHeight="25dp"
+                    android:textColor="@color/common_black87"
+                    android:textSize="14sp" />
 
-        </LinearLayout>
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/displayName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center"
+                    android:maxLines="2"
+                    android:minHeight="28dp"
+                    android:textSize="20sp" />
 
-    <FrameLayout
+                <TextView
+                    android:id="@+id/body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:minHeight="19dp"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/action_buttons_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/conversation_details_container"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/common_black12" />
+
+                <LinearLayout
+                    android:id="@+id/more_actions_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="16dp">
+
+                    <Button
+                        android:id="@+id/button_message"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="8dp"
+                        android:paddingEnd="14dp"
+                        android:paddingStart="14dp"
+                        android:text="@string/common_message"
+                        android:textColor="@color/common_white" />
+
+                    <Button
+                        android:id="@+id/button_call"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_toStartOf="@id/button_message"
+                        android:background="@color/common_white"
+                        android:paddingEnd="14dp"
+                        android:paddingStart="14dp"
+                        android:text="@string/common_call"
+                        android:textColor="@color/buttons_color" />
+
+                    <TextView
+                        android:id="@+id/txt_more"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="8dp"
+                        android:layout_toStartOf="@id/button_call"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="start|center"
+                        android:text="@string/common_more"
+                        android:textAllCaps="true"
+                        android:textColor="@color/more_color"
+                        android:textSize="14sp" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
         android:id="@+id/opacity_layer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/common_black07"
-        android:visibility="invisible" />
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:visibility="invisible"
+        card_view:cardBackgroundColor="@color/common_black54"
+        card_view:cardCornerRadius="8dp"
+        card_view:cardElevation="2dp" />
 
 </FrameLayout>

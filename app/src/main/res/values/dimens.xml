@@ -8,4 +8,7 @@
     <dimen name="font_size_advanced">20sp</dimen>
     <dimen name="font_size_simple">24sp</dimen>
     <!-- eof profile dimens -->
+
+    <!-- redesign v2 -->
+    <dimen name="conv_type_icon_size_diff">6dp</dimen>
 </resources>

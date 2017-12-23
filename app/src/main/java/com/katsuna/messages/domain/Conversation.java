@@ -1,6 +1,7 @@
 package com.katsuna.messages.domain;
 
 import com.katsuna.commons.domain.Contact;
+import com.katsuna.messages.utils.ConversationStatus;
 
 public class Conversation {
 
@@ -74,4 +75,22 @@ public class Conversation {
     public void setRead(int read) {
         this.read = read;
     }
+
+    public int getStatus() {
+        int output;
+        if (unanswered) {
+            if (getRead() == 0) {
+                // unread conversation
+                output = ConversationStatus.UNREAD;
+            } else {
+                // read conversation
+                output = ConversationStatus.READ;
+            }
+        } else {
+            output = ConversationStatus.SENT;
+        }
+
+        return output;
+    }
+
 }

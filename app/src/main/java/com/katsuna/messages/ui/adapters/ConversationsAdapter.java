@@ -63,9 +63,9 @@ public class ConversationsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 break;
             case CONVERSATION_SELECTED:
                 if (isRightHanded) {
-                    view = inflater.inflate(R.layout.conversation_selected, parent, false);
+                    view = inflater.inflate(R.layout.conversation, parent, false);
                 } else {
-                    view = inflater.inflate(R.layout.conversation_selected_lh, parent, false);
+                    view = inflater.inflate(R.layout.conversation_lh, parent, false);
                 }
                 viewHolder = new ConversationSelectedViewHolder(view, mListener);
                 break;
