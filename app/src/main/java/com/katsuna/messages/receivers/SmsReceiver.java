@@ -14,8 +14,10 @@ import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.telephony.SmsMessage;
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.katsuna.commons.domain.Contact;
 import com.katsuna.messages.R;
 import com.katsuna.messages.domain.Message;
 import com.katsuna.messages.providers.SmsProvider;
@@ -119,10 +121,20 @@ public class SmsReceiver extends BroadcastReceiver {
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         //build the notification
+        SmsProvider provider = new SmsProvider(context);
+        Contact contact = provider.getContactByAddress(message.getAddress());
+        String contentText;
+        if (contact != null && !TextUtils.isEmpty(contact.getDisplayName())) {
+            contentText = contact.getDisplayName();
+        } else {
+            contentText = message.getDisplayName();
+        }
+        contentText += ": " + message.getBody();
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setSmallIcon(R.drawable.ic_sms_white_18dp)
                 .setContentTitle(context.getResources().getString(R.string.new_message))
-                .setContentText(message.getDisplayName() + ": " + message.getBody())
+                .setContentText(contentText)
                 .setAutoCancel(true)
                 .setContentIntent(resultPendingIntent);
 
