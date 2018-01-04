@@ -212,7 +212,8 @@ public class MainActivity extends SearchBarActivity
     private void loadConversations() {
 
         if (!Device.hasAllPermissions(this, permissions)) {
-            Device.requestPermissions(this, permissions, Constants.REQUEST_CODE_READ_SMS_AND_CONTACTS);
+            ActivityCompat.requestPermissions(this, permissions,
+                    Constants.REQUEST_CODE_READ_SMS_AND_CONTACTS);
             return;
         }
 
@@ -228,8 +229,15 @@ public class MainActivity extends SearchBarActivity
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case Constants.REQUEST_CODE_READ_SMS_AND_CONTACTS:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission Granted
+                boolean allGood = true;
+                for (int result : grantResults) {
+                    if (result != PackageManager.PERMISSION_GRANTED) {
+                        allGood = false;
+                        break;
+                    }
+                }
+                if (allGood) {
+                    // Permissions Granted
                     loadConversations();
                 } else {
                     Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_SHORT).show();
