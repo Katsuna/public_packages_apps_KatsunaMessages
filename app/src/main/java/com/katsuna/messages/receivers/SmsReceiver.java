@@ -51,6 +51,7 @@ public class SmsReceiver extends BroadcastReceiver {
                 Intent i = new Intent(context, ConversationActivity.class);
                 i.putExtra("reload", true);
                 i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(i);
 
                 playRingtone(context);
