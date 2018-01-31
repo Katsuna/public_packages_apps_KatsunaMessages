@@ -10,8 +10,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.katsuna.commons.entities.OpticalParams;
+import com.katsuna.commons.entities.SizeProfile;
+import com.katsuna.commons.entities.SizeProfileKeyV2;
 import com.katsuna.commons.entities.UserProfileContainer;
 import com.katsuna.commons.utils.DateFormatter;
+import com.katsuna.commons.utils.SizeAdjuster;
+import com.katsuna.commons.utils.SizeCalcV2;
 import com.katsuna.messages.R;
 import com.katsuna.messages.domain.Conversation;
 import com.katsuna.messages.ui.listeners.IConversationInteractionListener;
@@ -43,8 +48,26 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
         mItemTypeImage = itemView.findViewById(R.id.item_type_image);
     }
 
-    void adjustProfile() {
+    private void adjustProfile() {
 
+        SizeProfile sizeProfile = mUserProfileContainer.getOpticalSizeProfile();
+
+        // item type icon
+        OpticalParams opticalParams = SizeCalcV2.getOpticalParams(SizeProfileKeyV2.ICON_1,
+                sizeProfile);
+        SizeAdjuster.adjustIcon(itemView.getContext(), mItemTypeImage, opticalParams);
+
+        // date
+        opticalParams = SizeCalcV2.getOpticalParams(SizeProfileKeyV2.BODY_1, sizeProfile);
+        SizeAdjuster.adjustText(itemView.getContext(), mDateTime, opticalParams);
+
+        // display name
+        opticalParams = SizeCalcV2.getOpticalParams(SizeProfileKeyV2.TITLE, sizeProfile);
+        SizeAdjuster.adjustText(itemView.getContext(), mDisplayName, opticalParams);
+
+        // contact description
+        opticalParams = SizeCalcV2.getOpticalParams(SizeProfileKeyV2.SUBHEADING_1, sizeProfile);
+        SizeAdjuster.adjustText(itemView.getContext(), mSnippet, opticalParams);
     }
 
     public void bindGreyed(Conversation conversation, final int position) {
@@ -89,6 +112,8 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
 
         //adjustProfile();
         adjustmentsByConversation(conversation);
+
+        adjustProfile();
     }
 
     private void adjustmentsByConversation(Conversation conversation) {
