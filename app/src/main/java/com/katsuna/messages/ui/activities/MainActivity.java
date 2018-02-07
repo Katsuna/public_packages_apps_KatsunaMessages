@@ -1,6 +1,8 @@
 package com.katsuna.messages.ui.activities;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -27,6 +29,7 @@ import com.katsuna.commons.entities.UserProfile;
 import com.katsuna.commons.entities.UserProfileContainer;
 import com.katsuna.commons.ui.SearchBarActivity;
 import com.katsuna.commons.utils.KatsunaAlertBuilder;
+import com.katsuna.commons.utils.KatsunaUtils;
 import com.katsuna.messages.R;
 import com.katsuna.messages.domain.Conversation;
 import com.katsuna.messages.providers.SmsProvider;
@@ -115,9 +118,35 @@ public class MainActivity extends SearchBarActivity
     }
 
     private void selectContact() {
-        Intent i = new Intent(MainActivity.this, ContactsActivity.class);
-        startActivity(i);
+        PackageManager manager = getPackageManager();
+        Intent i = manager.getLaunchIntentForPackage(KatsunaUtils.KATSUNA_CONTACTS_PACKAGE);
+        if (i == null) {
+            showContactsAppInstallationDialog();
+        } else {
+            i.addCategory(Intent.CATEGORY_LAUNCHER);
+            startActivity(i);
+        }
     }
+
+    private void showContactsAppInstallationDialog() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+        String contactsAppName = getString(R.string.common_katsuna_contacts_app);
+        String title = getString(R.string.common_missing_app, contactsAppName);
+        alert.setTitle(title);
+        alert.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                KatsunaUtils.goToGooglePlay(MainActivity.this,
+                        KatsunaUtils.KATSUNA_CONTACTS_PACKAGE);
+            }
+        });
+        alert.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //Put actions for CANCEL button here, or leave in blank
+            }
+        });
+        alert.show();
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
