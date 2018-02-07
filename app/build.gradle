@@ -28,6 +28,14 @@ android {
     }
 
     buildTypes {
+
+
+        staging {
+            initWith debug
+            applicationIdSuffix '.staging'
+            matchingFallbacks = ['debug','release']
+        }
+
         release {
             minifyEnabled true
             proguardFiles 'proguard-rules.pro'
