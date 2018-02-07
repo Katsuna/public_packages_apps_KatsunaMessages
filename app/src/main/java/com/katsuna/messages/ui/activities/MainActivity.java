@@ -8,20 +8,15 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +47,7 @@ public class MainActivity extends SearchBarActivity
     private TextView mNoResultsView;
     private View mPopupFrame;
     private DrawerLayout mDrawer;
+    private int mSelectedConversationPosition = ConversationsAdapter.NO_CONVERSATION_POSITION;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +56,7 @@ public class MainActivity extends SearchBarActivity
 
         initControls();
 
-        mFab1 = (FloatingActionButton) findViewById(R.id.fab);
+        mFab1 = findViewById(R.id.fab);
         mFab1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,7 +64,7 @@ public class MainActivity extends SearchBarActivity
             }
         });
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -147,7 +143,6 @@ public class MainActivity extends SearchBarActivity
         alert.show();
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -198,15 +193,15 @@ public class MainActivity extends SearchBarActivity
 
     private void initControls() {
         initToolbar(R.drawable.common_ic_menu_black_24dp);
-        mRecyclerView = (RecyclerView) findViewById(R.id.conversations_list);
+        mRecyclerView = findViewById(R.id.conversations_list);
         mRecyclerView.setItemAnimator(null);
-        mNoResultsView = (TextView) findViewById(R.id.no_results);
+        mNoResultsView = findViewById(R.id.no_results);
 
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawer = findViewById(R.id.drawer_layout);
 
-        mFabContainer = (LinearLayout) findViewById(R.id.fab_container);
-        mButtonsContainer1 = (LinearLayout) findViewById(R.id.message_buttons_container);
-        mPopupButton1 = (Button) findViewById(R.id.message_button);
+        mFabContainer = findViewById(R.id.fab_container);
+        mButtonsContainer1 = findViewById(R.id.message_buttons_container);
+        mPopupButton1 = findViewById(R.id.message_button);
         mPopupButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -215,11 +210,10 @@ public class MainActivity extends SearchBarActivity
         });
 
         mPopupFrame = findViewById(R.id.popup_frame);
-        mPopupFrame.setOnTouchListener(new View.OnTouchListener() {
+        mPopupFrame.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public void onClick(View v) {
                 showPopup(false);
-                return true;
             }
         });
 
@@ -352,8 +346,6 @@ public class MainActivity extends SearchBarActivity
             focusConversation(position);
         }
     }
-
-    private int mSelectedConversationPosition = ConversationsAdapter.NO_CONVERSATION_POSITION;
 
     @Override
     protected void deselectItem() {
