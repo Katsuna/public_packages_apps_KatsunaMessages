@@ -49,6 +49,37 @@
           "status": 2
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:360475593728:android:bd931f37621b659e",
+        "android_client_info": {
+          "package_name": "com.katsuna.messages.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "360475593728-m69nd4bm7fqfqvh8trq2s07eqnd4orls.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9Mi70clY1uoKJNbf1r4emLyhKkHQiJYU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
     }
   ],
   "configuration_version": "1"
