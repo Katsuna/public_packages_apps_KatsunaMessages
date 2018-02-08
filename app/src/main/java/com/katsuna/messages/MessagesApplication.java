@@ -3,12 +3,15 @@ package com.katsuna.messages;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.firebase.crash.FirebaseCrash;
 import com.katsuna.messages.ui.activities.ConversationActivity;
 import com.katsuna.messages.utils.ActivityVisibility;
 
 public class MessagesApplication extends Application implements Application.ActivityLifecycleCallbacks {
+
+    private static final String TAG = "MessagesApplication";
 
     @Override
     public void onCreate() {
@@ -17,8 +20,12 @@ public class MessagesApplication extends Application implements Application.Acti
         // Register to be notified of activity state changes
         registerActivityLifecycleCallbacks(this);
 
-        // disable firebase crash collection for debug
-        FirebaseCrash.setCrashCollectionEnabled(!BuildConfig.DEBUG);
+        try {
+            // disable firebase crash collection for debug
+            FirebaseCrash.setCrashCollectionEnabled(!BuildConfig.DEBUG);
+        } catch (Exception ex) {
+            Log.e(TAG, ex.getMessage());
+        }
     }
 
     @Override

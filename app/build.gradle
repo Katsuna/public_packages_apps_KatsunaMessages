@@ -16,6 +16,8 @@ android {
         versionCode 5
         versionName "1.2.0"
         project.ext.set("archivesBaseName", "Messages-" + defaultConfig.versionName)
+
+        manifestPlaceholders = [providers_auth:"com.katsuna"]
     }
 
     signingConfigs {
@@ -28,6 +30,14 @@ android {
     }
 
     buildTypes {
+
+        staging {
+            initWith debug
+            applicationIdSuffix '.staging'
+            manifestPlaceholders = [providers_auth:"com.katsuna.staging"]
+            matchingFallbacks = ['debug','release']
+        }
+
         release {
             minifyEnabled true
             proguardFiles 'proguard-rules.pro'
@@ -56,5 +66,5 @@ dependencies {
     compile project(':commons')
 }
 
-apply plugin: 'com.google.gms.google-services'
+//apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.firebase-perf'
