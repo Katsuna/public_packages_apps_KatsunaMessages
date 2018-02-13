@@ -11,20 +11,18 @@ import com.katsuna.messages.R;
 
 public class DrawableGenerator {
 
-    public static Drawable getItemTypeDrawable(Context ctx, int conv_status) {
+    public static Drawable getItemTypeDrawable(Context ctx, int conv_status, int color) {
 
+        int iconColorId = R.color.common_black87;
         // calc color and icon
-        int circleColorId = R.color.priority_one;
         int iconId = R.drawable.ic_message_read;
 
         if (conv_status == ConversationStatus.SENT) {
-            circleColorId = R.color.priority_two;
             iconId = R.drawable.ic_message_sent;
+            iconColorId = R.color.common_white;
         } else if (conv_status == ConversationStatus.READ) {
-            circleColorId = R.color.priority_one;
             iconId = R.drawable.ic_message_read;
         } else if (conv_status == ConversationStatus.UNREAD) {
-            circleColorId = R.color.priority_three;
             iconId = R.drawable.ic_message_unread;
         }
 
@@ -32,13 +30,13 @@ public class DrawableGenerator {
         GradientDrawable circleDrawable =
                 (GradientDrawable) ctx.getDrawable(R.drawable.common_circle_black);
         if (circleDrawable != null) {
-            circleDrawable.setColor(ContextCompat.getColor(ctx, circleColorId));
+            circleDrawable.setColor(color);
         }
 
         // adjust icon
         Drawable icon = ctx.getDrawable(iconId);
-        int black87 = ContextCompat.getColor(ctx, com.katsuna.commons.R.color.common_black87);
-        DrawUtils.setColor(icon, black87);
+        int iconColor = ContextCompat.getColor(ctx, iconColorId);
+        DrawUtils.setColor(icon, iconColor);
 
         // compose layers
         Drawable[] layers = {circleDrawable, icon};

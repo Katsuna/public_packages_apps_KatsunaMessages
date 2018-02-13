@@ -25,8 +25,7 @@
         android:minWidth="@dimen/common_button_min_width"
         android:paddingEnd="14dp"
         android:paddingStart="14dp"
-        android:text="@string/common_call"
-        android:textColor="@color/buttons_color" />
+        android:text="@string/common_call" />
 
     <TextView
         android:id="@+id/txt_more"
@@ -40,7 +39,6 @@
         android:gravity="start|center"
         android:text="@string/common_more"
         android:textAllCaps="true"
-        android:textColor="@color/more_color"
         android:textSize="14sp" />
 
 </RelativeLayout>

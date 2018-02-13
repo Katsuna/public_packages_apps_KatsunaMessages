@@ -1,16 +1,13 @@
 package com.katsuna.messages.ui.viewholders;
 
-import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.katsuna.commons.entities.ColorProfile;
 import com.katsuna.commons.entities.OpticalParams;
 import com.katsuna.commons.entities.SizeProfile;
 import com.katsuna.commons.entities.SizeProfileKeyV2;
-import com.katsuna.commons.utils.Shape;
+import com.katsuna.commons.utils.ColorAdjusterV2;
 import com.katsuna.commons.utils.SizeAdjuster;
 import com.katsuna.commons.utils.SizeCalcV2;
 import com.katsuna.messages.R;
@@ -55,12 +52,9 @@ public class ConversationSelectedViewHolder extends ConversationViewHolder {
     }
 
     private void adjustColorProfile() {
-        ColorProfile colorProfile = mUserProfileContainer.getColorProfile();
-
-        // set action buttons background color
-        adjustPrimaryButton(itemView.getContext(), mMessageButton);
-
-        adjustSecondaryButton(itemView.getContext(), mCallButton);
+        ColorAdjusterV2.adjustButtons(itemView.getContext(),
+                mUserProfileContainer.getActiveUserProfile(),
+                mMessageButton, mCallButton, mMoreText);
     }
 
     public void bind(final Conversation conversation, final int position) {
@@ -91,14 +85,4 @@ public class ConversationSelectedViewHolder extends ConversationViewHolder {
         adjustProfile();
     }
 
-    private void adjustPrimaryButton(Context context, Button button) {
-        int color1 = ContextCompat.getColor(context, R.color.buttons_color);
-        Shape.setRoundedBackground(button, color1);
-    }
-
-    private void adjustSecondaryButton(Context context, Button button) {
-        int color1 = ContextCompat.getColor(context, R.color.buttons_color);
-        int white = ContextCompat.getColor(context, R.color.common_white);
-        Shape.setRoundedBorder(button, color1, white);
-    }
 }

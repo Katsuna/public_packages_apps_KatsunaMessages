@@ -2,7 +2,6 @@ package com.katsuna.messages.ui.viewholders;
 
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -10,10 +9,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.katsuna.commons.entities.ColorProfile;
+import com.katsuna.commons.entities.ColorProfileKeyV2;
 import com.katsuna.commons.entities.OpticalParams;
 import com.katsuna.commons.entities.SizeProfile;
 import com.katsuna.commons.entities.SizeProfileKeyV2;
 import com.katsuna.commons.entities.UserProfileContainer;
+import com.katsuna.commons.utils.ColorCalcV2;
 import com.katsuna.commons.utils.DateFormatter;
 import com.katsuna.commons.utils.SizeAdjuster;
 import com.katsuna.commons.utils.SizeCalcV2;
@@ -140,28 +142,33 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
         int cardColor = 0;
         int cardColorAlpha = 0;
 
+        ColorProfile colorProfile = mUserProfileContainer.getColorProfile();
         if (convStatus == ConversationStatus.SENT) {
-            cardColor = R.color.priority_two;
-            cardColorAlpha = R.color.priority_two_tone_one;
+            cardColor = ColorCalcV2.getColor(itemView.getContext(),
+                    ColorProfileKeyV2.PRIMARY_COLOR_2, colorProfile);
+            cardColorAlpha = ColorCalcV2.getColor(itemView.getContext(),
+                    ColorProfileKeyV2.SECONDARY_COLOR_2, colorProfile);
         } else if (convStatus == ConversationStatus.READ) {
-            cardColor = R.color.priority_one;
-            cardColorAlpha = R.color.priority_one_tone_one;
+            cardColor = ColorCalcV2.getColor(itemView.getContext(),
+                    ColorProfileKeyV2.PRIMARY_GREY_1, colorProfile);
+            cardColorAlpha = ColorCalcV2.getColor(itemView.getContext(),
+                    ColorProfileKeyV2.SECONDARY_GREY_2, colorProfile);
         } else if (convStatus == ConversationStatus.UNREAD) {
-            cardColor = R.color.priority_three;
-            cardColorAlpha = R.color.priority_three_tone_one;
+            cardColor = ColorCalcV2.getColor(itemView.getContext(),
+                    ColorProfileKeyV2.PRIMARY_COLOR_1, colorProfile);
+            cardColorAlpha = ColorCalcV2.getColor(itemView.getContext(),
+                    ColorProfileKeyV2.SECONDARY_COLOR_1, colorProfile);
         }
 
         // set colors
         if (cardColor != 0) {
-            mConversationContainer.setCardBackgroundColor(ColorStateList.valueOf(
-                    ContextCompat.getColor(itemView.getContext(), cardColor)));
-            mConversationContainerInner.setBackgroundColor(
-                    ContextCompat.getColor(itemView.getContext(), cardColorAlpha));
+            mConversationContainer.setCardBackgroundColor(ColorStateList.valueOf(cardColor));
+            mConversationContainerInner.setBackgroundColor(cardColorAlpha);
         }
 
         // style callTypeDrawable based on call type
         Drawable itemTypeDrawable = DrawableGenerator.getItemTypeDrawable(itemView.getContext(),
-                convStatus);
+                convStatus, cardColor);
         mItemTypeImage.setImageDrawable(itemTypeDrawable);
     }
 }

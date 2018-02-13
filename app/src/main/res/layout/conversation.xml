@@ -14,7 +14,6 @@
         android:layout_marginTop="4dp"
         android:clipToPadding="false"
         android:gravity="center"
-        card_view:cardBackgroundColor="@color/priority_one"
         card_view:cardCornerRadius="8dp"
         card_view:cardElevation="2dp">
 
