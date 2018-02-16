@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.katsuna.commons.controls.KatsunaNavigationView;
 import com.katsuna.commons.entities.UserProfile;
 import com.katsuna.commons.entities.UserProfileContainer;
 import com.katsuna.commons.ui.SearchBarActivity;
@@ -64,8 +65,8 @@ public class MainActivity extends SearchBarActivity
             }
         });
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        KatsunaNavigationView mKatsunaNavigationView = findViewById(R.id.katsuna_navigation_view);
+        mKatsunaNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
