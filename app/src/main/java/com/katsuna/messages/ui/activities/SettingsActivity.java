@@ -2,15 +2,17 @@ package com.katsuna.messages.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.katsuna.commons.entities.ColorProfile;
+import com.katsuna.commons.entities.ColorProfileKeyV2;
 import com.katsuna.commons.entities.SizeProfile;
 import com.katsuna.commons.ui.SettingsActivityBase;
-import com.katsuna.commons.utils.ColorAdjuster;
+import com.katsuna.commons.utils.ColorAdjusterV2;
+import com.katsuna.commons.utils.ColorCalcV2;
 import com.katsuna.commons.utils.ProfileReader;
 import com.katsuna.commons.utils.SizeAdjuster;
 import com.katsuna.messages.R;
@@ -20,7 +22,8 @@ import com.katsuna.messages.utils.Device;
 public class SettingsActivity extends SettingsActivityBase {
 
     private TextView defaultSmsTextView;
-    private Button defaultSmsButton;
+    private CardView mDefaultAppCard;
+    private View mDefaultAppCardInner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +50,17 @@ public class SettingsActivity extends SettingsActivityBase {
                 profile = ColorProfile.COLOR_IMPAIREMENT;
             }
         }
-        ColorAdjuster.adjustButtons(this, profile, defaultSmsButton, null);
+
+        // color profiles
+        int primary2 = ColorCalcV2.getColor(this, ColorProfileKeyV2.PRIMARY_COLOR_2, profile);
+        ColorAdjusterV2.setTextViewDrawableColor(defaultSmsTextView, primary2);
+
+        int primaryGrey1 = ColorCalcV2.getColor(this, ColorProfileKeyV2.PRIMARY_GREY_1, profile);
+
+        int secondaryGrey2 = ColorCalcV2.getColor(this, ColorProfileKeyV2.SECONDARY_GREY_2, profile);
+
+        mDefaultAppCard.setCardBackgroundColor(primaryGrey1);
+        mDefaultAppCardInner.setBackgroundColor(secondaryGrey2);
     }
 
     @Override
@@ -63,23 +76,22 @@ public class SettingsActivity extends SettingsActivityBase {
         mScrollViewContainer = findViewById(R.id.scroll_view_container);
 
         defaultSmsTextView = findViewById(R.id.default_sms_status);
-        defaultSmsButton = findViewById(R.id.default_sms_button);
-        defaultSmsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Device.makeDefaultApp(SettingsActivity.this, 0);
-            }
-        });
-
+        mDefaultAppCard = findViewById(R.id.default_app_card);
+        mDefaultAppCardInner = findViewById(R.id.default_app_card_inner);
     }
 
     private void activateControls() {
         if (Device.isDefaultApp(this)) {
             defaultSmsTextView.setText(R.string.app_is_default_sms_handler);
-            defaultSmsButton.setVisibility(View.GONE);
+            defaultSmsTextView.setOnClickListener(null);
         } else {
-            defaultSmsTextView.setText(R.string.app_is_not_the_default_sms_handler);
-            defaultSmsButton.setVisibility(View.VISIBLE);
+            defaultSmsTextView.setText(R.string.set_as_default);
+            defaultSmsTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Device.makeDefaultApp(SettingsActivity.this, 0);
+                }
+            });
         }
     }
 
