@@ -168,7 +168,7 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
 
         // style callTypeDrawable based on call type
         Drawable itemTypeDrawable = DrawableGenerator.getItemTypeDrawable(itemView.getContext(),
-                convStatus, cardColor);
+                convStatus, cardColor, colorProfile);
         mItemTypeImage.setImageDrawable(itemTypeDrawable);
     }
 }

@@ -6,12 +6,14 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.support.v4.content.ContextCompat;
 
+import com.katsuna.commons.entities.ColorProfile;
 import com.katsuna.commons.utils.DrawUtils;
 import com.katsuna.messages.R;
 
 public class DrawableGenerator {
 
-    public static Drawable getItemTypeDrawable(Context ctx, int conv_status, int color) {
+    public static Drawable getItemTypeDrawable(Context ctx, int conv_status, int color,
+                                               ColorProfile colorProfile) {
 
         int iconColorId = R.color.common_black87;
         // calc color and icon
@@ -23,6 +25,9 @@ public class DrawableGenerator {
         } else if (conv_status == ConversationStatus.READ) {
             iconId = R.drawable.ic_message_read;
         } else if (conv_status == ConversationStatus.UNREAD) {
+            if (colorProfile == ColorProfile.CONTRAST) {
+                iconColorId = R.color.common_white;
+            }
             iconId = R.drawable.ic_message_unread;
         }
 
