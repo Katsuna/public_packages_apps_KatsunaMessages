@@ -1,5 +1,6 @@
 package com.katsuna.messages.ui.adapters;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,9 +44,10 @@ public class ConversationsAdapter extends RecyclerView.Adapter<RecyclerView.View
         return viewType;
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder viewHolder = null;
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        RecyclerView.ViewHolder viewHolder;
 
         boolean isRightHanded = mListener.getUserProfileContainer().isRightHanded();
         View view;
@@ -71,12 +73,14 @@ public class ConversationsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 }
                 viewHolder = new ConversationSelectedViewHolder(view, mListener);
                 break;
+            default:
+                throw new RuntimeException("viewType not supported: " + viewType);
         }
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Conversation conversation = mModels.get(position);
 
         ContactsCache contactsCache = ContactsCache.getInstance();

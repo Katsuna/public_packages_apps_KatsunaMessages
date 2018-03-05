@@ -30,6 +30,8 @@ public class HeadlessSmsSendService extends IntentService {
 
         Log.d(TAG, "HeadlessSmsSendService onHandleIntent");
 
+        if (intent == null) return;
+
         final String action = intent.getAction();
         if (!TelephonyManager.ACTION_RESPOND_VIA_MESSAGE.equals(action)) {
             Log.d(TAG, "HeadlessSmsSendService onHandleIntent wrong action: " +

@@ -31,6 +31,7 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="6dp"
+                android:contentDescription="@string/message_type"
                 android:gravity="top" />
 
             <LinearLayout
@@ -119,7 +120,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:visibility="invisible"
-        card_view:cardBackgroundColor="@color/common_white70"
+        card_view:cardBackgroundColor="@color/common_black34"
         card_view:cardCornerRadius="8dp"
         card_view:cardElevation="2dp" />
 

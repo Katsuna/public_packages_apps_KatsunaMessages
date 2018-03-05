@@ -207,8 +207,8 @@ public class ConversationActivity extends KatsunaActivity {
     private void initControls() {
         initToolbarLocal();
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.messagesRecyclerView);
-        mNewMessage = (EditText) findViewById(R.id.new_message);
+        mRecyclerView = findViewById(R.id.messagesRecyclerView);
+        mNewMessage = findViewById(R.id.new_message);
 
         sendBroadcastReceiver = new BaseBroadcastReceiver() {
 
@@ -256,7 +256,7 @@ public class ConversationActivity extends KatsunaActivity {
             }
         };
 
-        Button mSendButton = (Button) findViewById(R.id.send_button);
+        Button mSendButton = findViewById(R.id.send_button);
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -276,7 +276,9 @@ public class ConversationActivity extends KatsunaActivity {
         View view = getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
         }
     }
 
@@ -288,9 +290,11 @@ public class ConversationActivity extends KatsunaActivity {
     }
 
     private ConversationIntentData getConversationIntentData(Intent i) {
+        if (i == null) return null;
+
         // Find conversationId
         long convId = Constants.NOT_FOUND_CONVERSATION_ID;
-        if (i != null && i.getExtras() != null) {
+        if (i.getExtras() != null) {
             convId = i.getExtras().getLong(Constants.EXTRA_CONVERASTION_ID);
         }
 
@@ -300,7 +304,9 @@ public class ConversationActivity extends KatsunaActivity {
         if (i.getAction() != null &&
                 (i.getAction().equals(Intent.ACTION_VIEW) ||
                         i.getAction().equals(Intent.ACTION_SENDTO))) {
-            conversationNumber = i.getData().getSchemeSpecificPart();
+            if (i.getData() != null) {
+                conversationNumber = i.getData().getSchemeSpecificPart();
+            }
         } else {
             if (i.getExtras() != null) {
                 conversationNumber = i.getExtras().getString(KatsunaConstants.EXTRA_NUMBER);
@@ -319,10 +325,10 @@ public class ConversationActivity extends KatsunaActivity {
     }
 
     private class ConversationIntentData {
-        long conversationId;
-        String conversationNumber;
-        String conversationDisplayName;
-        String message;
+        final long conversationId;
+        final String conversationNumber;
+        final String conversationDisplayName;
+        final String message;
 
         ConversationIntentData(long conversationId, String conversationNumber,
                                String conversationDisplayName, String message) {
@@ -372,8 +378,11 @@ public class ConversationActivity extends KatsunaActivity {
 
     private boolean simIsReady() {
         TelephonyManager telMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        int simState = telMgr.getSimState();
-        return simState == TelephonyManager.SIM_STATE_READY;
+        if (telMgr != null) {
+            int simState = telMgr.getSimState();
+            return simState == TelephonyManager.SIM_STATE_READY;
+        }
+        return false;
     }
 
     @Override

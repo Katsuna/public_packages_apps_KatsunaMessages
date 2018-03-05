@@ -67,4 +67,7 @@
     <string name="conversation_unread">Unread</string>
     <string name="conversation_sent">Sent</string>
 
+    <!-- Used for icon content description at conversations list -->
+    <string name="message_type">Message type</string>
+
 </resources>

@@ -28,6 +28,7 @@ import com.katsuna.messages.utils.Device;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class SmsReceiver extends BroadcastReceiver {
 
@@ -36,7 +37,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (!intent.getAction().equals(ACTION) || !Device.isDefaultApp(context)) {
+        if (!Objects.equals(intent.getAction(), ACTION) || !Device.isDefaultApp(context)) {
             return;
         }
 
@@ -53,6 +54,7 @@ public class SmsReceiver extends BroadcastReceiver {
                 Intent i = new Intent(context, ConversationActivity.class);
                 i.putExtra("reload", true);
                 i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(i);
 
                 playRingtone(context);
@@ -65,10 +67,12 @@ public class SmsReceiver extends BroadcastReceiver {
 
     private void wakeUp(Context context) {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK
-                | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");
-        long timeout = 30000;
-        wl.acquire(timeout);
+        if (pm != null) {
+            PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK
+                    | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");
+            long timeout = 30000;
+            wl.acquire(timeout);
+        }
     }
 
     private Message getMessage(Intent intent) {
@@ -140,8 +144,10 @@ public class SmsReceiver extends BroadcastReceiver {
 
         //send the notification
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        String convIdStr = String.valueOf(conversationId);
-        mNotificationManager.notify(Integer.parseInt(convIdStr), builder.build());
+        if (mNotificationManager != null) {
+            String convIdStr = String.valueOf(conversationId);
+            mNotificationManager.notify(Integer.parseInt(convIdStr), builder.build());
+        }
     }
 
     private void playRingtone(Context context) {
