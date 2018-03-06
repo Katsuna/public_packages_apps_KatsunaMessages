@@ -20,6 +20,10 @@ public class ContactsCache {
         contactsMap.put(recipientId, contact);
     }
 
+    public void removeContact(long recipientId) {
+        contactsMap.remove(recipientId);
+    }
+
     public Contact getContact(long recipientId) {
         return contactsMap.get(recipientId);
     }

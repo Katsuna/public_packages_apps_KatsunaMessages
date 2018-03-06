@@ -32,16 +32,22 @@ import com.katsuna.messages.providers.SmsProvider;
 import com.katsuna.messages.ui.adapters.ConversationsAdapter;
 import com.katsuna.messages.ui.listeners.IConversationInteractionListener;
 import com.katsuna.messages.utils.Constants;
+import com.katsuna.messages.utils.ContactsCache;
 import com.katsuna.messages.utils.Device;
 import com.katsuna.messages.utils.Settings;
 
 import java.util.List;
 
+import static com.katsuna.commons.utils.Constants.ADD_TO_CONTACT_ACTION;
+import static com.katsuna.commons.utils.Constants.ADD_TO_CONTACT_ACTION_NUMBER;
+import static com.katsuna.commons.utils.Constants.CREATE_CONTACT_ACTION;
 import static com.katsuna.commons.utils.Constants.KATSUNA_PRIVACY_URL;
 
 public class MainActivity extends SearchBarActivity
         implements IConversationInteractionListener {
 
+    private static final int CREATE_CONTACT_REQUEST = 1;
+    private static final int ADD_TO_CONTACT_REQUEST = 2;
     private final String[] permissions = new String[]{Manifest.permission.READ_SMS, Manifest.permission.READ_CONTACTS};
     private RecyclerView mRecyclerView;
     private ConversationsAdapter mAdapter;
@@ -153,6 +159,12 @@ public class MainActivity extends SearchBarActivity
                 } else {
                     Settings.setSetting(this, Constants.DEFAULT_SMS_KEY, Constants.DEFAULT_SMS_OFF);
                 }
+                break;
+            case CREATE_CONTACT_REQUEST:
+                loadConversations();
+                break;
+            case ADD_TO_CONTACT_REQUEST:
+                loadConversations();
                 break;
         }
     }
@@ -279,6 +291,8 @@ public class MainActivity extends SearchBarActivity
     public void onBackPressed() {
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {
             mDrawer.closeDrawer(GravityCompat.START);
+        } else if (mItemSelected) {
+            deselectItem();
         } else {
             super.onBackPressed();
         }
@@ -304,6 +318,42 @@ public class MainActivity extends SearchBarActivity
     @Override
     public void sendSMS(Conversation conversation) {
         showConversation(conversation.getId());
+    }
+
+    @Override
+    public void createContact(Conversation conversation) {
+        Intent i = new Intent(CREATE_CONTACT_ACTION);
+        i.putExtra("number", conversation.getContact().getMessageAddress());
+
+        PackageManager packageManager = getPackageManager();
+        List activities = packageManager.queryIntentActivities(i, PackageManager.MATCH_DEFAULT_ONLY);
+        boolean isIntentSafe = activities.size() > 0;
+
+        if (isIntentSafe) {
+            startActivityForResult(i, CREATE_CONTACT_REQUEST);
+            //clear it from cache to enable fetching the fresh contact
+            ContactsCache.getInstance().removeContact(conversation.getRecipientIds());
+        } else {
+            showContactsAppInstallationDialog();
+        }
+    }
+
+    @Override
+    public void addToContact(Conversation conversation) {
+        Intent i = new Intent(ADD_TO_CONTACT_ACTION);
+        i.putExtra(ADD_TO_CONTACT_ACTION_NUMBER, conversation.getContact().getMessageAddress());
+
+        PackageManager packageManager = getPackageManager();
+        List activities = packageManager.queryIntentActivities(i, PackageManager.MATCH_DEFAULT_ONLY);
+        boolean isIntentSafe = activities.size() > 0;
+
+        if (isIntentSafe) {
+            startActivityForResult(i, ADD_TO_CONTACT_REQUEST);
+            //clear it from cache to enable fetching the fresh contact
+            ContactsCache.getInstance().removeContact(conversation.getRecipientIds());
+        } else {
+            showContactsAppInstallationDialog();
+        }
     }
 
     @Override

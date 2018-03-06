@@ -70,4 +70,6 @@
     <!-- Used for icon content description at conversations list -->
     <string name="message_type">Message type</string>
 
+    <string name="delete_conversation">Delete Conversation</string>
+
 </resources>

@@ -96,6 +96,85 @@
                     android:orientation="vertical"
                     android:visibility="gone">
 
+                    <TextView
+                        android:id="@+id/create_contact_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="12dp"
+                        android:drawablePadding="10dp"
+                        android:drawableStart="@drawable/ic_person_black54_28dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:text="@string/common_add_contact"
+                        android:textColor="@color/common_black54"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/conversation_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="12dp"
+                        android:drawablePadding="10dp"
+                        android:drawableStart="@drawable/ic_info_outline_black54_28dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:textColor="@color/common_black54"
+                        android:textSize="16sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@color/common_black12" />
+
+                    <TextView
+                        android:id="@+id/add_to_existing_contact_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="12dp"
+                        android:drawablePadding="10dp"
+                        android:drawableStart="@drawable/ic_person_black54_28dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:text="@string/common_add_to_existing_contact"
+                        android:textColor="@color/common_black54"
+                        android:textSize="16sp" />
+
+                    <View
+                        android:id="@+id/delete_conversation_divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@color/common_black12"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/delete_conversation_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="12dp"
+                        android:drawablePadding="10dp"
+                        android:drawableStart="@drawable/ic_delete_black54_28dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:text="@string/delete_conversation"
+                        android:textColor="@color/common_black54"
+                        android:textSize="16sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/common_black12" />
+
                 </LinearLayout>
 
                 <RelativeLayout
