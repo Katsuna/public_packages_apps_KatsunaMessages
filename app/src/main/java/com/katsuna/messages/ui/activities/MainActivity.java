@@ -2,7 +2,6 @@ package com.katsuna.messages.ui.activities;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -132,22 +131,22 @@ public class MainActivity extends SearchBarActivity
     }
 
     private void showContactsAppInstallationDialog() {
-        AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+        KatsunaAlertBuilder builder = new KatsunaAlertBuilder(this);
         String contactsAppName = getString(R.string.common_katsuna_contacts_app);
         String title = getString(R.string.common_missing_app, contactsAppName);
-        alert.setTitle(title);
-        alert.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
+        builder.setTitle(title);
+        builder.setView(R.layout.common_katsuna_alert);
+        builder.setUserProfile(mUserProfileContainer.getActiveUserProfile());
+        builder.setOkListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 KatsunaUtils.goToGooglePlay(MainActivity.this,
                         KatsunaUtils.KATSUNA_CONTACTS_PACKAGE);
             }
         });
-        alert.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                //Put actions for CANCEL button here, or leave in blank
-            }
-        });
-        alert.show();
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override
@@ -359,10 +358,10 @@ public class MainActivity extends SearchBarActivity
     @Override
     public void deleteConversation(final Conversation conversation) {
         KatsunaAlertBuilder builder = new KatsunaAlertBuilder(this);
-        builder.setTitle(R.string.confirmation);
-        builder.setMessage(R.string.confirmation_delete_conversation);
+        builder.setTitle(getString(R.string.confirmation));
+        builder.setMessage(getString(R.string.confirmation_delete_conversation));
         builder.setView(R.layout.common_katsuna_alert);
-        builder.setUserProfileContainer(mUserProfileContainer);
+        builder.setUserProfile(mUserProfileContainer.getActiveUserProfile());
         builder.setOkListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
