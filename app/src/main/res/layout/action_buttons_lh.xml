@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <Button
+        android:id="@+id/button_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="8dp"
+        android:minWidth="@dimen/common_button_min_width"
+        android:paddingEnd="14dp"
+        android:paddingStart="14dp"
+        android:text="@string/common_message"
+        android:textColor="@color/common_white" />
+
+    <Button
+        android:id="@+id/button_call"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_toEndOf="@id/button_message"
+        android:background="@color/common_white"
+        android:minWidth="@dimen/common_button_min_width"
+        android:paddingEnd="14dp"
+        android:paddingStart="14dp"
+        android:text="@string/common_call" />
+
+    <TextView
+        android:id="@+id/txt_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_toEndOf="@id/button_call"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="end|center"
+        android:singleLine="true"
+        android:text="@string/common_more"
+        android:textAllCaps="true"
+        android:textSize="14sp" />
+</RelativeLayout>

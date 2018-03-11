@@ -36,13 +36,14 @@ task clean(type: Delete) {
 
 // Define versions in a single place
 ext {
-    // Sdk and tools
-    compileSdkVersion = 25
-    buildToolsVersion = '26.0.3'
+// Sdk and tools
+    compileSdkVersion = 27
+    buildToolsVersion = '27.0.2'
 
     minSdkVersion = 23
-    targetSdkVersion = 25
+    targetSdkVersion = 27
 
-    // App dependencies
-    supportLibraryVersion = '25.2.0'
+// App dependencies
+    supportLibraryVersion = '27.1.0'
+    firebaseVersion = '11.8.0'
 }

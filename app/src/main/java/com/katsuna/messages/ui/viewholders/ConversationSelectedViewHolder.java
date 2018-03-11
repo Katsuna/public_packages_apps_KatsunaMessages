@@ -1,21 +1,15 @@
 package com.katsuna.messages.ui.viewholders;
 
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.katsuna.commons.entities.ColorProfile;
-import com.katsuna.commons.entities.ColorProfileKey;
 import com.katsuna.commons.entities.OpticalParams;
 import com.katsuna.commons.entities.SizeProfile;
-import com.katsuna.commons.entities.SizeProfileKey;
-import com.katsuna.commons.utils.ColorAdjuster;
-import com.katsuna.commons.utils.ColorCalc;
-import com.katsuna.commons.utils.DrawUtils;
-import com.katsuna.commons.utils.Shape;
+import com.katsuna.commons.entities.SizeProfileKeyV2;
+import com.katsuna.commons.utils.ColorAdjusterV2;
 import com.katsuna.commons.utils.SizeAdjuster;
-import com.katsuna.commons.utils.SizeCalc;
+import com.katsuna.commons.utils.SizeCalcV2;
 import com.katsuna.messages.R;
 import com.katsuna.messages.domain.Conversation;
 import com.katsuna.messages.ui.listeners.IConversationInteractionListener;
@@ -24,62 +18,53 @@ public class ConversationSelectedViewHolder extends ConversationViewHolder {
 
     private final Button mCallButton;
     private final Button mMessageButton;
-    private final View mMessageButtonContainer;
-    private final View mCallButtonContainer;
-    private final ImageView mDeleteConversationButton;
+    private final View mActionButtonsContainer;
+    private final TextView mMoreText;
+    private final View mMoreActionsContainer;
+    private final TextView mCreateContactText;
+    private final TextView mAddToExistingText;
+    private final TextView mDeleteConversationText;
+    private final View mDeleteConversationDivider;
+
+    private final TextView mConvNumber;
 
     public ConversationSelectedViewHolder(View itemView, IConversationInteractionListener listener) {
         super(itemView, listener);
-        mCallButton = (Button) itemView.findViewById(R.id.call_button);
-        mMessageButton = (Button) itemView.findViewById(R.id.message_button);
-        mDeleteConversationButton = (ImageView) itemView.findViewById(R.id.delete_conversation_button);
-        mMessageButtonContainer = itemView.findViewById(R.id.message_button_container);
-        mCallButtonContainer = itemView.findViewById(R.id.call_button_container);
+        mMoreText = itemView.findViewById(R.id.txt_more);
+        mCallButton = itemView.findViewById(R.id.button_call);
+        mMessageButton = itemView.findViewById(R.id.button_message);
+        mActionButtonsContainer = itemView.findViewById(R.id.action_buttons_container);
+        mMoreActionsContainer = itemView.findViewById(R.id.more_actions_container);
+        mCreateContactText = itemView.findViewById(R.id.create_contact_text);
+        mAddToExistingText = itemView.findViewById(R.id.add_to_existing_contact_text);
+        mDeleteConversationText = itemView.findViewById(R.id.delete_conversation_text);
+        mDeleteConversationDivider = itemView.findViewById(R.id.delete_conversation_divider);
+        mConvNumber = itemView.findViewById(R.id.conversation_number);
     }
 
-    protected void adjustProfile() {
-        super.adjustProfile();
+    private void adjustProfile() {
+        SizeProfile sizeProfile = mUserProfileContainer.getOpticalSizeProfile();
 
-        SizeProfile opticalSizeProfile = mUserProfileContainer.getOpticalSizeProfile();
-
-        if (opticalSizeProfile != null) {
-            int messageButtonDrawable = R.drawable.common_ic_message_black_24dp;
-            int callButtonDrawable = R.drawable.common_ic_call_white_24dp;
-            int deleteButtonDrawable = R.drawable.common_ic_delete_black54_24dp;
-
-            if (opticalSizeProfile == SizeProfile.SIMPLE) {
-                messageButtonDrawable = R.drawable.common_ic_message_black_28dp;
-                callButtonDrawable = R.drawable.common_ic_call_white_28dp;
-                deleteButtonDrawable = R.drawable.common_ic_delete_black54_28dp;
-            }
-            mMessageButton.setCompoundDrawablesWithIntrinsicBounds(messageButtonDrawable, 0, 0,0);
-            mCallButton.setCompoundDrawablesWithIntrinsicBounds(callButtonDrawable, 0, 0,0);
-            mDeleteConversationButton.setImageResource(deleteButtonDrawable);
-
-            OpticalParams opticalParams = SizeCalc.getOpticalParams(SizeProfileKey.ACTION_BUTTON,
-                    opticalSizeProfile);
+        if (sizeProfile != null) {
+            // adjust buttons
+            OpticalParams opticalParams = SizeCalcV2.getOpticalParams(SizeProfileKeyV2.BUTTON,
+                    sizeProfile);
             SizeAdjuster.adjustText(itemView.getContext(), mCallButton, opticalParams);
             SizeAdjuster.adjustText(itemView.getContext(), mMessageButton, opticalParams);
 
-            SizeAdjuster.adjustButtonContainer(itemView.getContext(), mCallButtonContainer,
-                    opticalParams);
-            SizeAdjuster.adjustButtonContainer(itemView.getContext(), mMessageButtonContainer,
-                    opticalParams);
+            // more text
+            opticalParams = SizeCalcV2.getOpticalParams(SizeProfileKeyV2.BUTTON,
+                    sizeProfile);
+            SizeAdjuster.adjustText(itemView.getContext(), mMoreText, opticalParams);
         }
 
         adjustColorProfile();
     }
 
     private void adjustColorProfile() {
-        ColorProfile colorProfile = mUserProfileContainer.getColorProfile();
-
-        // set action buttons background color
-        ColorAdjuster.adjustButtons(itemView.getContext(), colorProfile,
-                mMessageButtonContainer, mMessageButton, mCallButtonContainer, mCallButton);
-
-        int bgColor = ColorCalc.getColor(itemView.getContext(), ColorProfileKey.POP_UP_COLOR,
-                colorProfile);
-        mConversationContainer.setBackgroundColor(bgColor);
+        ColorAdjusterV2.adjustButtons(itemView.getContext(),
+                mUserProfileContainer.getActiveUserProfile(),
+                mMessageButton, mCallButton, mMoreText);
     }
 
     public void bind(final Conversation conversation, final int position) {
@@ -91,31 +76,71 @@ public class ConversationSelectedViewHolder extends ConversationViewHolder {
                 mListener.callContact(conversation);
             }
         });
-        mCallButtonContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.callContact(conversation);
-            }
-        });
         mMessageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener.sendSMS(conversation);
             }
         });
-        mMessageButtonContainer.setOnClickListener(new View.OnClickListener() {
+
+        mActionButtonsContainer.setVisibility(View.VISIBLE);
+
+        mMoreText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.sendSMS(conversation);
+                if (mMoreActionsContainer.getVisibility() == View.VISIBLE) {
+                    expandMoreActions(false);
+                } else {
+                    expandMoreActions(true);
+                }
             }
         });
-        mDeleteConversationButton.setOnClickListener(new View.OnClickListener() {
+
+        // by default more actions are hidden
+        expandMoreActions(false);
+
+        mCreateContactText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.createContact(conversation);
+            }
+        });
+
+        mAddToExistingText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.addToContact(conversation);
+            }
+        });
+
+        mDeleteConversationText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener.deleteConversation(conversation);
             }
         });
 
+        boolean contactFound = conversation.getContact().getId() > 0;
+        mCreateContactText.setVisibility(contactFound ? View.GONE : View.VISIBLE);
+        mAddToExistingText.setVisibility(contactFound ? View.GONE : View.VISIBLE);
+        mDeleteConversationDivider.setVisibility(contactFound ? View.GONE : View.VISIBLE);
+        mConvNumber.setVisibility(contactFound ? View.VISIBLE : View.GONE);
+        mDeleteConversationText.setVisibility(View.VISIBLE);
+
+        if (contactFound) {
+            mConvNumber.setText(conversation.getContact().getMessageAddress());
+        }
+
         adjustProfile();
+    }
+
+    private void expandMoreActions(boolean flag) {
+        if (flag) {
+            mMoreActionsContainer.setVisibility(View.VISIBLE);
+            mMoreText.setText(R.string.common_less);
+        } else {
+            mMoreActionsContainer.setVisibility(View.GONE);
+            mMoreText.setText(R.string.common_more);
+        }
     }
 }

@@ -1,54 +1,59 @@
 package com.katsuna.messages.ui.activities;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.katsuna.commons.controls.KatsunaNavigationView;
 import com.katsuna.commons.entities.UserProfile;
 import com.katsuna.commons.entities.UserProfileContainer;
 import com.katsuna.commons.ui.SearchBarActivity;
 import com.katsuna.commons.utils.KatsunaAlertBuilder;
+import com.katsuna.commons.utils.KatsunaUtils;
 import com.katsuna.messages.R;
 import com.katsuna.messages.domain.Conversation;
 import com.katsuna.messages.providers.SmsProvider;
 import com.katsuna.messages.ui.adapters.ConversationsAdapter;
 import com.katsuna.messages.ui.listeners.IConversationInteractionListener;
 import com.katsuna.messages.utils.Constants;
+import com.katsuna.messages.utils.ContactsCache;
 import com.katsuna.messages.utils.Device;
 import com.katsuna.messages.utils.Settings;
 
 import java.util.List;
 
+import static com.katsuna.commons.utils.Constants.ADD_TO_CONTACT_ACTION;
+import static com.katsuna.commons.utils.Constants.ADD_TO_CONTACT_ACTION_NUMBER;
+import static com.katsuna.commons.utils.Constants.CREATE_CONTACT_ACTION;
 import static com.katsuna.commons.utils.Constants.KATSUNA_PRIVACY_URL;
 
 public class MainActivity extends SearchBarActivity
         implements IConversationInteractionListener {
 
+    private static final int CREATE_CONTACT_REQUEST = 1;
+    private static final int ADD_TO_CONTACT_REQUEST = 2;
     private final String[] permissions = new String[]{Manifest.permission.READ_SMS, Manifest.permission.READ_CONTACTS};
     private RecyclerView mRecyclerView;
     private ConversationsAdapter mAdapter;
     private TextView mNoResultsView;
     private View mPopupFrame;
     private DrawerLayout mDrawer;
+    private int mSelectedConversationPosition = ConversationsAdapter.NO_CONVERSATION_POSITION;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +62,7 @@ public class MainActivity extends SearchBarActivity
 
         initControls();
 
-        mFab1 = (FloatingActionButton) findViewById(R.id.fab);
+        mFab1 = findViewById(R.id.fab);
         mFab1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,8 +70,8 @@ public class MainActivity extends SearchBarActivity
             }
         });
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        KatsunaNavigationView mKatsunaNavigationView = findViewById(R.id.katsuna_navigation_view);
+        mKatsunaNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
@@ -115,8 +120,33 @@ public class MainActivity extends SearchBarActivity
     }
 
     private void selectContact() {
-        Intent i = new Intent(MainActivity.this, ContactsActivity.class);
-        startActivity(i);
+        PackageManager manager = getPackageManager();
+        Intent i = manager.getLaunchIntentForPackage(KatsunaUtils.KATSUNA_CONTACTS_PACKAGE);
+        if (i == null) {
+            showContactsAppInstallationDialog();
+        } else {
+            i.addCategory(Intent.CATEGORY_LAUNCHER);
+            startActivity(i);
+        }
+    }
+
+    private void showContactsAppInstallationDialog() {
+        KatsunaAlertBuilder builder = new KatsunaAlertBuilder(this);
+        String contactsAppName = getString(R.string.common_katsuna_contacts_app);
+        String title = getString(R.string.common_missing_app, contactsAppName);
+        builder.setTitle(title);
+        builder.setView(R.layout.common_katsuna_alert);
+        builder.setUserProfile(mUserProfileContainer.getActiveUserProfile());
+        builder.setOkListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                KatsunaUtils.goToGooglePlay(MainActivity.this,
+                        KatsunaUtils.KATSUNA_CONTACTS_PACKAGE);
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override
@@ -128,6 +158,12 @@ public class MainActivity extends SearchBarActivity
                 } else {
                     Settings.setSetting(this, Constants.DEFAULT_SMS_KEY, Constants.DEFAULT_SMS_OFF);
                 }
+                break;
+            case CREATE_CONTACT_REQUEST:
+                loadConversations();
+                break;
+            case ADD_TO_CONTACT_REQUEST:
+                loadConversations();
                 break;
         }
     }
@@ -169,15 +205,15 @@ public class MainActivity extends SearchBarActivity
 
     private void initControls() {
         initToolbar(R.drawable.common_ic_menu_black_24dp);
-        mRecyclerView = (RecyclerView) findViewById(R.id.conversations_list);
+        mRecyclerView = findViewById(R.id.conversations_list);
         mRecyclerView.setItemAnimator(null);
-        mNoResultsView = (TextView) findViewById(R.id.no_results);
+        mNoResultsView = findViewById(R.id.no_results);
 
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawer = findViewById(R.id.drawer_layout);
 
-        mFabContainer = (LinearLayout) findViewById(R.id.fab_container);
-        mButtonsContainer1 = (LinearLayout) findViewById(R.id.message_buttons_container);
-        mPopupButton1 = (Button) findViewById(R.id.message_button);
+        mFabContainer = findViewById(R.id.fab_container);
+        mButtonsContainer1 = findViewById(R.id.message_buttons_container);
+        mPopupButton1 = findViewById(R.id.message_button);
         mPopupButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -186,11 +222,10 @@ public class MainActivity extends SearchBarActivity
         });
 
         mPopupFrame = findViewById(R.id.popup_frame);
-        mPopupFrame.setOnTouchListener(new View.OnTouchListener() {
+        mPopupFrame.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public void onClick(View v) {
                 showPopup(false);
-                return true;
             }
         });
 
@@ -263,6 +298,8 @@ public class MainActivity extends SearchBarActivity
     public void onBackPressed() {
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {
             mDrawer.closeDrawer(GravityCompat.START);
+        } else if (mItemSelected) {
+            deselectItem();
         } else {
             super.onBackPressed();
         }
@@ -291,12 +328,48 @@ public class MainActivity extends SearchBarActivity
     }
 
     @Override
+    public void createContact(Conversation conversation) {
+        Intent i = new Intent(CREATE_CONTACT_ACTION);
+        i.putExtra("number", conversation.getContact().getMessageAddress());
+
+        PackageManager packageManager = getPackageManager();
+        List activities = packageManager.queryIntentActivities(i, PackageManager.MATCH_DEFAULT_ONLY);
+        boolean isIntentSafe = activities.size() > 0;
+
+        if (isIntentSafe) {
+            startActivityForResult(i, CREATE_CONTACT_REQUEST);
+            //clear it from cache to enable fetching the fresh contact
+            ContactsCache.getInstance().removeContact(conversation.getRecipientIds());
+        } else {
+            showContactsAppInstallationDialog();
+        }
+    }
+
+    @Override
+    public void addToContact(Conversation conversation) {
+        Intent i = new Intent(ADD_TO_CONTACT_ACTION);
+        i.putExtra(ADD_TO_CONTACT_ACTION_NUMBER, conversation.getContact().getMessageAddress());
+
+        PackageManager packageManager = getPackageManager();
+        List activities = packageManager.queryIntentActivities(i, PackageManager.MATCH_DEFAULT_ONLY);
+        boolean isIntentSafe = activities.size() > 0;
+
+        if (isIntentSafe) {
+            startActivityForResult(i, ADD_TO_CONTACT_REQUEST);
+            //clear it from cache to enable fetching the fresh contact
+            ContactsCache.getInstance().removeContact(conversation.getRecipientIds());
+        } else {
+            showContactsAppInstallationDialog();
+        }
+    }
+
+    @Override
     public void deleteConversation(final Conversation conversation) {
         KatsunaAlertBuilder builder = new KatsunaAlertBuilder(this);
-        builder.setTitle(R.string.confirmation);
-        builder.setMessage(R.string.confirmation_delete_conversation);
+        builder.setTitle(getString(R.string.confirmation));
+        builder.setMessage(getString(R.string.confirmation_delete_conversation));
         builder.setView(R.layout.common_katsuna_alert);
-        builder.setUserProfileContainer(mUserProfileContainer);
+        builder.setUserProfile(mUserProfileContainer.getActiveUserProfile());
         builder.setOkListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -331,8 +404,6 @@ public class MainActivity extends SearchBarActivity
             focusConversation(position);
         }
     }
-
-    private int mSelectedConversationPosition = ConversationsAdapter.NO_CONVERSATION_POSITION;
 
     @Override
     protected void deselectItem() {

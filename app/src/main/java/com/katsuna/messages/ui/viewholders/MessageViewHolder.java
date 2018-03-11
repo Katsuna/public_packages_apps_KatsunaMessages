@@ -32,9 +32,9 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
 
     public MessageViewHolder(View itemView, UserProfileContainer userProfileContainer) {
         super(itemView);
-        mDateTime = (TextView) itemView.findViewById(R.id.dateTime);
-        mBody = (TextView) itemView.findViewById(R.id.body);
-        mPhoto = (ImageView) itemView.findViewById(R.id.photo);
+        mDateTime = itemView.findViewById(R.id.dateTime);
+        mBody = itemView.findViewById(R.id.body);
+        mPhoto = itemView.findViewById(R.id.photo);
         mMessageContainer = itemView.findViewById(R.id.message_container);
         mUserProfileContainer = userProfileContainer;
         adjustProfile();

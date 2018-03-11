@@ -1,5 +1,6 @@
 package com.katsuna.messages.ui.adapters;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,9 +44,10 @@ public class ConversationsAdapter extends RecyclerView.Adapter<RecyclerView.View
         return viewType;
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder viewHolder = null;
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        RecyclerView.ViewHolder viewHolder;
 
         boolean isRightHanded = mListener.getUserProfileContainer().isRightHanded();
         View view;
@@ -54,27 +56,31 @@ public class ConversationsAdapter extends RecyclerView.Adapter<RecyclerView.View
         switch (viewType) {
             case CONVERSATION_NOT_SELECTED:
             case CONVERSATION_GREYED:
-                if (isRightHanded) {
-                    view = inflater.inflate(R.layout.conversation, parent, false);
-                } else {
-                    view = inflater.inflate(R.layout.conversation_lh, parent, false);
-                }
+                view = inflater.inflate(R.layout.conversation, parent, false);
                 viewHolder = new ConversationViewHolder(view, mListener);
                 break;
             case CONVERSATION_SELECTED:
+                view = inflater.inflate(R.layout.conversation, parent, false);
+                ViewGroup buttonsWrapper = view.findViewById(R.id.action_buttons_wrapper);
                 if (isRightHanded) {
-                    view = inflater.inflate(R.layout.conversation_selected, parent, false);
+                    View buttonsView = inflater.inflate(R.layout.action_buttons_rh, buttonsWrapper,
+                            false);
+                    buttonsWrapper.addView(buttonsView);
                 } else {
-                    view = inflater.inflate(R.layout.conversation_selected_lh, parent, false);
+                    View buttonsView = inflater.inflate(R.layout.action_buttons_lh, buttonsWrapper,
+                            false);
+                    buttonsWrapper.addView(buttonsView);
                 }
                 viewHolder = new ConversationSelectedViewHolder(view, mListener);
                 break;
+            default:
+                throw new RuntimeException("viewType not supported: " + viewType);
         }
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Conversation conversation = mModels.get(position);
 
         ContactsCache contactsCache = ContactsCache.getInstance();
