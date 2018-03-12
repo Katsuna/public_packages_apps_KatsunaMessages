@@ -2,6 +2,8 @@ package com.katsuna.messages.ui.activities;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -14,6 +16,10 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -54,6 +60,8 @@ public class MainActivity extends SearchBarActivity
     private View mPopupFrame;
     private DrawerLayout mDrawer;
     private int mSelectedConversationPosition = ConversationsAdapter.NO_CONVERSATION_POSITION;
+    private SearchView mSearchView;
+    private boolean mSearchMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +103,74 @@ public class MainActivity extends SearchBarActivity
         });
 
         checkIsDefaultSmsHandler();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        // Assumes current activity is the searchable activity
+        if (searchManager != null) {
+            mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+            mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+            mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    search(newText);
+                    return false;
+                }
+            });
+            mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
+                @Override
+                public boolean onClose() {
+                    mSearchMode = false;
+                    if (mAdapter != null) {
+                        mAdapter.resetFilter();
+                    }
+                    return false;
+                }
+            });
+            mSearchView.setOnSearchClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mSearchMode = true;
+                    showPopup(false);
+                }
+            });
+        }
+
+        return true;
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            mSearchView.setQuery(query, false);
+        }
+    }
+
+    private void search(String query) {
+        if (mAdapter == null) return;
+        if (TextUtils.isEmpty(query)) {
+            mAdapter.resetFilter();
+        } else {
+            mAdapter.filter(query);
+        }
     }
 
     @Override
@@ -191,7 +267,9 @@ public class MainActivity extends SearchBarActivity
     protected void showPopup(boolean show) {
         if (show) {
             //don't show popup if menu drawer is open or conversation is selected.
-            if (!mDrawer.isDrawerOpen(GravityCompat.START) && !mItemSelected) {
+            if (!mDrawer.isDrawerOpen(GravityCompat.START)
+                    && !mSearchMode
+                    && !mItemSelected) {
                 mPopupFrame.setVisibility(View.VISIBLE);
                 mPopupButton1.setVisibility(View.VISIBLE);
                 mPopupVisible = true;
@@ -255,6 +333,13 @@ public class MainActivity extends SearchBarActivity
         SmsProvider dao = new SmsProvider(this);
         List<Conversation> conversations = dao.getConversations();
         mAdapter = new ConversationsAdapter(conversations, this);
+        mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                showNoResultsView();
+            }
+        });
         mRecyclerView.setAdapter(mAdapter);
 
         showNoResultsView();
@@ -300,6 +385,8 @@ public class MainActivity extends SearchBarActivity
             mDrawer.closeDrawer(GravityCompat.START);
         } else if (mItemSelected) {
             deselectItem();
+        } else if (mSearchMode) {
+            mSearchView.onActionViewCollapsed();
         } else {
             super.onBackPressed();
         }

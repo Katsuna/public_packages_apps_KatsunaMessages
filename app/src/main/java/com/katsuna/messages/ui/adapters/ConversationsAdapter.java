@@ -2,6 +2,7 @@ package com.katsuna.messages.ui.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import com.katsuna.messages.ui.viewholders.ConversationSelectedViewHolder;
 import com.katsuna.messages.ui.viewholders.ConversationViewHolder;
 import com.katsuna.messages.utils.ContactsCache;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ConversationsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -23,13 +25,15 @@ public class ConversationsAdapter extends RecyclerView.Adapter<RecyclerView.View
     private static final int CONVERSATION_NOT_SELECTED = 1;
     private static final int CONVERSATION_SELECTED = 2;
     private static final int CONVERSATION_GREYED = 3;
-    private final List<Conversation> mModels;
+    private List<Conversation> mFilteredConversations;
+    private final List<Conversation> mOriginalConversations;
     private final IConversationInteractionListener mListener;
     private int mSelectedConversationPosition = NO_CONVERSATION_POSITION;
 
     public ConversationsAdapter(List<Conversation> models,
                                 IConversationInteractionListener listener) {
-        mModels = models;
+        mFilteredConversations = models;
+        mOriginalConversations = models;
         mListener = listener;
     }
 
@@ -81,7 +85,7 @@ public class ConversationsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Conversation conversation = mModels.get(position);
+        Conversation conversation = mFilteredConversations.get(position);
 
         ContactsCache contactsCache = ContactsCache.getInstance();
         Contact contact = contactsCache.getContact(conversation.getRecipientIds());
@@ -111,7 +115,7 @@ public class ConversationsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemCount() {
-        return mModels.size();
+        return mFilteredConversations.size();
     }
 
     public void setSelectedConversationAtPosition(int position) {
@@ -123,4 +127,53 @@ public class ConversationsAdapter extends RecyclerView.Adapter<RecyclerView.View
         setSelectedConversationAtPosition(NO_CONVERSATION_POSITION);
     }
 
+    public void resetFilter() {
+        mFilteredConversations = mOriginalConversations;
+        notifyDataSetChanged();
+    }
+
+    public void filter(String query) {
+        query = query.toLowerCase();
+
+        List<Conversation> filteredConversations = new ArrayList<>();
+        for (Conversation conversation : mOriginalConversations) {
+            boolean found = false;
+
+            // check contact name
+            Contact contact = conversation.getContact();
+            if (contact != null) {
+                String name = contact.getDisplayName().toLowerCase();
+                if (name.contains(query)) {
+                    found = true;
+                }
+            }
+
+            // check text
+            if (!found) {
+                String text = conversation.getSnippet();
+                if (!TextUtils.isEmpty(text)) {
+                    if (text.toLowerCase().contains(query)) {
+                        found = true;
+                    }
+                }
+            }
+
+            // check number
+            if (!found) {
+                if (contact != null) {
+                    String number = contact.getMessageAddress().toLowerCase();
+                    if (number.contains(query)) {
+                        found = true;
+                    }
+                }
+            }
+
+            if (found) {
+                filteredConversations.add(conversation);
+            }
+        }
+
+        mFilteredConversations = filteredConversations;
+        notifyDataSetChanged();
+    }
 }
