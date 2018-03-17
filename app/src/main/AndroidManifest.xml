@@ -51,6 +51,20 @@
                 android:resource="@xml/searchable" />
         </activity>
 
+        <activity
+            android:name=".ui.activities.SelectContactActivity"
+            android:label="@string/common_contacts"
+            android:configChanges="orientation|screenSize"
+            android:parentActivityName=".ui.activities.MainActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+
         <receiver
             android:name=".receivers.SmsReceiver"
             android:permission="android.permission.BROADCAST_SMS">

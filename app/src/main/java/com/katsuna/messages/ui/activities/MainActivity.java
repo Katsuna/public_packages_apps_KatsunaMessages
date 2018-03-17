@@ -47,6 +47,7 @@ import static com.katsuna.commons.utils.Constants.ADD_TO_CONTACT_ACTION;
 import static com.katsuna.commons.utils.Constants.ADD_TO_CONTACT_ACTION_NUMBER;
 import static com.katsuna.commons.utils.Constants.CREATE_CONTACT_ACTION;
 import static com.katsuna.commons.utils.Constants.KATSUNA_PRIVACY_URL;
+import static com.katsuna.commons.utils.Constants.SELECT_CONTACT_NUMBER_ACTION;
 
 public class MainActivity extends SearchBarActivity
         implements IConversationInteractionListener {
@@ -196,14 +197,9 @@ public class MainActivity extends SearchBarActivity
     }
 
     private void selectContact() {
-        PackageManager manager = getPackageManager();
-        Intent i = manager.getLaunchIntentForPackage(KatsunaUtils.KATSUNA_CONTACTS_PACKAGE);
-        if (i == null) {
-            showContactsAppInstallationDialog();
-        } else {
-            i.addCategory(Intent.CATEGORY_LAUNCHER);
-            startActivity(i);
-        }
+        Intent i = new Intent(this, SelectContactActivity.class);
+        i.setAction(SELECT_CONTACT_NUMBER_ACTION);
+        startActivity(i);
     }
 
     private void showContactsAppInstallationDialog() {
