@@ -43,4 +43,10 @@
   <string name="delivered">Nachricht zugestellt</string>
   <!-- The delivery of the SMS was not successful -->
   <string name="not_delivered">Nachricht nicht zugestellt</string>
+  <string name="conversation_read">Read</string>
+  <string name="conversation_unread">Unread</string>
+  <string name="conversation_sent">Sent</string>
+  <!-- Used for icon content description at conversations list -->
+  <string name="message_type">Message type</string>
+  <string name="delete_conversation">Delete Conversation</string>
 </resources>
