@@ -13,8 +13,8 @@ android {
         applicationId "com.katsuna.messages"
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
-        versionCode 6
-        versionName "2.0.0"
+        versionCode 7
+        versionName "2.1.0"
         project.ext.set("archivesBaseName", "Messages-" + defaultConfig.versionName)
 
         manifestPlaceholders = [providers_auth:"com.katsuna"]
