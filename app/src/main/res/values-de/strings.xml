@@ -43,10 +43,10 @@
   <string name="delivered">Nachricht zugestellt</string>
   <!-- The delivery of the SMS was not successful -->
   <string name="not_delivered">Nachricht nicht zugestellt</string>
-  <string name="conversation_read">Read</string>
-  <string name="conversation_unread">Unread</string>
-  <string name="conversation_sent">Sent</string>
+  <string name="conversation_read">Gelesen</string>
+  <string name="conversation_unread">Ungelesen</string>
+  <string name="conversation_sent">Gesendet</string>
   <!-- Used for icon content description at conversations list -->
-  <string name="message_type">Message type</string>
-  <string name="delete_conversation">Delete Conversation</string>
+  <string name="message_type">Nachrichtentyp</string>
+  <string name="delete_conversation">Gespräch löschen</string>
 </resources>
