@@ -5,6 +5,7 @@ public final class Constants {
     public static final int REQUEST_CODE_READ_SMS_AND_CONTACTS = 1;
     public static final int REQUEST_CODE_ASK_CALL_PERMISSION = 2;
     public static final int REQUEST_CODE_READ_SMS = 3;
+    public static final int REQUEST_CODE_READ_CONV_ID = 4;
     public static final String DEFAULT_SMS_KEY = "DEFAULT_SMS_KEY";
     public static final String DEFAULT_SMS_NOT_SET = "NOT_SET";
     public static final String DEFAULT_SMS_ON = "ON";

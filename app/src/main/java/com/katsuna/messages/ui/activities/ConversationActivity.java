@@ -77,12 +77,7 @@ public class ConversationActivity extends KatsunaActivity {
         // set value from intent data to member variables.
         if (intentData.conversationId == Constants.NOT_FOUND_CONVERSATION_ID) {
             // Try to find conversation id from conversation number.
-            if (intentData.conversationNumber != null) {
-                SmsProvider dao = new SmsProvider(this);
-                conversationId = dao.getConversationId(intentData.conversationNumber);
-            } else {
-                conversationId = Constants.NOT_FOUND_CONVERSATION_ID;
-            }
+            conversationId = getConversationId(intentData.conversationNumber);
         } else {
             conversationId = intentData.conversationId;
         }
@@ -108,6 +103,21 @@ public class ConversationActivity extends KatsunaActivity {
 
         // open keyboard
         mNewMessage.requestFocus();
+    }
+
+    private long getConversationId(String number) {
+        long conversationId = Constants.NOT_FOUND_CONVERSATION_ID;
+        if (number != null) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_SMS},
+                        Constants.REQUEST_CODE_READ_CONV_ID);
+            } else {
+                SmsProvider dao = new SmsProvider(this);
+                conversationId = dao.getConversationId(number);
+            }
+        }
+        return conversationId;
     }
 
     @Override
