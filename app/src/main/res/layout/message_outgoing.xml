@@ -10,7 +10,7 @@
 
     <include
         android:id="@+id/photo"
-        layout="@layout/common_photo"
+        layout="@layout/contact_photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true" />

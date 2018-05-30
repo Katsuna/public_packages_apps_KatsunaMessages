@@ -9,7 +9,7 @@
     android:paddingTop="8dp">
 
     <include
-        layout="@layout/common_photo"
+        layout="@layout/contact_photo"
         android:layout_width="@dimen/common_contact_photo_size_intemediate"
         android:layout_height="@dimen/common_contact_photo_size_intemediate"
         android:layout_gravity="top"
