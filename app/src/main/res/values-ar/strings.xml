@@ -43,10 +43,10 @@
   <string name="delivered">تم توصيل الرسالة</string>
   <!-- The delivery of the SMS was not successful -->
   <string name="not_delivered">لم يتم توصيل الرسالة</string>
-  <string name="conversation_read">Read</string>
-  <string name="conversation_unread">Unread</string>
-  <string name="conversation_sent">Sent</string>
+  <string name="conversation_read">مقروء</string>
+  <string name="conversation_unread">جديد</string>
+  <string name="conversation_sent">مرسل</string>
   <!-- Used for icon content description at conversations list -->
-  <string name="message_type">Message type</string>
-  <string name="delete_conversation">Delete Conversation</string>
+  <string name="message_type">نوع الرسالة</string>
+  <string name="delete_conversation">حذف المحادثة</string>
 </resources>
