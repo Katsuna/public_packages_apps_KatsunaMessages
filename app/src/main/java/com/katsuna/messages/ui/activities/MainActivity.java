@@ -108,6 +108,12 @@ public class MainActivity extends SearchBarActivity
                 return true;
             }
         });
+        mKatsunaNavigationView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDrawer.closeDrawers();
+            }
+        });
 
         checkIsDefaultSmsHandler();
     }
