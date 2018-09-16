@@ -1,5 +1,6 @@
 package com.katsuna.messages.receivers;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -41,7 +42,7 @@ public class SmsReceiver extends BroadcastReceiver {
             return;
         }
 
-        Log.e(TAG, "onReceive: intent-ACTION=" + intent.getAction());
+        Log.d(TAG, "onReceive: intent-ACTION=" + intent.getAction());
         Message message = getMessage(intent);
 
         if (message != null) {
@@ -135,18 +136,28 @@ public class SmsReceiver extends BroadcastReceiver {
         }
         contentText += ": " + message.getBody();
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-        builder.setSmallIcon(R.drawable.ic_sms_white_18dp)
-                .setContentTitle(context.getResources().getString(R.string.new_message))
-                .setContentText(contentText)
-                .setAutoCancel(true)
-                .setContentIntent(resultPendingIntent);
-
         //send the notification
-        NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (mNotificationManager != null) {
+        NotificationManager notificationManager = (NotificationManager)
+                context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager != null) {
+            String channelId = "katsuna-messages-channel-id";
+            String channelName = "katsuna-messages-channel";
+            if (Build.VERSION.SDK_INT >=  Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel(channelId, channelName,
+                        NotificationManager.IMPORTANCE_DEFAULT);
+                channel.setDescription("Channel description");
+                notificationManager.createNotificationChannel(channel);
+            }
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId);
+
+            builder.setSmallIcon(R.drawable.ic_sms_white_18dp)
+                    .setContentTitle(context.getResources().getString(R.string.new_message))
+                    .setContentText(contentText)
+                    .setAutoCancel(true)
+                    .setContentIntent(resultPendingIntent);
+
             String convIdStr = String.valueOf(conversationId);
-            mNotificationManager.notify(Integer.parseInt(convIdStr), builder.build());
+            notificationManager.notify(Integer.parseInt(convIdStr), builder.build());
         }
     }
 
