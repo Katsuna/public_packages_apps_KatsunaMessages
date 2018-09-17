@@ -360,6 +360,7 @@ public class ConversationActivity extends KatsunaActivity {
         if (!Device.isDefaultApp(this)) {
             Toast.makeText(this, R.string.app_is_not_the_default_sms_handler, Toast.LENGTH_SHORT)
                     .show();
+            Device.makeDefaultApp(this, 0);
             return;
         }
 
