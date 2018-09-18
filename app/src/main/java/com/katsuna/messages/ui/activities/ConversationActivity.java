@@ -145,6 +145,9 @@ public class ConversationActivity extends KatsunaActivity {
             //Log.e(TAG, mNewMessage.getText().toString());
             callContact(conversationNumber);
             return true;
+        } else if (id == android.R.id.home) {
+            finish();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
