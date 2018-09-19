@@ -226,7 +226,7 @@ public class ConversationActivity extends KatsunaActivity {
         sendBroadcastReceiver = new BaseBroadcastReceiver() {
 
             public void onReceive(Context arg0, Intent arg1) {
-                Log.e(TAG, "SENT RESULT: " + getResultCode());
+                Log.d(TAG, "SENT RESULT: " + getResultCode());
 
                 switch (getResultCode()) {
                     case Activity.RESULT_OK:
@@ -251,6 +251,10 @@ public class ConversationActivity extends KatsunaActivity {
                         break;
                     case SmsManager.RESULT_ERROR_RADIO_OFF:
                         Toast.makeText(getBaseContext(), R.string.radio_off, Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        Log.e(TAG, "getResultCode() returned:"  + getResultCode());
+                        Toast.makeText(getBaseContext(), R.string.generic_failure, Toast.LENGTH_SHORT).show();
                         break;
                 }
             }
