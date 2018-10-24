@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -31,6 +32,7 @@ import com.katsuna.commons.entities.UserProfileContainer;
 import com.katsuna.commons.ui.SearchBarActivity;
 import com.katsuna.commons.utils.BrowserUtils;
 import com.katsuna.commons.utils.KatsunaAlertBuilder;
+import com.katsuna.commons.utils.KatsunaSnackbarBuilder;
 import com.katsuna.commons.utils.KatsunaUtils;
 import com.katsuna.messages.R;
 import com.katsuna.messages.domain.Conversation;
@@ -65,6 +67,7 @@ public class MainActivity extends SearchBarActivity
     private int mSelectedConversationPosition = ConversationsAdapter.NO_CONVERSATION_POSITION;
     private SearchView mSearchView;
     private boolean mSearchMode;
+    private Snackbar mSnackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -207,6 +210,10 @@ public class MainActivity extends SearchBarActivity
     }
 
     private void selectContact() {
+        if (!Device.isDefaultApp(this)) {
+            return;
+        }
+
         Intent i = new Intent(this, SelectContactActivity.class);
         i.setAction(SELECT_CONTACT_NUMBER_ACTION);
         startActivity(i);
@@ -237,6 +244,11 @@ public class MainActivity extends SearchBarActivity
             case Constants.DEF_SMS_REQ_CODE:
                 if (Device.isDefaultApp(this)) {
                     Settings.setSetting(this, Constants.DEFAULT_SMS_KEY, Constants.DEFAULT_SMS_ON);
+                    if (mSnackbar.isShown()) {
+                        mSnackbar.dismiss();
+                    }
+                    initPopupActionHandler();
+                    initDeselectionActionHandler();
                 } else {
                     Settings.setSetting(this, Constants.DEFAULT_SMS_KEY, Constants.DEFAULT_SMS_OFF);
                 }
@@ -253,6 +265,33 @@ public class MainActivity extends SearchBarActivity
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (!Device.isDefaultApp(this)) {
+            // clear data if there are any
+            if (mAdapter != null) {
+                mAdapter.clearData();
+            }
+
+            // clear handlers
+            if (mPopupActionHandler != null) {
+                mPopupActionHandler.removeCallbacksAndMessages(null);
+                mPopupActionHandler = null;
+            }
+
+            if (mDeselectionActionHandler != null) {
+                mDeselectionActionHandler.removeCallbacksAndMessages(null);
+                mDeselectionActionHandler = null;
+            }
+
+            showDefaultAppNotSetDialog();
+
+            return;
+        } else {
+            if (mSnackbar != null) {
+                mSnackbar.dismiss();
+            }
+        }
+
         loadConversations();
 
         scrollToPosition(mSelectedConversationPosition);
@@ -260,6 +299,24 @@ public class MainActivity extends SearchBarActivity
         if (mItemSelected) {
             deselectItem();
         }
+    }
+
+    private void showDefaultAppNotSetDialog() {
+        View parentLayout = findViewById(android.R.id.content);
+        int layoutId = R.layout.default_app_snackbar;
+        int duration = Snackbar.LENGTH_INDEFINITE;
+        View.OnClickListener button1Pressed = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Device.makeDefaultApp(MainActivity.this, Constants.DEF_SMS_REQ_CODE);
+            }
+        };
+
+        KatsunaSnackbarBuilder builder = new KatsunaSnackbarBuilder(parentLayout, layoutId, duration);
+        builder.setView1Id(R.id.snackbar_view_1);
+        builder.setView1Pressed(button1Pressed);
+        mSnackbar = builder.create();
+        mSnackbar.show();
     }
 
     private void scrollToPosition(int position) {
@@ -314,8 +371,11 @@ public class MainActivity extends SearchBarActivity
         });
 
         mLastTouchTimestamp = System.currentTimeMillis();
-        initPopupActionHandler();
-        initDeselectionActionHandler();
+
+        if (Device.isDefaultApp(this)) {
+            initPopupActionHandler();
+            initDeselectionActionHandler();
+        }
     }
 
     private void showNoResultsView() {

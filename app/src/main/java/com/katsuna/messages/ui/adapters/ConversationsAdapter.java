@@ -176,4 +176,11 @@ public class ConversationsAdapter extends RecyclerView.Adapter<RecyclerView.View
         mFilteredConversations = filteredConversations;
         notifyDataSetChanged();
     }
+
+    public void clearData() {
+        // clear the data
+        mOriginalConversations.clear();
+        mFilteredConversations.clear();
+        notifyDataSetChanged();
+    }
 }

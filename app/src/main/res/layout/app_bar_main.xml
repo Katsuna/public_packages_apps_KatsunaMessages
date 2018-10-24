@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
+        android:paddingTop="?actionBarSize"
         android:text="@string/no_messages"
         android:textSize="@dimen/common_text_size"
         android:visibility="gone" />
