@@ -19,6 +19,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.katsuna.commons.domain.Contact;
+import com.katsuna.commons.utils.KatsunaUtils;
 import com.katsuna.messages.R;
 import com.katsuna.messages.domain.Message;
 import com.katsuna.messages.providers.SmsProvider;
@@ -162,6 +163,11 @@ public class SmsReceiver extends BroadcastReceiver {
     }
 
     private void playRingtone(Context context) {
+        if (KatsunaUtils.katsunaOsDetected()) {
+            // no need to play ringtone
+            return;
+        }
+
         try {
             Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             Ringtone r = RingtoneManager.getRingtone(context, notification);
