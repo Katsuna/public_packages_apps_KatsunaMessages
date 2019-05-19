@@ -48,6 +48,7 @@ public class SelectContactActivity extends ContactsActivity {
 
     @Override
     protected void setupFab() {
+        mFabsTopContainer = findViewById(R.id.fabs_top_container);
         mFab1 = findViewById(R.id.search_fab);
         mFab1.setOnClickListener(new View.OnClickListener() {
             @Override
