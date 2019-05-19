@@ -34,6 +34,7 @@ import com.katsuna.commons.utils.BrowserUtils;
 import com.katsuna.commons.utils.KatsunaAlertBuilder;
 import com.katsuna.commons.utils.KatsunaSnackbarBuilder;
 import com.katsuna.commons.utils.KatsunaUtils;
+import com.katsuna.commons.utils.KeyboardUtils;
 import com.katsuna.messages.R;
 import com.katsuna.messages.domain.Conversation;
 import com.katsuna.messages.providers.SmsProvider;
@@ -68,6 +69,7 @@ public class MainActivity extends SearchBarActivity
     private SearchView mSearchView;
     private boolean mSearchMode;
     private Snackbar mSnackbar;
+    private View mFabsTopContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +78,7 @@ public class MainActivity extends SearchBarActivity
 
         initControls();
 
+        mFabsTopContainer = findViewById(R.id.fabs_top_container);
         mFab1 = findViewById(R.id.fab);
         mFab1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,6 +141,9 @@ public class MainActivity extends SearchBarActivity
 
                 @Override
                 public boolean onQueryTextChange(String newText) {
+                    if (mItemSelected) {
+                        deselectItem();
+                    }
                     search(newText);
                     return false;
                 }
@@ -152,11 +158,17 @@ public class MainActivity extends SearchBarActivity
                     return false;
                 }
             });
-            mSearchView.setOnSearchClickListener(new View.OnClickListener() {
+            mSearchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
-                public void onClick(View v) {
-                    mSearchMode = true;
-                    showPopup(false);
+                public void onFocusChange(View v, boolean hasFocus) {
+                    mSearchMode = hasFocus;
+                    if (hasFocus) {
+                        mFabsTopContainer.setVisibility(View.GONE);
+                        showPopup(false);
+                    } else {
+                        refreshLastTouchTimestamp();
+                        mFabsTopContainer.setVisibility(View.VISIBLE);
+                    }
                 }
             });
         }
@@ -571,6 +583,8 @@ public class MainActivity extends SearchBarActivity
 
     @Override
     public void focusConversation(int position) {
+        KeyboardUtils.hideKeyboard(this);
+
         mDrawer.setBackgroundColor(ContextCompat.getColor(this, R.color.common_black07));
         mSelectedConversationPosition = position;
 
