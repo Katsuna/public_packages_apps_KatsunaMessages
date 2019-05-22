@@ -132,7 +132,9 @@ public class ConversationViewHolder extends RecyclerView.ViewHolder {
                 convStatus = itemView.getResources().getString(R.string.conversation_sent);
                 break;
         }
-        mDateTime.setText(convStatus + ", " + DateFormatter.format(conversation.getDate()));
+        String date = DateFormatter.format(conversation.getDate());
+        String status = String.format("%s, %s", convStatus, date);
+        mDateTime.setText(status);
 
         adjustColorBasedOnCallType(conversation.getStatus());
     }

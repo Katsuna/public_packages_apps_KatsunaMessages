@@ -51,7 +51,6 @@ public class ConversationActivity extends KatsunaActivity {
     private long conversationId;
     private String conversationNumber;
     private long savedMessageId = -1;
-    private String mDisplayName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +81,7 @@ public class ConversationActivity extends KatsunaActivity {
             conversationId = intentData.conversationId;
         }
 
-        mDisplayName = intentData.conversationDisplayName;
+        String displayName = intentData.conversationDisplayName;
         conversationNumber = intentData.conversationNumber;
 
         if (intentData.message != null) {
@@ -92,8 +91,8 @@ public class ConversationActivity extends KatsunaActivity {
         if (conversationId != Constants.NOT_FOUND_CONVERSATION_ID) {
             loadMessages();
         } else {
-            if (mDisplayName != null && mDisplayName.length() > 0) {
-                setTitle(mDisplayName);
+            if (displayName != null && displayName.length() > 0) {
+                setTitle(displayName);
             } else {
                 setTitle(conversationNumber);
             }
@@ -200,7 +199,9 @@ public class ConversationActivity extends KatsunaActivity {
         MessagesAdapter adapter = new MessagesAdapter(messages, null, null, mUserProfileContainer);
         mRecyclerView.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
-        linearLayoutManager.setReverseLayout(true);
+        if (linearLayoutManager != null) {
+            linearLayoutManager.setReverseLayout(true);
+        }
 
         if (messages.size() > 0) {
             conversationNumber = messages.get(0).getAddress();

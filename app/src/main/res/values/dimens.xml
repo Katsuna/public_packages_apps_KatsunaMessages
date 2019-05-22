@@ -1,6 +1,4 @@
 <resources>
-    <dimen name="text_margin_top_bottom">5dp</dimen>
-    <dimen name="text_margin_left_right">14dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
 
     <!-- profile dimens -->

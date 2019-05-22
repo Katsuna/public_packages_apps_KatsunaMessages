@@ -67,11 +67,12 @@ public class SmsReceiver extends BroadcastReceiver {
         }
     }
 
+    @SuppressWarnings("deprecation")
     private void wakeUp(Context context) {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         if (pm != null) {
             PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK
-                    | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");
+                    | PowerManager.ACQUIRE_CAUSES_WAKEUP, "KatsunaMessages:WakeUpTag");
             long timeout = 30000;
             wl.acquire(timeout);
         }
